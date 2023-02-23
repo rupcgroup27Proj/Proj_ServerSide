@@ -6,15 +6,15 @@ namespace Project_ServerSide.Models.DAL
 {
     public class Students_DBservices
     {
-        //public SqlDataAdapter da;
-        //public DataTable dt;
+        public SqlDataAdapter da;
+        public DataTable dt;
 
-        ////public Students_DBservices()
-        ////{
-        //    //
-        //    // TODO: Add constructor logic here
-        //    //
-        //}
+        public Students_DBservices()
+        {
+            //
+            // TODO: Add constructor logic here
+            //
+        }
 
         //--------------------------------------------------------------------------------------------------
         // This method creates a connection to the database according to the connectionString name in the web.config 
@@ -128,18 +128,20 @@ namespace Project_ServerSide.Models.DAL
         //--------------------------------------------------------------------
         // Build the Insert command String
         //--------------------------------------------------------------------
-        private String BuildInsertCommand(Student student)//להוסיף את כל הפרטים בשורה -הוספת רשומה של הפרטי תלמיד 138
+        private String BuildInsertCommand(Student student)
         {
             String command;
 
             StringBuilder sb = new StringBuilder();
             // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}',)", student.StudentId, student.Password);
-            String prefix = "INSERT INTO Students " + "(ID, Password) ";
+            sb.AppendFormat("Values('{0}', '{1}',{2},{3},{4},'{5},{6})", student.FirstName, student.LastName
+                ,student.StudentId,student.Password,student.Phone,student.Email,student.ParentPhone);
+            String prefix = "INSERT INTO Students " + "(firstName,lastName,studentId,password,lastName,phone,email,parentPhone) ";
             command = prefix + sb.ToString();
 
             return command;
         }
+       
 
         //--------------------------------------------------------------------
         // Build the Insert command String
@@ -154,7 +156,7 @@ namespace Project_ServerSide.Models.DAL
             //command = prefix + sb.ToString();
 
             //update Students_2022 set name = 'messi', age = 35 where id = 3
-            string command = sb.AppendFormat("update Students set name = '{0}', age = {1} where id = {2}", student.Name, student.Age, student.Id).ToString();
+            string command = sb.AppendFormat("update Students_2022 set name = '{0}', age = {1} where id = {2}", student.Name, student.Age, student.Id).ToString();
 
             return command;
         }
@@ -206,4 +208,3 @@ namespace Project_ServerSide.Models.DAL
         }
 
     }
-}

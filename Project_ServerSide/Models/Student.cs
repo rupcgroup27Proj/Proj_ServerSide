@@ -1,19 +1,17 @@
-﻿using Project_ServerSide.Models.DAL;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Project_ServerSide.Models.DAL;
+using System.Numerics;
+using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    //תיקונים:
-    //לשנות את הדאטה בייס להוסיף את כל הפרטים
-    //     בקלאס לשנות את פונקציית פבליק
-    //    לוודא מול הקונטרולר עד דקה 14
-    //    ---כל זה הכנסת משתמש--
-    //    אחר כך
-    //    לבדוק אם הסיסמא והמייל קיים במערכת
+    //תיקונים:  //    לבדוק אם הסיסמא והמייל קיים במערכת
     //    אם כן פצצה ולשרשר את שאר הפרטים
     //    להוסיף TYPE למחלקה!
-    //להבין איזה טייפ זה תמונה בקלאס
     public class Student
     {
+        Type Student;
+
         double password;
         int studentId;
         string firstName;
@@ -21,7 +19,10 @@ namespace Project_ServerSide.Models
         double phone;
         string email;
         double parentPhone;
-        //[pictureUrl]
+        string pictureUrl { get; set; };
+        int groupId { get; set; };
+        DateTime startDate { get; set; };
+        DateTime endDate { get; set; };
 
         public double Password { get => password; set => password = value; }
         public int StudentId { get => studentId; set => studentId = value; }
@@ -31,38 +32,66 @@ namespace Project_ServerSide.Models
         public string Email { get => email; set => email = value; }
         public double ParentPhone { get => parentPhone; set => parentPhone = value; }
 
-        public Student(double password,int studentId)// להוסיף את כל הפרטים להזנה ולשים לב לGET
-            {
-            password = password;
-            studentId = studentId;
+        //static List<Student> StudentList = new List<Student>();
+
+        //public List<Student> Read()
+        //{
+        //    DBservices dbs = new DBservices();
+        //    return dbs.ReadStudent();
+        //}
+
+        public Student
+        (double password,
+        int studentId,
+        string firstName,
+        string lastName,
+        double phone,
+        string email,
+        double parentPhone)//פונקציית הזנה של המורה 
+        {
+            Password = password;
+            StudentId = studentId;
+            FirstName= firstName;
+            LastName=lastName;
+            Phone=phone;
+            Email=email;
+            ParentPhone=parentPhone;
         }
 
-            public int Insert()//insetrt new students to DB
+        //public Student(string name, double age, int id)
+        //{
+        //    Name = name;
+        //    Age = age;
+        //    Id = id;
+        //}
+
+
+        public int Insert()//insetrt new students to DB
         {
             Students_DBservices dbs = new Students_DBservices();
-                return dbs.Insert(this);
-            }
+            return dbs.Insert(this);
+        }
 
-            public int Update()
-            {
+        public int Update()
+        {
             Students_DBservices dbs = new Students_DBservices();
-                return dbs.Update(this);
+            return dbs.Update(this);
 
-            }
+        }
 
-            public List<Student> Read()
-            {
-                Students_DBservices dbs = new Students_DBservices();
-                //return dbs.Read();
-                return null;
-            }
+        public List<Student> Read()
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            //return dbs.Read();
+            return null;
+        }
 
-            public void Init()
-            {
+        public void Init()
+        {
             //SmartRec_DBservices dbs = new SmartRec_DBservices();
             //dbs.Init();
         }
 
     }
-    }
+}
 

@@ -36,8 +36,8 @@ namespace Project_ServerSide.Controllers
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] Student student)
         {
-            student.StudentId = id;
-            student.Update();
+            //student.Id = id;
+            //student.Update();
         }
 
         // DELETE api/<StudentsController>/5
