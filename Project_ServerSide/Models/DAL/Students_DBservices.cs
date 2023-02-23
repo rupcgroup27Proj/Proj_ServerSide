@@ -153,7 +153,8 @@ finally
                     u.Phone = Convert.ToInt32(dataReader["phone"]);
                     u.ParentPhone = Convert.ToInt32(dataReader["parentPhone"]);
                     u.PictureUrl= dataReader["pictureUrl"].ToString();
-
+                    //vacation.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
+                    //vacation.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
 
                 }
