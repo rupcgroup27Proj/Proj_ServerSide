@@ -5,12 +5,9 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    //תיקונים:  //    לבדוק אם הסיסמא והמייל קיים במערכת
-    //    אם כן פצצה ולשרשר את שאר הפרטים
-    //    להוסיף TYPE למחלקה!
     public class Student
     {
-        Type Student;
+        Type student;
 
         double password;
         int studentId;
@@ -19,7 +16,7 @@ namespace Project_ServerSide.Models
         double phone;
         string email;
         double parentPhone;
-        string pictureUrl { get; set; };
+        string pictureUrl;
         int groupId { get; set; };
         DateTime startDate { get; set; };
         DateTime endDate { get; set; };
@@ -31,23 +28,11 @@ namespace Project_ServerSide.Models
         public double Phone { get => phone; set => phone = value; }
         public string Email { get => email; set => email = value; }
         public double ParentPhone { get => parentPhone; set => parentPhone = value; }
+        public string PictureUrl { get => pictureUrl; set => pictureUrl = value; }
 
-        //static List<Student> StudentList = new List<Student>();
+        static List<Student> StudentList = new List<Student>();
 
-        //public List<Student> Read()
-        //{
-        //    DBservices dbs = new DBservices();
-        //    return dbs.ReadStudent();
-        //}
-
-        public Student
-        (double password,
-        int studentId,
-        string firstName,
-        string lastName,
-        double phone,
-        string email,
-        double parentPhone)//פונקציית הזנה של המורה 
+        public Student(double password,int studentId,string firstName,string lastName,double phone,string email,double parentPhone)
         {
             Password = password;
             StudentId = studentId;
@@ -58,38 +43,15 @@ namespace Project_ServerSide.Models
             ParentPhone=parentPhone;
         }
 
-        //public Student(string name, double age, int id)
-        //{
-        //    Name = name;
-        //    Age = age;
-        //    Id = id;
-        //}
-
-
         public int Insert()//insetrt new students to DB
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Insert(this);
         }
-
-        public int Update()
-        {
-            Students_DBservices dbs = new Students_DBservices();
-            return dbs.Update(this);
-
-        }
-
         public List<Student> Read()
         {
             Students_DBservices dbs = new Students_DBservices();
-            //return dbs.Read();
-            return null;
-        }
-
-        public void Init()
-        {
-            //SmartRec_DBservices dbs = new SmartRec_DBservices();
-            //dbs.Init();
+            return dbs.Read();
         }
 
     }

@@ -11,9 +11,10 @@ namespace Project_ServerSide.Controllers
     {
         // GET: api/<StudentsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Student> Get()
         {
-            return new string[] { "value1", "value2" };
+            Student student = new Student();
+            return student.Read();
         }
 
         // GET api/<StudentsController>/5

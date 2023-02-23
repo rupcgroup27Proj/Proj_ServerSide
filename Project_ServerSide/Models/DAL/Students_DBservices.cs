@@ -1,6 +1,13 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Data.SqlClient;
 using System.Data;
 using System.Text;
+using System.Xml.Linq;
+using Project_ServerSide.Models;
+using System.Numerics;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -35,53 +42,79 @@ namespace Project_ServerSide.Models.DAL
         // This method inserts a student to the student table 
         //--------------------------------------------------------------------------------------------------
         public int Insert(Student student)
+        { 
+
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
         {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            String cStr = BuildInsertCommand(student);      // helper method to build the insert string
-
-            cmd = CreateCommand(cStr, con);             // create the command
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
+            con = connect("myProjDB"); // create the connection
+    }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
         }
 
+cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
+
+try
+{
+    int numEffected = cmd.ExecuteNonQuery(); // execute the command
+    return numEffected;
+}
+catch (Exception ex)
+{
+    // write to log
+    throw (ex);
+}
+
+finally
+{
+    if (con != null)
+    {
+        // close the db connection
+        con.Close();
+    }
+}
+
+    }
 
 
+    //---------------------------------------------------------------------------------
+    // Create the SqlCommand InsertCommand
+    //---------------------------------------------------------------------------------
+    private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
+{
+
+    SqlCommand cmd = new SqlCommand(); // create the command object
+
+    cmd.Connection = con;              // assign the connection to the command object
+
+    cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+    cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+    cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+    cmd.Parameters.AddWithValue("@studentId", student.StudentId);
+    cmd.Parameters.AddWithValue("@password", student.Password);
+    cmd.Parameters.AddWithValue("@firstName", student.FirstName);
+    cmd.Parameters.AddWithValue("@lastName", student.LastName);
+    cmd.Parameters.AddWithValue("@phone", student.Phone);
+    cmd.Parameters.AddWithValue("@email", student.Email);
+    cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
+    cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
+
+
+    return cmd;
+}
         //--------------------------------------------------------------------------------------------------
-        // This method update a student to the student table 
+        // This method read users 
         //--------------------------------------------------------------------------------------------------
-        public int Update(Student student)
+        public List<Student> ReadUsers()
         {
 
             SqlConnection con;
@@ -99,12 +132,32 @@ namespace Project_ServerSide.Models.DAL
 
             //String cStr = BuildUpdateCommand(student);      // helper method to build the insert string
 
-            cmd = CreateCommandWithStoredProcedure("spUpdateStudent1", con, student);             // create the command
+            //cmd = CreateCommand(cStr, con);             // create the command
+
+            cmd = CreateReadStudentsCommandSP("spReadStudent", con);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                List<Student> StudentList = new List<Student>();
+
+                while (dataReader.Read())
+                {
+                    Student u = new Student();
+                    u.StudentId = Convert.ToInt32(dataReader["studentId"]);
+                    u.Password = Convert.ToInt32(dataReader["password"]);
+                    u.Email = dataReader["email"].ToString();
+                    u.FirstName = dataReader["firstname"].ToString();
+                    u.LastName = dataReader["lastname"].ToString();
+                    u.Phone = Convert.ToInt32(dataReader["phone"]);
+                    u.ParentPhone = Convert.ToInt32(dataReader["parentPhone"]);
+                    u.PictureUrl= dataReader["pictureUrl"].ToString();
+
+                    StudentList.Add(u);
+
+                }
+                return StudentList;
             }
             catch (Exception ex)
             {
@@ -123,68 +176,10 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-
-
-        //--------------------------------------------------------------------
-        // Build the Insert command String
-        //--------------------------------------------------------------------
-        private String BuildInsertCommand(Student student)
-        {
-            String command;
-
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            sb.AppendFormat("Values('{0}', '{1}',{2},{3},{4},'{5},{6})", student.FirstName, student.LastName
-                ,student.StudentId,student.Password,student.Phone,student.Email,student.ParentPhone);
-            String prefix = "INSERT INTO Students " + "(firstName,lastName,studentId,password,lastName,phone,email,parentPhone) ";
-            command = prefix + sb.ToString();
-
-            return command;
-        }
-       
-
-        //--------------------------------------------------------------------
-        // Build the Insert command String
-        //--------------------------------------------------------------------
-        private String BuildUpdateCommand(Student student)
-        {
-
-            StringBuilder sb = new StringBuilder();
-            // use a string builder to create the dynamic string
-            //sb.AppendFormat("Values('{0}', '{1}')", student.Name, student.Age,student.Id);
-            //String prefix = "INSERT INTO Students_2022 " + "(name, age) ";
-            //command = prefix + sb.ToString();
-
-            //update Students_2022 set name = 'messi', age = 35 where id = 3
-            string command = sb.AppendFormat("update Students_2022 set name = '{0}', age = {1} where id = {2}", student.Name, student.Age, student.Id).ToString();
-
-            return command;
-        }
-
         //---------------------------------------------------------------------------------
-        // Create the SqlCommand
+        // Create the ReadStudents SqlCommand
         //---------------------------------------------------------------------------------
-        private SqlCommand CreateCommand(String CommandSTR, SqlConnection con)
-        {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = CommandSTR;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.Text; // the type of the command, can also be stored procedure
-
-            return cmd;
-        }
-
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand using a stored procedure
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Student student)
+        private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -197,14 +192,9 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@id", student.Id);
-
-            cmd.Parameters.AddWithValue("@name", student.Name);
-
-            cmd.Parameters.AddWithValue("@age", student.Age);
-
 
             return cmd;
         }
 
     }
+}
