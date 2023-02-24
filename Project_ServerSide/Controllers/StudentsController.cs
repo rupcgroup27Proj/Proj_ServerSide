@@ -27,12 +27,12 @@ namespace Project_ServerSide.Controllers
             }
         }
         [HttpGet("email/{email}/password/{password}")]
-        public IActionResult Get(string email, double password)
+        public IActionResult Get(string email, string password)
         {
             Student student = new Student();
             student.Email = email;
             student.Password = password;
-            student result = student.Login();
+            Student result = student.Login();
             if (result.FirstName == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace Project_ServerSide.Controllers
 
         // POST api/<StudentsController>
         [HttpPost]
-        public int Post([FromBody] Student student)
+        public bool Post([FromBody] Student student)
         {         
             return student.Insert();
 

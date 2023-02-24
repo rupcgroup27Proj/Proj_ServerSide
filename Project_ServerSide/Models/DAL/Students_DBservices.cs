@@ -138,20 +138,21 @@ finally
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-
+             
                 while (dataReader.Read())
                 {
                     Student u = new Student();
                     u.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    u.Password = Convert.ToDouble(dataReader["password"]);
+                    u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
                     u.LastName = dataReader["Lastname"].ToString();
                     u.Phone = Convert.ToDouble(dataReader["Phone"]);
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
                     u.PictureUrl= dataReader["PictureUrl"].ToString();
-                    //vacation.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
-                    //vacation.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
+                    u.GroupId= Convert.ToInt32(dataReader["groupId"]);
+                    u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
+                    u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
 
                 }
@@ -222,7 +223,7 @@ finally
                 while (dataReader.Read())
                 {
                     u.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    u.Password = Convert.ToDouble(dataReader["password"]);
+                    u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
                     u.LastName = dataReader["Lastname"].ToString();

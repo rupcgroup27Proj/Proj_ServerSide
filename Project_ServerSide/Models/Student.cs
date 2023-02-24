@@ -17,22 +17,20 @@ namespace Project_ServerSide.Models
     //PictureUrl: x,
     //ParentPhone: (יכול להיות נאל, כי לא לכולם יש)
     //IsAdmin: (יכול להיות נאל, רק למדריכים יש)
- //   StartDate: מקבל תאריך
- //EndDate: מקבל תאריך
+    //   StartDate: מקבל תאריך
+    //EndDate: מקבל תאריך
     //type יכול להיות Admin, Student, Guide, Teacher
 
     ////צריכה ליצור פונקציה אם הטייפ סטודנט לשרשר את פרטי הסטודנט
-    //צריכה לשרשר את התאריך ולחתוך אותו מטבלה GROUP
-    //    צריכה למשוך את הGROUP ID מטבלה GROUP
     //    צריכה להבין איך להתייחס לNULL
+
 
 
 
     public class Student
     {
-        //Type 1;
-
-        double password;
+        string Type = "Student";
+        string password;
         int studentId;
         string firstName;
         string lastName;
@@ -44,7 +42,7 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
-        public double Password { get => password; set => password = value; }
+        public string Password { get => password; set => password = value; }
         public int StudentId { get => studentId; set => studentId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
