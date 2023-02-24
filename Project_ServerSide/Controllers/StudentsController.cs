@@ -27,10 +27,10 @@ namespace Project_ServerSide.Controllers
             }
         }
         [HttpGet("email/{email}/password/{password}")]
-        public IActionResult Get(string email, string password)
+        public IActionResult Get(int studentId, string password)
         {
             Student student = new Student();
-            student.Email = email;
+            student.StudentId = studentId;
             student.Password = password;
             Student result = student.Login();
             if (result.FirstName == null)

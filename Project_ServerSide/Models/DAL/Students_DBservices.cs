@@ -45,11 +45,11 @@ namespace Project_ServerSide.Models.DAL
         try
         {
             con = connect("myProjDB"); // create the connection
-    }
+        }
         catch (Exception ex)
         {
-            // write to log
-            throw (ex);
+                // write to log
+                throw ex;
         }
 
 cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
@@ -61,8 +61,8 @@ try
 }
 catch (Exception ex)
 {
-    // write to log
-    throw (ex);
+                // write to log
+                throw ex;
 }
 
 finally
@@ -214,7 +214,7 @@ finally
             }
 
 
-            cmd = CreateLoginCommandSP("spLogin", con, student);// create the command
+            cmd = CreateLoginCommandSP("spLoginStudent", con, student);// create the command
             Student u= new Student();
             try
             {
@@ -237,7 +237,7 @@ finally
             catch (Exception ex)
             {
 
-                throw (ex);
+                throw;
             }
 
             finally
@@ -267,7 +267,7 @@ finally
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
 
-            cmd.Parameters.AddWithValue("@Email", student.Email);
+            cmd.Parameters.AddWithValue("@studentId", student.StudentId);
             cmd.Parameters.AddWithValue("@Password", student.Password);
 
 

@@ -29,7 +29,7 @@ namespace Project_ServerSide.Models
 
     public class Student
     {
-        string Type = "Student";
+        //string Type = "Student";
         string password;
         int studentId;
         string firstName;
