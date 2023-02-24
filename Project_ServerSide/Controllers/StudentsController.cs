@@ -9,42 +9,69 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        // GET: api/<StudentsController>
+        //GET: api/<StudentsController>
         [HttpGet]
-        public IEnumerable<Student> Get()
+
+        public IActionResult Get()
         {
             Student student = new Student();
-            return student.Read();
+            List<Student> StudentList = student.Read();
+
+            if (StudentList.Count > 0)
+            {
+                return Ok(StudentList);
+            }
+            else
+            {
+                return NotFound("No Student on the system ");
+            }
+        }
+        [HttpGet("email/{email}/password/{password}")]
+        public IActionResult Get(string email, double password)
+        {
+            Student student = new Student();
+            student.Email = email;
+            student.Password = password;
+            student result = student.Login();
+            if (result.FirstName == null)
+            {
+                return NotFound();
+
+            }
+            else
+            {
+                return Ok(result);
+            }
         }
 
+
         // GET api/<StudentsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
         // POST api/<StudentsController>
         [HttpPost]
         public int Post([FromBody] Student student)
-        {
-            int numEffected = student.Insert();
-            return numEffected;
+        {         
+            return student.Insert();
 
         }
 
         // PUT api/<StudentsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Student student)
-        {
-            //student.Id = id;
-            //student.Update();
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] Student student)
+        //{
+        //    //student.Id = id;
+        //    //student.Update();
+        //}
 
-        // DELETE api/<StudentsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/<StudentsController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

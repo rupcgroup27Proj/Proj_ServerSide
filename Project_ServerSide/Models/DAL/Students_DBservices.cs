@@ -16,12 +16,6 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-        public Students_DBservices()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
 
         //--------------------------------------------------------------------------------------------------
         // This method creates a connection to the database according to the connectionString name in the web.config 
@@ -112,9 +106,11 @@ finally
     return cmd;
 }
         //--------------------------------------------------------------------------------------------------
-        // This method read users 
+        // This method read student 
         //--------------------------------------------------------------------------------------------------
-        public List<Student> ReadUsers()
+
+        public List<Student> Read()
+
         {
 
             SqlConnection con;
@@ -136,23 +132,24 @@ finally
 
             cmd = CreateReadStudentsCommandSP("spReadStudent", con);
 
+            List<Student> StudentList = new List<Student>();
+
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-                List<Student> StudentList = new List<Student>();
 
                 while (dataReader.Read())
                 {
                     Student u = new Student();
                     u.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    u.Password = Convert.ToInt32(dataReader["password"]);
-                    u.Email = dataReader["email"].ToString();
-                    u.FirstName = dataReader["firstname"].ToString();
-                    u.LastName = dataReader["lastname"].ToString();
-                    u.Phone = Convert.ToInt32(dataReader["phone"]);
-                    u.ParentPhone = Convert.ToInt32(dataReader["parentPhone"]);
-                    u.PictureUrl= dataReader["pictureUrl"].ToString();
+                    u.Password = Convert.ToDouble(dataReader["password"]);
+                    u.Email = dataReader["Email"].ToString();
+                    u.FirstName = dataReader["Firstname"].ToString();
+                    u.LastName = dataReader["Lastname"].ToString();
+                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
+                    u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
+                    u.PictureUrl= dataReader["PictureUrl"].ToString();
                     //vacation.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
                     //vacation.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
@@ -192,6 +189,85 @@ finally
             cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+
+            return cmd;
+        }
+
+        // This method - login 
+        //---------------------------------------------------------------------------------
+        public Student Login(Student student)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreateLoginCommandSP("spLogin", con, student);// create the command
+            Student u= new Student();
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    u.StudentId = Convert.ToInt32(dataReader["studentId"]);
+                    u.Password = Convert.ToDouble(dataReader["password"]);
+                    u.Email = dataReader["Email"].ToString();
+                    u.FirstName = dataReader["Firstname"].ToString();
+                    u.LastName = dataReader["Lastname"].ToString();
+                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
+                    u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
+                    u.PictureUrl = dataReader["PictureUrl"].ToString();
+                }
+                return u;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        // Create the Login SqlCommand
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+
+            cmd.Parameters.AddWithValue("@Email", student.Email);
+            cmd.Parameters.AddWithValue("@Password", student.Password);
 
 
             return cmd;

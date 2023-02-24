@@ -6,7 +6,7 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    //    Type: x,
+    //Type: x,
     //GroupId: x,
     //UserId: x,
     //Password: x,
@@ -21,9 +21,16 @@ namespace Project_ServerSide.Models
  //EndDate: מקבל תאריך
     //type יכול להיות Admin, Student, Guide, Teacher
 
+    ////צריכה ליצור פונקציה אם הטייפ סטודנט לשרשר את פרטי הסטודנט
+    //צריכה לשרשר את התאריך ולחתוך אותו מטבלה GROUP
+    //    צריכה למשוך את הGROUP ID מטבלה GROUP
+    //    צריכה להבין איך להתייחס לNULL
+
+
+
     public class Student
     {
-        Type Student;
+        //Type 1;
 
         double password;
         int studentId;
@@ -53,25 +60,33 @@ namespace Project_ServerSide.Models
 
         static List<Student> StudentList = new List<Student>();
 
-        public Student(double password,int studentId,string firstName,string lastName,double phone,string email,double parentPhone)
-        {
-            Password = password;
-            StudentId = studentId;
-            FirstName= firstName;
-            LastName=lastName;
-            Phone=phone;
-            Email=email;
-            ParentPhone=parentPhone;
-        }
+        //public Student(double password,int studentId,string firstName,string lastName,double phone,string email,double parentPhone)
+        //{
+        //    Password = password;
+        //    StudentId = studentId;
+        //    FirstName= firstName;
+        //    LastName=lastName;
+        //    Phone=phone;
+        //    Email=email;
+        //    ParentPhone=parentPhone;
+        //}
 
-        public Student()
-        {
-        }
-
-        public int Insert()//insetrt new students to DB
+        public Student Login()
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.Insert(this);
+            return dbs.Login(this);
+        }
+
+        public bool Insert()//insetrt new students to DB
+        {
+            Students_DBservices dbs = new Students_DBservices();
+
+            if (dbs.Insert(this) == 1)
+            {
+                StudentList.Add(this);
+                return true;
+            }
+            return false;
         }
         public List<Student> Read()
         {
