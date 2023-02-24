@@ -26,11 +26,11 @@ namespace Project_ServerSide.Controllers
                 return NotFound("No Student on the system ");
             }
         }
-        [HttpGet("email/{email}/password/{password}")]
+        [HttpGet("studentId/{studentId}/password/{password}")]
         public IActionResult Get(int studentId, string password)
         {
             Student student = new Student();
-            student.StudentId = studentId;
+            student.StudentId =studentId;
             student.Password = password;
             Student result = student.Login();
             if (result.FirstName == null)
