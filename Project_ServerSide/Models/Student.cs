@@ -21,15 +21,13 @@ namespace Project_ServerSide.Models
     //EndDate: מקבל תאריך
     //type יכול להיות Admin, Student, Guide, Teacher
 
-    ////צריכה ליצור פונקציה אם הטייפ סטודנט לשרשר את פרטי הסטודנט
-    //    צריכה להבין איך להתייחס לNULL
 
 
 
 
     public class Student
     {
-        //string Type = "Student";
+        string type;
         string password;
         int studentId;
         string firstName;
@@ -53,21 +51,9 @@ namespace Project_ServerSide.Models
         public int GroupId { get => groupId; set => groupId = value; }
         public DateTime StartDate { get => startDate; set => startDate = value; }
         public DateTime EndDate { get => endDate; set => endDate = value; }
-
-        
+        public string Type { get => type; set => type = value; }
 
         static List<Student> StudentList = new List<Student>();
-
-        //public Student(double password,int studentId,string firstName,string lastName,double phone,string email,double parentPhone)
-        //{
-        //    Password = password;
-        //    StudentId = studentId;
-        //    FirstName= firstName;
-        //    LastName=lastName;
-        //    Phone=phone;
-        //    Email=email;
-        //    ParentPhone=parentPhone;
-        //}
 
         public Student Login()
         {

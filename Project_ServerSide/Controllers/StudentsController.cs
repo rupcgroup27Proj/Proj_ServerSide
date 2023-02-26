@@ -33,7 +33,7 @@ namespace Project_ServerSide.Controllers
             student.StudentId =studentId;
             student.Password = password;
             Student result = student.Login();
-            if (result.FirstName == null)
+            if (result.StudentId == null)
             {
                 return NotFound();
 
@@ -43,6 +43,8 @@ namespace Project_ServerSide.Controllers
                 return Ok(result);
             }
         }
+
+        
 
 
         // GET api/<StudentsController>/5

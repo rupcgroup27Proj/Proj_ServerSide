@@ -36,75 +36,75 @@ namespace Project_ServerSide.Models.DAL
         // This method inserts a student to the student table 
         //--------------------------------------------------------------------------------------------------
         public int Insert(Student student)
-        { 
-
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
         {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
+
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
                 // write to log
                 throw ex;
-        }
+            }
 
-cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
+            cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
 
-try
-{
-    int numEffected = cmd.ExecuteNonQuery(); // execute the command
-    return numEffected;
-}
-catch (Exception ex)
-{
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
                 // write to log
                 throw ex;
-}
+            }
 
-finally
-{
-    if (con != null)
-    {
-        // close the db connection
-        con.Close();
-    }
-}
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
 
-    }
-
-
-    //---------------------------------------------------------------------------------
-    // Create the SqlCommand InsertCommand
-    //---------------------------------------------------------------------------------
-    private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
-{
-
-    SqlCommand cmd = new SqlCommand(); // create the command object
-
-    cmd.Connection = con;              // assign the connection to the command object
-
-    cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-    cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-    cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-    cmd.Parameters.AddWithValue("@studentId", student.StudentId);
-    cmd.Parameters.AddWithValue("@password", student.Password);
-    cmd.Parameters.AddWithValue("@firstName", student.FirstName);
-    cmd.Parameters.AddWithValue("@lastName", student.LastName);
-    cmd.Parameters.AddWithValue("@phone", student.Phone);
-    cmd.Parameters.AddWithValue("@email", student.Email);
-    cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
-    cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
+        }
 
 
-    return cmd;
-}
+        //---------------------------------------------------------------------------------
+        // Create the SqlCommand InsertCommand
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+            cmd.Parameters.AddWithValue("@studentId", student.StudentId);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@firstName", student.FirstName);
+            cmd.Parameters.AddWithValue("@lastName", student.LastName);
+            cmd.Parameters.AddWithValue("@phone", student.Phone);
+            cmd.Parameters.AddWithValue("@email", student.Email);
+            cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
+            cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
+
+
+            return cmd;
+        }
         //--------------------------------------------------------------------------------------------------
         // This method read student 
         //--------------------------------------------------------------------------------------------------
@@ -138,7 +138,7 @@ finally
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-             
+
                 while (dataReader.Read())
                 {
                     Student u = new Student();
@@ -149,10 +149,16 @@ finally
                     u.LastName = dataReader["Lastname"].ToString();
                     u.Phone = Convert.ToDouble(dataReader["Phone"]);
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
-                    u.PictureUrl= dataReader["PictureUrl"].ToString();
-                    u.GroupId= Convert.ToInt32(dataReader["groupId"]);
-                    //u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
-                    //u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
+                    u.PictureUrl = dataReader["PictureUrl"].ToString();
+                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    if (dataReader["StartDate"] == null)
+                        u.StartDate = new DateTime(2222, 2, 22);
+                    else
+                        u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
+                    if (dataReader["EndDate"] == null)
+                        u.EndDate = new DateTime(2222, 2, 22);
+                    else
+                        u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
 
                 }
@@ -215,7 +221,7 @@ finally
 
 
             cmd = CreateLoginCommandSP("spLoginStudent", con, student);// create the command
-            Student u= new Student();
+            Student u = new Student();
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -230,6 +236,7 @@ finally
                     u.Phone = Convert.ToDouble(dataReader["Phone"]);
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
                     u.PictureUrl = dataReader["PictureUrl"].ToString();
+                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
                 }
                 return u;
 
