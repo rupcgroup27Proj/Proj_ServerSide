@@ -6,24 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    //Type: x,
-    //GroupId: x,
-    //UserId: x,
-    //Password: x,
-    //FirstName: x,
-    //LastName: x,
-    //Phone: x,
-    //Email: x,
-    //PictureUrl: x,
-    //ParentPhone: (יכול להיות נאל, כי לא לכולם יש)
-    //IsAdmin: (יכול להיות נאל, רק למדריכים יש)
-    //   StartDate: מקבל תאריך
-    //EndDate: מקבל תאריך
-    //type יכול להיות Admin, Student, Guide, Teacher
-
-
-
-
 
     public class Student
     {

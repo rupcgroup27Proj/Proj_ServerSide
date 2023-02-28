@@ -18,23 +18,23 @@ namespace Project_ServerSide.Controllers
         //{
             
         //}
-        [HttpGet("teachertId/{teacherId}/password/{password}")]
-        public IActionResult Get(int teacherId, string password)
-        {
-            Teacher teacher = new Teacher();
-            teacher.TeacherId = teacherId;
-            teacher.Password = password;
-            Teacher result = teacher.Login();
-            if (teacher.TeacherId == null)
-            {
-                return NotFound();
+        //[HttpGet("teachertId/{teacherId}/password/{password}")]
+        //public IActionResult Get(int teacherId, string password)
+        //{
+        //    Teacher teacher = new Teacher();
+        //    teacher.TeacherId = teacherId;
+        //    teacher.Password = password;
+        //    Teacher result = teacher.Login();
+        //    if (teacher.TeacherId == null)
+        //    {
+        //        return NotFound();
 
-            }
-            else
-            {
-                return Ok(result);
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        return Ok(result);
+        //    }
+        //}
 
 
 

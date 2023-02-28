@@ -18,23 +18,23 @@ namespace Project_ServerSide.Controllers
         //{
             
         //}
-        [HttpGet("guidetId/{guideId}/password/{password}")]
-        public IActionResult Get(int guideId, string password)
-        {
-            Guide guide = new Guide();
-            guide.GuideId = guideId;
-            guide.Password = password;
-            Guide result = guide.Login();
-            if (guide.GuideId == null)
-            {
-                return NotFound();
+        //[HttpGet("guidetId/{guideId}/password/{password}")]
+        //public IActionResult Get(int guideId, string password)
+        //{
+        //    Guide guide = new Guide();
+        //    guide.GuideId = guideId;
+        //    guide.Password = password;
+        //    Guide result = guide.Login();
+        //    if (guide.GuideId == null)
+        //    {
+        //        return NotFound();
 
-            }
-            else
-            {
-                return Ok(result);
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        return Ok(result);
+        //    }
+        //}
 
 
 
