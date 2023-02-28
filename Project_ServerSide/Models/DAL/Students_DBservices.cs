@@ -151,13 +151,13 @@ namespace Project_ServerSide.Models.DAL
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
                     u.PictureUrl = dataReader["PictureUrl"].ToString();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    if (dataReader["StartDate"] == null)
-                        u.StartDate = new DateTime(2222, 2, 22);
-                    else
+                    //if (dataReader["StartDate"] == null)
+                    //    u.StartDate = new DateTime(2222, 2, 22);
+                    //else
                         u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
-                    if (dataReader["EndDate"] == null)
-                        u.EndDate = new DateTime(2222, 2, 22);
-                    else
+                    //if (dataReader["EndDate"] == null)
+                    //    u.EndDate = new DateTime(2222, 2, 22);
+                    //else
                         u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
 
@@ -237,6 +237,7 @@ namespace Project_ServerSide.Models.DAL
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
                     u.PictureUrl = dataReader["PictureUrl"].ToString();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    u.Type = "Student".ToString();
                 }
                 return u;
 

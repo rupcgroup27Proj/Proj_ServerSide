@@ -11,7 +11,7 @@ using System.Numerics;
 
 namespace Project_ServerSide.Models.DAL
 {
-    public class Teachers_DBservices
+    public class Guides_DBservices
     {
         public SqlDataAdapter da;
         public DataTable dt;
@@ -33,9 +33,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
         //--------------------------------------------------------------------------------------------------
-        // This method inserts a teacher to the Teachers table 
+        // This method inserts a guide to the guides table 
         //--------------------------------------------------------------------------------------------------
-        public int Insert(Teacher teacher)
+        public int Insert(Guide guide)
         {
 
 
@@ -52,7 +52,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertTeacherstCommandSP("spInsertTeachers", con, teacher);
+            cmd = CreateInsertGuidestCommandSP("spInsertguides", con, guide);
 
             try
             {
@@ -80,7 +80,7 @@ namespace Project_ServerSide.Models.DAL
         //---------------------------------------------------------------------------------
         // Create the SqlCommand InsertCommand
         //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertTeacherstCommandSP(String spName, SqlConnection con, Teacher teacher)
+        private SqlCommand CreateInsertGuidestCommandSP(String spName, SqlConnection con, Guide guide)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -93,13 +93,14 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@teacherId", teacher.TeacherId);
-            cmd.Parameters.AddWithValue("@password", teacher.Password);
-            cmd.Parameters.AddWithValue("@firstName", teacher.FirstName);
-            cmd.Parameters.AddWithValue("@lastName", teacher.LastName);
-            cmd.Parameters.AddWithValue("@phone", teacher.Phone);
-            cmd.Parameters.AddWithValue("@email", teacher.Email);
-            cmd.Parameters.AddWithValue("@pictureUrl", teacher.PictureUrl);
+            cmd.Parameters.AddWithValue("@guideId", guide.GuideId);
+            cmd.Parameters.AddWithValue("@password", guide.Password);
+            cmd.Parameters.AddWithValue("@firstName", guide.FirstName);
+            cmd.Parameters.AddWithValue("@lastName", guide.LastName);
+            cmd.Parameters.AddWithValue("@phone", guide.Phone);
+            cmd.Parameters.AddWithValue("@email", guide.Email);
+            cmd.Parameters.AddWithValue("@isAdmin", guide.GuideId);
+            cmd.Parameters.AddWithValue("@pictureUrl", guide.PictureUrl);
 
 
             return cmd;
@@ -107,7 +108,7 @@ namespace Project_ServerSide.Models.DAL
 
         // This method - login 
         //---------------------------------------------------------------------------------
-        public Teacher Login(Teacher teacher)
+        public  Guide Login(Guide guide)
         {
 
             SqlConnection con;
@@ -124,15 +125,15 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateLoginCommandSP("spLoginTeachers", con, teacher);// create the command
-            Teacher u = new Teacher();
+            cmd = CreateLoginCommandSP("spLoginGuides", con, guide);// create the command
+            Guide u = new Guide();
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (dataReader.Read())
                 {
-                    u.TeacherId = Convert.ToInt32(dataReader["teacherId"]); 
+                    u.GuideId = Convert.ToInt32(dataReader["guideId"]); 
                     u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
@@ -140,7 +141,8 @@ namespace Project_ServerSide.Models.DAL
                     u.Phone = Convert.ToDouble(dataReader["Phone"]);
                     u.PictureUrl = dataReader["PictureUrl"].ToString();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.Type = "Teacher".ToString();
+                    u.IsAdmin = Convert.ToBoolean(dataReader["isAdmin"]);
+                    u.Type = "Guide".ToString();
 
                 }
                 return u;
@@ -165,7 +167,7 @@ namespace Project_ServerSide.Models.DAL
 
         // Create the Login SqlCommand
         //---------------------------------------------------------------------------------
-        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Teacher teacher)
+        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Guide guide)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -179,8 +181,8 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
 
-            cmd.Parameters.AddWithValue("@teacherId", teacher.TeacherId); 
-            cmd.Parameters.AddWithValue("@Password", teacher.Password);
+            cmd.Parameters.AddWithValue("@guideId", guide.GuideId); 
+            cmd.Parameters.AddWithValue("@Password", guide.Password);
 
 
             return cmd;
