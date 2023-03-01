@@ -33,9 +33,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
         //--------------------------------------------------------------------------------------------------
-        // This method inserts a Journey to the Journey table 
+        // This method inserts a Journey to the Journey table --- by schoolname 
         //--------------------------------------------------------------------------------------------------
-        public int Insert(Journey journey)
+        public int Insert(string schoolName)
         {
 
 
@@ -52,7 +52,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertJourneyCommandSP("spInsertJourney", con, journey);
+            cmd = CreateInsertJourneyCommandSP("spInsertJourney", con, schoolName);
 
             try
             {
@@ -78,9 +78,9 @@ namespace Project_ServerSide.Models.DAL
 
 
         //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand
+        // Create the SqlCommand InsertCommand 
         //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertJourneyCommandSP(String spName, SqlConnection con, Journey journey)
+        private SqlCommand CreateInsertJourneyCommandSP(String spName, SqlConnection con, string schoolName)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -93,18 +93,7 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            //cmd.Parameters.AddWithValue("@groupId", journey.GroupId);
-            //cmd.Parameters.AddWithValue("@startDate", journey.StartDate);
-            //cmd.Parameters.AddWithValue("@endDate", journey.EndDate);
-            //cmd.Parameters.AddWithValue("@schoolName", journey.SchoolName);
-            //cmd.Parameters.AddWithValue("@teacherName", journey.TeacherName);
-            //cmd.Parameters.AddWithValue("@phoneTeacher", journey.PhoneTeacher);
-            //cmd.Parameters.AddWithValue("@teacherEmail", journey.TeacherEmail);
-            //cmd.Parameters.AddWithValue("@guideName", journey.GuideName);
-            //cmd.Parameters.AddWithValue("@guideId", journey.GuideId);
-            //cmd.Parameters.AddWithValue("@phoneGuide", journey.PhoneGuide);
-            //cmd.Parameters.AddWithValue("@guideEmail", journey.GuideEmail);
-
+            cmd.Parameters.AddWithValue("@schoolName", schoolName);
 
             return cmd;
         }
@@ -147,14 +136,14 @@ namespace Project_ServerSide.Models.DAL
 
                     Journey u = new Journey();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.PhoneGuide = Convert.ToDouble(dataReader["phone"]);
-                    u.GuideEmail = dataReader["Email"].ToString();
-                    u.GuideName = dataReader["firstName"].ToString();
+                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
+                    u.GuideEmail = dataReader["guideEmail"].ToString();
+                    u.GuideName = dataReader["guidefirstname"].ToString();
                     u.GuideId = Convert.ToInt32(dataReader["guideId"]);
-                    u.PhoneTeacher = Convert.ToDouble(dataReader["phone"]);
-                    u.TeacherEmail = dataReader["Email"].ToString();
+                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
+                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
                     u.SchoolName = dataReader["schoolName"].ToString();
-                    u.TeacherName = dataReader["firstName"].ToString();
+                    u.TeacherName = dataReader["teacherFirstName"].ToString();
                     u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
                     u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     JourneyList.Add(u);
@@ -227,14 +216,14 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.PhoneGuide = Convert.ToDouble(dataReader["phone"]);
-                    u.GuideEmail = dataReader["Email"].ToString();
-                    u.GuideName = dataReader["firstName"].ToString();
+                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
+                    u.GuideEmail = dataReader["guideEmail"].ToString();
+                    u.GuideName = dataReader["guidefirstname"].ToString();
                     u.GuideId = Convert.ToInt32(dataReader["guideId"]);
-                    u.PhoneTeacher = Convert.ToDouble(dataReader["phone"]);
-                    u.TeacherEmail = dataReader["Email"].ToString();
+                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
+                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
                     u.SchoolName = dataReader["schoolName"].ToString();
-                    u.TeacherName = dataReader["firstName"].ToString();
+                    u.TeacherName = dataReader["teacherFirstName"].ToString();
                     u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
                     u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                 }

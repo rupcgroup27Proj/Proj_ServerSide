@@ -46,10 +46,10 @@ namespace Project_ServerSide.Controllers
         }
 
         //insert new Journey
-        [HttpPost]
-        public bool Post([FromBody] Journey journey)
+        [HttpPost("schoolName/{schoolName}")]
+        public void Post( string schoolName)
         {         
-            return journey.Insert();
+             Journey.Insert(schoolName);
 
         }
 
