@@ -93,7 +93,7 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@studentId", student.StudentId);
+            cmd.Parameters.AddWithValue("@Id", student.StudentId);
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@firstName", student.FirstName);
             cmd.Parameters.AddWithValue("@lastName", student.LastName);
@@ -142,7 +142,7 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     Student u = new Student();
-                    u.StudentId = Convert.ToInt32(dataReader["studentId"]);
+                    u.StudentId = Convert.ToInt32(dataReader["id"]);
                     u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
@@ -228,7 +228,7 @@ namespace Project_ServerSide.Models.DAL
 
                 while (dataReader.Read())
                 {
-                    u.StudentId = Convert.ToInt32(dataReader["studentId"]);
+                    u.StudentId = Convert.ToInt32(dataReader["Id"]);
                     u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
@@ -275,7 +275,7 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
 
-            cmd.Parameters.AddWithValue("@studentId", student.StudentId);
+            cmd.Parameters.AddWithValue("@Id", student.StudentId);
             cmd.Parameters.AddWithValue("@Password", student.Password);
 
 
