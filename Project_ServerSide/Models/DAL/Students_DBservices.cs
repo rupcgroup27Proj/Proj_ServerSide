@@ -282,5 +282,171 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
+        // This method - pull Specific Student by studentID
+        //---------------------------------------------------------------------------------
+        public Student pullSpecificStudent(Student student)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreatePullCommandSP("spPullStudentById", con, student);// create the command
+            Student Y = new Student();
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+
+                    Y.StudentId = Convert.ToInt32(dataReader["Id"]);
+                    Y.Password = dataReader["Password"].ToString();
+                    Y.Email = dataReader["Email"].ToString();
+                    Y.FirstName = dataReader["Firstname"].ToString();
+                    Y.LastName = dataReader["Lastname"].ToString();
+                    Y.Phone = Convert.ToDouble(dataReader["Phone"]);
+                    Y.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
+                    Y.PictureUrl = dataReader["PictureUrl"].ToString();
+                    Y.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    Y.Type = "Student".ToString();
+                }
+                return Y;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        // Create the pull Specific Journey SqlCommand
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Student student)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+
+            cmd.Parameters.AddWithValue("@Id", student.StudentId);
+
+
+            return cmd;
+        }
+
+        //--------------------------------------------------------------------------------------------------
+        // This method update a student to the student table 
+        //--------------------------------------------------------------------------------------------------
+        public int Update(Student student)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreateCommandWithStoredProcedure("spUpdateStudent", con, student);           
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildUpdateCommand(Student student)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            
+            string command = sb.AppendFormat("update Students set phone = '{0}', email = {1}, parentPhone = {2} where id = {3}", student.Phone, student.Email, student.ParentPhone,student.StudentId).ToString();
+
+            return command;
+        }
+
+        //---------------------------------------------------------------------------------
+        // Create the SqlCommand using a stored procedure
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Student student)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+            cmd.Parameters.AddWithValue("@id", student.StudentId);
+
+            cmd.Parameters.AddWithValue("@email", student.Email);
+
+            cmd.Parameters.AddWithValue("@phone", student.Phone);
+
+            cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
+
+
+
+            return cmd;
+        }
+
     }
 }
+
+

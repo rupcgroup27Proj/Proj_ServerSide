@@ -63,6 +63,14 @@ namespace Project_ServerSide.Models
             return dbs.Read();
         }
 
+        public int Update()
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            return dbs.Update(this);
+
+        }
+
+
     }
 }
 

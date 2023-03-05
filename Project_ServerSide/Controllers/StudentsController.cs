@@ -26,6 +26,33 @@ namespace Project_ServerSide.Controllers
                 return NotFound("No Student on the system ");
             }
         }
+
+        [HttpGet("studentId/{studentId}")]
+
+        public IActionResult Get(int studentId)
+        {
+            Student student=new Student();
+            student.StudentId = studentId;
+
+            Student res = student.pullSpecificStudent();
+            if (res.StudentId == null)
+            {
+                return NotFound();
+
+            }
+            else
+            {
+                return Ok(res);
+            }
+        }
+
+        // PUT api/<StudentsController>/5
+        [HttpPut("{studentId}")]
+        public void Put(int studentId, [FromBody] Student student)
+        {
+            student.StudentId = studentId;
+            student.Update();
+        }
         //[HttpGet("studentId/{studentId}/password/{password}")]
         //public IActionResult Get(int studentId, string password)
         //{
@@ -44,7 +71,7 @@ namespace Project_ServerSide.Controllers
         //    }
         //}
 
-//insert new student
+        //insert new student
         [HttpPost]
         public bool Post([FromBody] Student student)
         {         

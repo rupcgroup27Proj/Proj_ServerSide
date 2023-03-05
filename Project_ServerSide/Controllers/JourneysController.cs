@@ -47,12 +47,17 @@ namespace Project_ServerSide.Controllers
 
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
-        public void Post( string schoolName)
+        public void Post(string schoolName)
         {         
              Journey.Insert(schoolName);
 
         }
-
+        [HttpPut("{groupId}")]
+        public void Put(int groupId, [FromBody] Journey journey)
+        {
+            journey.GroupId = groupId;
+            journey.Update();
+        }
         // PUT api/<StudentsController>/5
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] Student student)
