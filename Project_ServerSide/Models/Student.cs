@@ -42,6 +42,12 @@ namespace Project_ServerSide.Models
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Login(this);
         }
+        public int Update()
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            return dbs.Update(this);
+
+        }
 
         public bool Insert()//insetrt new students to DB
         {
@@ -59,7 +65,11 @@ namespace Project_ServerSide.Models
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Read();
         }
-
+        public Student pullSpecificStudent()
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            return dbs.pullSpecificStudent(this);
+        }
     }
 }
 

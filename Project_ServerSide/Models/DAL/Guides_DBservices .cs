@@ -93,13 +93,13 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@guideId", guide.GuideId);
+            cmd.Parameters.AddWithValue("@Id", guide.GuideId);
             cmd.Parameters.AddWithValue("@password", guide.Password);
             cmd.Parameters.AddWithValue("@firstName", guide.FirstName);
             cmd.Parameters.AddWithValue("@lastName", guide.LastName);
             cmd.Parameters.AddWithValue("@phone", guide.Phone);
             cmd.Parameters.AddWithValue("@email", guide.Email);
-            cmd.Parameters.AddWithValue("@isAdmin", guide.GuideId);
+            cmd.Parameters.AddWithValue("@isAdmin", guide.IsAdmin);
             cmd.Parameters.AddWithValue("@pictureUrl", guide.PictureUrl);
 
 
@@ -133,7 +133,7 @@ namespace Project_ServerSide.Models.DAL
 
                 while (dataReader.Read())
                 {
-                    u.GuideId = Convert.ToInt32(dataReader["guideId"]); 
+                    u.GuideId = Convert.ToInt32(dataReader["Id"]); 
                     u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
@@ -181,7 +181,7 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
 
-            cmd.Parameters.AddWithValue("@guideId", guide.GuideId); 
+            cmd.Parameters.AddWithValue("@Id", guide.GuideId); 
             cmd.Parameters.AddWithValue("@Password", guide.Password);
 
 

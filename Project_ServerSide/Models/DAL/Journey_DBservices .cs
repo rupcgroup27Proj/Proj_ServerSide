@@ -269,6 +269,88 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
+        //--------------------------------------------------------------------------------------------------
+        // This method update dates to the groups table 
+        //--------------------------------------------------------------------------------------------------
+        public int Update(Journey journey)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreateCommandWithStoredProcedure("spInsertNewDates", con, journey);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        private String BuildUpdateCommand(Journey journey)
+        {
+
+            StringBuilder sb = new StringBuilder();
+
+            string command = sb.AppendFormat("update Groups set startDate = '{0}', endDate = {1} where groupId = {2}", journey.StartDate, journey.EndDate,journey.GroupId).ToString();
+
+            return command;
+        }
+
+        //---------------------------------------------------------------------------------
+        // Create the SqlCommand using a stored procedure
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Journey journey)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+            cmd.Parameters.AddWithValue("@startDate", journey.StartDate);
+
+            cmd.Parameters.AddWithValue("@endDate", journey.EndDate);
+
+            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);
+
+            
+
+
+
+            return cmd;
+        }
 
     }
 }
