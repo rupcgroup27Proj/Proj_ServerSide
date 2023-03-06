@@ -5,11 +5,11 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Text;
-using WebApplication1.Models;
+using Project_ServerSide.Models;
 using System.Xml.Linq;
 
 
-public class DBservices
+/*public class DBservices
 {
     public SqlDataAdapter da;
     public DataTable dt;
@@ -340,3 +340,4 @@ public class DBservices
 
     /////////////////////////////////////////////////////////END OF FLAT///////////////////////////////////////////////////////////
 }
+*/
