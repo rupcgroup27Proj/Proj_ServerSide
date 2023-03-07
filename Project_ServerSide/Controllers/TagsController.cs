@@ -20,7 +20,7 @@ namespace Project_ServerSide.Controllers
         [HttpGet("{postId}")]
         public List<Tag> Get(int postId)
         {
-           return Tag.ReadTagInPost(postId);
+            return Tag.ReadTagInPost(postId);
         }
 
         // POST api/<TagsController>
