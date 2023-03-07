@@ -16,9 +16,8 @@ namespace Project_ServerSide.Models.DAL
     public class Algorithm_DBS
     {
         //////////////////////////////////////////
-        ///might need to adapt the code for normalized "TagCount" (to 5).
         const int CoreTagsQuantity = 3;
-        const int normScalar = 5;
+        const int normScalar = 5;  //used for normalizing between 0 to 5.
         List<int> tags = new List<int>();
         List<StudentTagJSON> studentsTags = new List<StudentTagJSON>();
         double maxTagCount = 0;
