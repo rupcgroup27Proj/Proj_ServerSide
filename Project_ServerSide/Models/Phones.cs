@@ -11,12 +11,12 @@ namespace Project_ServerSide.Models
     {
         int id;
         string title;
-        double phone;
+        string phone;
         string notes;
         int groupId;
         
        
-        public double Phone { get => phone; set => phone = value; }
+        public string Phone { get => phone; set => phone = value; }
         public string Title { get => title; set => title = value; }
         public string Notes { get => notes; set => notes = value; }
         public int Id { get => id; set => id = value; }
@@ -49,7 +49,13 @@ namespace Project_ServerSide.Models
             Phones_DBservices dbs = new Phones_DBservices();
             return dbs.Read();
         }
-        
+
+        public Phones pullEmbassy()
+        {
+            Phones_DBservices dbs = new Phones_DBservices();
+            return dbs.pullEmbassy(this);
+        }
+
     }
 }
 

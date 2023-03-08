@@ -27,25 +27,24 @@ namespace Project_ServerSide.Controllers
             }
         }
 
-        [HttpGet("title/{title}/phone/{phone}")]
+        [HttpGet("title/{title}")]
 
-        //public IActionResult Get(string title,double phone)
-        //{
-        //    Phones phones=new Phones();
-        //    phones.Title = title;
-        //    phones.Phone = phone;
+        public IActionResult Get(string title)// title is 'embassy'
+        {
+            Phones phones = new Phones();
+            phones.Title = title;
 
-        //    Phones res = phone.pullSpecificphone();
-        //    if (res.Title == null)
-        //    {
-        //        return NotFound();
+            Phones res = phones.pullEmbassy();
+            if (res.Title == null)
+            {
+                return NotFound();
 
-        //    }
-        //    else
-        //    {
-        //        return Ok(res);
-        //    }
-        //}
+            }
+            else
+            {
+                return Ok(res);
+            }
+        }
 
         // PUT api/<PhonesController>/5
 

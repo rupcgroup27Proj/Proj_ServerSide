@@ -96,7 +96,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@phone", phones.Phone);
             cmd.Parameters.AddWithValue("@title", phones.Title);
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
-            cmd.Parameters.AddWithValue("@id", phones.Id);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
 
 
@@ -139,7 +138,7 @@ namespace Project_ServerSide.Models.DAL
                 {
                     Phones u = new Phones();
                     u.Title = dataReader["title"].ToString();
-                    u.Phone = Convert.ToDouble(dataReader["phone"]);
+                    u.Phone = dataReader["phone"].ToString();
                     u.Id = Convert.ToInt32(dataReader["id"]);
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
                     u.Notes = dataReader["notes"].ToString();
@@ -235,7 +234,7 @@ namespace Project_ServerSide.Models.DAL
 
             StringBuilder sb = new StringBuilder();
             
-            string command = sb.AppendFormat("update ImportantNumbers set phone = '{0}', title = {1}, notes = {2} where id = {3}", phones.Phone, phones.Title, phones.Notes, phones.Id).ToString();
+            string command = sb.AppendFormat("update ImportantNumbers set phone = '{0}', title = {1}, notes = {2}, groupId = {3} where id = {4}", phones.Phone, phones.Title, phones.Notes,phones.GroupId, phones.Id).ToString();
 
             return command;
         }
@@ -262,6 +261,80 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
             cmd.Parameters.AddWithValue("@id", phones.Id);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
+
+
+            return cmd;
+        }
+
+        // This method - pull Specific embassy of Israel
+        //---------------------------------------------------------------------------------
+        public Phones pullEmbassy(Phones phones)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreatePullCommandSP("sppullEmbassy", con, phones);// create the command
+            Phones X = new Phones();
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    X.Title = dataReader["title"].ToString();
+                    X.Phone = dataReader["phone"].ToString();
+                    X.Notes = dataReader["notes"].ToString();
+                    
+                }
+                return X;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        // Create the pull Specific  SqlCommand
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Phones phones)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+
+            cmd.Parameters.AddWithValue("@title", phones.Title);
 
 
             return cmd;
