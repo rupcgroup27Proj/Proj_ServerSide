@@ -1,3 +1,6 @@
+
+using Project_ServerSide.Models.Algorithm;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,6 +27,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Hi
+AlgorithmAutoRun.Main();
 
 app.Run();
+
+
+
+
