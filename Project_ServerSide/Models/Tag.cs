@@ -12,13 +12,12 @@ namespace Project_ServerSide.Models
         public int GroupId { get => groupId; set => groupId = value; }
         public string TagName { get => tagName; set => tagName = value; }
 
-        //coreTag?
 
         public static List<Tag> GetTags()
         {
             Tag_DBservices dbs = new Tag_DBservices();
             return dbs.GetTags();
-        }
+        }//להוסיף לפי groupId
 
         public int Insert()
         {
