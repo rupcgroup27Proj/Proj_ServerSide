@@ -100,6 +100,7 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@phone", teacher.Phone);
             cmd.Parameters.AddWithValue("@email", teacher.Email);
             cmd.Parameters.AddWithValue("@pictureUrl", teacher.PictureUrl);
+            cmd.Parameters.AddWithValue("@groupId", teacher.GroupId);
 
 
             return cmd;
