@@ -101,6 +101,8 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@email", guide.Email);
             cmd.Parameters.AddWithValue("@isAdmin", guide.IsAdmin);
             cmd.Parameters.AddWithValue("@pictureUrl", guide.PictureUrl);
+            cmd.Parameters.AddWithValue("@groupId", guide.GroupId);
+
 
 
             return cmd;
