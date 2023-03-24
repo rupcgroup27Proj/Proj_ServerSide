@@ -32,7 +32,11 @@ namespace Project_ServerSide.Models
             return dbs.ReadTagInPost(postId);
         }
 
-
+        static public List<Tag> GetBuiltInTags()
+        {
+            Tag_DBservices dbs = new Tag_DBservices();
+            return dbs.GetBuiltInTags();
+        }
 
 
 

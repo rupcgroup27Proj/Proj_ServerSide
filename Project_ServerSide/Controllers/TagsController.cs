@@ -23,6 +23,12 @@ namespace Project_ServerSide.Controllers
             return Tag.ReadTagInPost(postId);
         }
 
+        [HttpGet("builtInTags")]
+        public List<Tag> GetBuiltInTags()
+        {
+            return Tag.GetBuiltInTags();
+        }
+
         // POST api/<TagsController>
         [HttpPost]
         public void Post([FromBody] string value)

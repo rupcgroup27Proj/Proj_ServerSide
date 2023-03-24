@@ -6,36 +6,18 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    //Type: x,
-    //GroupId: x,
-    //UserId: x,
-    //Password: x,
-    //FirstName: x,
-    //LastName: x,
-    //Phone: x,
-    //Email: x,
-    //PictureUrl: x,
-    //ParentPhone: (יכול להיות נאל, כי לא לכולם יש)
-    //IsAdmin: (יכול להיות נאל, רק למדריכים יש)
-    //   StartDate: מקבל תאריך
-    //EndDate: מקבל תאריך
-    //type יכול להיות Admin, Student, Guide, Teacher
-
-
-
-
 
     public class Teacher
     {
         string type;
-        string password;
+        int groupId;
         int teacherId;
+        string password;
         string firstName;
         string lastName;
         double phone;
         string email;
         string pictureUrl;
-        int groupId;
         DateTime startDate;
         DateTime endDate;
 
@@ -70,7 +52,7 @@ namespace Project_ServerSide.Models
             }
             return false;
         }
-      
+
     }
 }
 

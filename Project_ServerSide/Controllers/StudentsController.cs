@@ -35,7 +35,7 @@ namespace Project_ServerSide.Controllers
             student.StudentId = studentId;
 
             Student res = student.pullSpecificStudent();
-            if (res.StudentId == null)
+            if (res.StudentId == 0)
             {
                 return NotFound();
 

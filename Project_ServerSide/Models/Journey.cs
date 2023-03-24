@@ -52,7 +52,7 @@ namespace Project_ServerSide.Models
             return dbs.pullSpecificJourney(this);
         }
 
-         public static void Insert(string schoolName) { //insetrt new Journey to DB
+         public static void Insert(string schoolName) { 
             Journey_DBservices dbs = new Journey_DBservices();
             dbs.Insert(schoolName);
            

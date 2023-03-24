@@ -27,7 +27,59 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //ReadTagList                                               
+        //Get all built-in tags - Barel                                              
+        //--------------------------------------------------------------------------------------------------
+        public List<Tag> GetBuiltInTags()
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetBuiltInTags(con);
+
+            List<Tag> tags = new List<Tag>();
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    Tag tag = new Tag();
+                    tag.TagId = Convert.ToInt32(dataReader["tagId"]);
+                    tag.GroupId = 0;
+                    tag.TagName = dataReader["tagName"].ToString();
+                    tags.Add(tag);
+                }
+                return tags;
+            }
+
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spGetBuiltInTags(SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "GetBuiltInTags";
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            return cmd;
+        }
+
+
+
+        // ReadTags
         //--------------------------------------------------------------------------------------------------
         public List<Tag> GetTags()
         {
@@ -99,8 +151,6 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-
-
         //ReadTagInPost                                                
         //--------------------------------------------------------------------------------------------------
         public List<Tag> ReadTagInPost(int postId)
@@ -132,7 +182,7 @@ namespace Project_ServerSide.Models.DAL
                 {
                     Tag tempTagList = new Tag();
 
-                    tempTagList.TagId= Convert.ToInt32(dataReader["tagId"]);
+                    tempTagList.TagId = Convert.ToInt32(dataReader["tagId"]);
                     tempTagList.TagName = dataReader["tagName"].ToString();
 
                     tempList.Add(tempTagList);
@@ -237,7 +287,7 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@groupId",tag.GroupId);
+            cmd.Parameters.AddWithValue("@groupId", tag.GroupId);
 
             return cmd;
         }
