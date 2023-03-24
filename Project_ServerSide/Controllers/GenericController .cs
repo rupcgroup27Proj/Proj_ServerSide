@@ -75,31 +75,5 @@ namespace Project_ServerSide.Controllers
         }
             
 
-
-
-
-        //// GET api/<TeachersController>/5
-        ////[HttpGet("{id}")]
-        ////public string Get(int id)
-        ////{
-        ////    return "value";
-        ////}
-
-        //// POST api/<TeachersController>
-        //[HttpPost]
-        //public bool Post([FromBody] Teacher teacher)
-        //{         
-        //    return teacher.Insert();
-
-        //}
-
-        //// PUT api/<TeachersController>/5
-        ////[HttpPut("{id}")]
-        
-        ////// DELETE api/<TeachersController>/5
-        ////[HttpDelete("{id}")]
-        ////public void Delete(int id)
-        ////{
-        ////}
     }
 }
