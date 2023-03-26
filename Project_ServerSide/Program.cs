@@ -26,7 +26,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-AlgorithmAutoRun.Main();
+//AlgorithmAutoRun.Main();
 
 app.Run();
 

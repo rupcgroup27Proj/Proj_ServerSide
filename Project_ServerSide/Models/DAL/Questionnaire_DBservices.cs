@@ -51,17 +51,17 @@ namespace Project_ServerSide.Models.DAL
             dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(json);
             dynamic questionnaireJson = parsedJson.questionnaire;
 
-
+          
 
             Questionnaire questionnaire = new Questionnaire
             {
                 Title = questionnaireJson.title,
+                Description = questionnaireJson.description,
                 Tags = questionnaireJson.tags.ToObject<List<Tag>>(),
                 Questions = questionnaireJson.questions.ToObject<List<Question>>()
             };
 
             string questionnaireJsonString = JsonConvert.SerializeObject(questionnaire);
-
 
             cmd = spPostQuestionnare(con, groupId, questionnaireJsonString);
 
@@ -106,7 +106,7 @@ namespace Project_ServerSide.Models.DAL
             { throw (ex); }
 
             //get all questionnaires with their id, title and description:
-            List<Dictionary<string, string>> questionnaires = getQuestionnairesIdsAndTitles(groupId, con);
+            List<Dictionary<string, string>> questionnaires = getQuestionnaires(groupId, con);
 
             //get the tags of all questionnares
             List<Dictionary<string, string>> tags = getQuestionnaireTags(groupId, con);
@@ -128,6 +128,7 @@ namespace Project_ServerSide.Models.DAL
                 tmpQuestionnaire.Description = questionnaire["description"];
                 tmpQuestionnaire.Tags = new List<Tag>();
                 tmpQuestionnaire.Questions = new List<Question>();
+
                 //fill the questionnaire with all its tags
                 foreach (var tag in tags)
                 {
@@ -183,14 +184,14 @@ namespace Project_ServerSide.Models.DAL
             }
 
             con.Close();
-            // Serialize "data" to a JSON string 
+       
             string jsonString = JsonConvert.SerializeObject(data);
 
             return jsonString;
 
         }
 
-        private List<Dictionary<string, string>> getQuestionnairesIdsAndTitles(int groupId, SqlConnection con)
+        private List<Dictionary<string, string>> getQuestionnaires(int groupId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
@@ -211,14 +212,6 @@ namespace Project_ServerSide.Models.DAL
                         {"title", dataReader["title"].ToString()},
                         {"description", dataReader["description"].ToString() }
                     };
-
-                    /* var questionnaire = new
-                     {
-                         questionnaireId = dataReader["Id"].ToString(),
-                         questionnaireTitle = dataReader["title"].ToString(),
-                         questionnaireDescription = dataReader["description"].ToString()
-                     };*/
-
                     result.Add(questionnaire);
                 }
                 dataReader.Close();//Close the dataReader so that i could open another one on the same connection.
