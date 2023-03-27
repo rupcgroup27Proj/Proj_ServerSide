@@ -1,4 +1,4 @@
-﻿// Add a reference to System.Data.SqlClient
+﻿﻿// Add a reference to System.Data.SqlClient
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
@@ -14,7 +14,7 @@ public class ExcelController : ControllerBase
     [HttpPost("api/excel/upload")]
     public IActionResult UploadExcelFile(IFormFile file)
     {
-        // Parse the Excel file
+        // Parse the Excel file---note
         var dataTable = ParseExcelFile(file);
 
         // Insert the data into the database
