@@ -13,6 +13,8 @@ namespace Project_ServerSide.Models
         string type;
         DateTime createdAt;
 
+        List<Tag> tags = new List<Tag>(); //מה שהתחלנו
+
         public int PostId { get => postId; set => postId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
         public int StudentId { get => studentId; set => studentId = value; }
@@ -21,35 +23,29 @@ namespace Project_ServerSide.Models
         public string FileUrl { get => fileUrl; set => fileUrl = value; }
         public string Type { get => type; set => type = value; }
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
+        public List<Tag> Tags { get => tags; set => tags = value; } //מה שהתחלנו
 
-        public static List<SocialCloud> ReadBygroupId(int groupId)
+
+        public static List<SocialCloud> ReadByGroupId(int groupId)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.PostsLikesByGroupId(groupId);
+            return dbs.ReadByGroupId(groupId);
         }
 
-        public int Insert()
+        public int Insert(string tagsJson)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.InsertSocialCloud(this);
+            return dbs.InsertSocialCloud(this, tagsJson);
+        } 
+
+        public static int Delete(int postId)
+        {
+            SocialCloud_DBservice dbs = new SocialCloud_DBservice();
+            return dbs.DeleteFromSocialCloud(postId);
         }
 
-        public int InsertTagsToPost(int tagId, int postId)
-        {
-            SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.InsertTagsToPost(tagId, postId);
+     
 
-        }
-        public static bool DeleteByStudent(int studentId, int postId)
-        {
-            SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.DeleteFromSocialCloudByStudent(studentId, postId);
-        }
 
-        public static int DeleteByTeacher(int teacherId, int postId)
-        {
-            SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.DeleteFromSocialCloudByTeacher(teacherId, postId);
-        }
     }
 }

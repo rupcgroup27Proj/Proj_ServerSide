@@ -78,10 +78,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        // ReadTags
+        //ReadTagList                                               
         //--------------------------------------------------------------------------------------------------
-        public List<Tag> GetTags()
+        public List<Tag> GetTags(int groupId)
         {
 
             SqlConnection con;
@@ -98,7 +97,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateCommandGetTags("spGetTags", con);             // create the command
+            cmd = CreateCommandGetTags("spGetTags", con , groupId);             // create the command
 
 
             List<Tag> tempList = new List<Tag>();
@@ -135,7 +134,7 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
-        private SqlCommand CreateCommandGetTags(string spName, SqlConnection con)
+        private SqlCommand CreateCommandGetTags(string spName, SqlConnection con , int groupId)
         {
             SqlCommand cmd = new SqlCommand(); // create the command object
 
@@ -147,9 +146,12 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
+            cmd.Parameters.AddWithValue("@groupId", groupId);
 
             return cmd;
         }
+
+
 
         //ReadTagInPost                                                
         //--------------------------------------------------------------------------------------------------
@@ -182,7 +184,7 @@ namespace Project_ServerSide.Models.DAL
                 {
                     Tag tempTagList = new Tag();
 
-                    tempTagList.TagId = Convert.ToInt32(dataReader["tagId"]);
+                    tempTagList.TagId= Convert.ToInt32(dataReader["tagId"]);
                     tempTagList.TagName = dataReader["tagName"].ToString();
 
                     tempList.Add(tempTagList);
@@ -224,70 +226,6 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.Parameters.AddWithValue("@postId", postId);
 
-
-            return cmd;
-        }
-
-
-
-        // InsertNewTag
-        //--------------------------------------------------------------------------------------------------
-
-        public int InsertNewTag(Tag tag)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-
-            cmd = CreateCommandInsertNewTag("spInsertNewTag", con, tag);             // create the command
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
-        }
-
-        private SqlCommand CreateCommandInsertNewTag(String spName, SqlConnection con, Tag tag)
-        {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-            cmd.Parameters.AddWithValue("@groupId", tag.GroupId);
 
             return cmd;
         }

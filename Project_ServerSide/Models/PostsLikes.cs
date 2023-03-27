@@ -24,7 +24,7 @@ namespace Project_ServerSide.Models
             return dbs.InsertPostsLikes(studentId, postId);
         }
 
-        public int Delete(int studentId, int postId)
+        public static int Delete(int studentId, int postId)
         {
             PostsLikes_DBservices dbs = new PostsLikes_DBservices();
             return dbs.DeleteFromPostsLikes(studentId, postId);

@@ -1,5 +1,4 @@
-
-using Project_ServerSide.Models.Algorithm;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +16,6 @@ var app = builder.Build();
   app.UseSwagger();
   app.UseSwaggerUI();
 
-
 //app.UseHttpsRedirection();
 
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -26,7 +24,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//AlgorithmAutoRun.Main();
+//AlgorithmAutoRun.Main(); //for updating the algorithm once a day
 
 app.Run();
 

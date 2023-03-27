@@ -16,10 +16,10 @@ namespace Project_ServerSide.Models
         public string CommentText { get => commentText; set => commentText = value; }
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
 
-        public static List<PostsComments> ReadByPostId(int PostId)
+        public static List<PostsComments> ReadByPostId(int postId)
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.GetCommentsByPostId(PostId);
+            return dbs.GetCommentsByPostId(postId);
         }
 
         public int Insert()
@@ -28,16 +28,10 @@ namespace Project_ServerSide.Models
             return dbs.InsertPostsComments(this);
         }
 
-        public static bool DeleteByStudent(int studentId, int commentId)
+        public static int Delete(int commentId)
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.DeleteFromPostsCommentsByStudent(studentId, commentId);
-        }
-
-        public static int DeleteByTeacher(int teacherId, int commentId)
-        {
-            PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.DeleteFromPostsCommentsByTeacher(teacherId, commentId);
+            return dbs.DeleteFromPostsComments(commentId);
         }
     }
 }

@@ -12,18 +12,11 @@ namespace Project_ServerSide.Models
         public int GroupId { get => groupId; set => groupId = value; }
         public string TagName { get => tagName; set => tagName = value; }
 
-        //coreTag?
 
-        public static List<Tag> GetTags()
+        public static List<Tag> GetTags(int groupId)
         {
             Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.GetTags();
-        }
-
-        public int Insert()
-        {
-            Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.InsertNewTag(this);
+            return dbs.GetTags(groupId);
         }
 
         public static List<Tag> ReadTagInPost(int postId)
