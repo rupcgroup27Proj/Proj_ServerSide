@@ -36,6 +36,7 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
+
         public void InsertNewQuestionnaire(int groupId, string sq)
         {
             SqlConnection con;
@@ -81,7 +82,6 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
-
         private SqlCommand spPostQuestionnare(SqlConnection con, int groupId, string json)
         {
             SqlCommand cmd = new SqlCommand();
@@ -94,7 +94,6 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
-
 
 
         public string GetAllQuestionnaires(int groupId)
@@ -314,6 +313,18 @@ namespace Project_ServerSide.Models.DAL
             }
             catch (Exception ex)
             { throw; }
+        }
+
+
+        public void updateStudentTags(int studentId, List<Tag> tags)
+        {
+            SqlConnection con;
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+
         }
     }
 }
