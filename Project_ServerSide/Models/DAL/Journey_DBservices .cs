@@ -22,7 +22,7 @@ namespace Project_ServerSide.Models.DAL
         //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
-            //a/aa
+            //a
             // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
