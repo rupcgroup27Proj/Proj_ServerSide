@@ -22,10 +22,9 @@ namespace Project_ServerSide.Models
         {
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.InsertFavPost(studentId, postId);
-
         }
 
-        public int Delete(int studentId, int postId)
+        public static int Delete(int studentId, int postId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.DeletePostFromListFav(studentId, postId);

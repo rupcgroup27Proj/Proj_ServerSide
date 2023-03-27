@@ -28,7 +28,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // GetStudentPostsLikes
+        // GetStudentPostsLikes  
         //--------------------------------------------------------------------------------------------------
         public List<PostsLikes> PostsLikesByStudentId(int studentId)
         {
@@ -107,7 +107,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // InsertPostToStudentPostsLikes
+        // InsertPostToStudentPostsLikes  
         //--------------------------------------------------------------------------------------------------
 
         public bool InsertPostsLikes(int studentId, int postId)
@@ -177,7 +177,7 @@ namespace Project_ServerSide.Models.DAL
 
 
 
-        // DeleteFromPostsLikes
+        // DeleteFromPostsLikes  
         //--------------------------------------------------------------------------------------------------
         public int DeleteFromPostsLikes(int studentId, int postId)
         {

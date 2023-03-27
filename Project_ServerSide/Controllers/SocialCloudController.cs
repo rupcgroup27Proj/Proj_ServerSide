@@ -10,59 +10,44 @@ namespace Project_ServerSide.Controllers
     public class SocialCloudController : ControllerBase
     {
         // GET: api/<SocialCloudController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
 
-        // GET api/<SocialCloudController>/5
-        [HttpGet("{groupId}")]
+        // GET api/<SocialCloudController>/
+        [HttpGet("groupId/{groupId}")]
         public List<SocialCloud> Get(int groupId)
         {
-            return SocialCloud.ReadBygroupId(groupId);
+            return SocialCloud.ReadByGroupId(groupId);
         }
 
         // POST api/<SocialCloudController>
-        [HttpPost]
-        public int Post([FromBody] SocialCloud socialCloud)
+        [HttpPost("tagsJson/{tagsJson}")]
+        public int Post([FromBody] SocialCloud socialCloud, string tagsJson)
         {
-            return socialCloud.Insert();
+            return socialCloud.Insert(tagsJson);
         }
 
-        // POST api/<SocialCloudController>
-        [HttpPost("{postId}/{tagId}")]
-        public int PostTagsToPost(int postId, int tagId)
-        {
-            SocialCloud s = new SocialCloud();
-            return s.InsertTagsToPost(postId, tagId);
-        }
 
         // PUT api/<SocialCloudController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody] string value)
+        //{
+        //}
 
         // DELETE api/<SocialCloudController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
 
         // DELETE api/<PostsCommentsController>/5
-        [HttpDelete("studentId/{studentId}/postId/{postId}")]
-        public bool Delete1(int studentId, int postId)
+        [HttpDelete("postId/{postId}")]
+        public int Delete(int postId)
         {
-            return SocialCloud.DeleteByStudent(studentId, postId);
-        }
-
-
-        // DELETE api/<PostsCommentsController>/5
-        [HttpDelete("teacherId/{teacherId}/postId/{postId}")]
-        public int Delete2(int teacherId, int postId)
-        {
-            return SocialCloud.DeleteByTeacher(teacherId, postId);
+            return SocialCloud.Delete(postId);
         }
     }
 }

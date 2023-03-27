@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Data;
-using System.Text;
 using System.Xml.Linq;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Data.SqlTypes;
 using Project_ServerSide.Models;
-using System.Text.RegularExpressions;
-
+using Microsoft.AspNetCore.Mvc.Formatters;
 namespace Project_ServerSide.Models.DAL
 {
     public class SocialCloud_DBservice
@@ -28,9 +25,9 @@ namespace Project_ServerSide.Models.DAL
 
 
 
-        // GetSocialCloud
+        // GetSocialCloud --  שמעלים תמונה להחזיר שם סטודנט או מורה+ תגים(בראל)
         //--------------------------------------------------------------------------------------------------
-        public List<SocialCloud> PostsLikesByGroupId (int groupId)
+        public List<SocialCloud> ReadByGroupId(int groupId)
         {
 
             SqlConnection con;
@@ -63,7 +60,9 @@ namespace Project_ServerSide.Models.DAL
                     tempSocialCloud.PostId = Convert.ToInt32(dataReader["postId"]);
                     tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
                     tempSocialCloud.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
+                    tempSocialCloud.GuideId = Convert.ToInt32(dataReader["guideId"]);
                     tempSocialCloud.FileUrl = dataReader["fileUrl"].ToString();
+                    tempSocialCloud.Type = dataReader["type"].ToString();
 
                     tempList.Add(tempSocialCloud);
 
@@ -110,10 +109,10 @@ namespace Project_ServerSide.Models.DAL
 
 
 
-        // InsertToSocialCloud
+        // InsertToSocialCloud  
         //--------------------------------------------------------------------------------------------------
 
-        public int InsertSocialCloud(SocialCloud socialCloud)
+        public int InsertSocialCloud(SocialCloud socialCloud, string tags)
         {
 
             SqlConnection con;
@@ -129,8 +128,18 @@ namespace Project_ServerSide.Models.DAL
                 throw (ex);
             }
 
+            dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(tags);
 
-            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud);             // create the command
+            // Access the array of tag objects using the "Tags" property
+            dynamic tagsJson = parsedJson.Tags;
+
+            // Convert the tag objects to a list of Tag objects
+            List<Tag> tagsList = tagsJson.ToObject<List<Tag>>();
+
+            // Serialize the list of Tag objects back into JSON format
+            string tagsJsonString = JsonConvert.SerializeObject(tagsList);
+
+            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud, tagsJsonString);             // create the command
 
             try
             {
@@ -154,7 +163,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud)
+        private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud, string tagsJson)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -166,83 +175,23 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            
+            cmd.Parameters.AddWithValue("@groupId", socialCloud.GroupId);
             cmd.Parameters.AddWithValue("@studentId", socialCloud.StudentId);
             cmd.Parameters.AddWithValue("@teacherId", socialCloud.TeacherId);
+            cmd.Parameters.AddWithValue("@guideId", socialCloud.GuideId);
+            cmd.Parameters.AddWithValue("@fileUrl", socialCloud.FileUrl);
+            cmd.Parameters.AddWithValue("@type", socialCloud.Type);
+            cmd.Parameters.AddWithValue("@tagsJson", tagsJson);
 
             return cmd;
         }
 
 
 
-
-        // InsertTagsToPost
-        //--------------------------------------------------------------------------------- 
-        public int InsertTagsToPost(int tagId, int postId)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-
-            cmd = CreatCommandInsertTagsToPost("spInsertTagsToPost", con, tagId, postId);             // create the command
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
-        }
-
-        private SqlCommand CreatCommandInsertTagsToPost(String spName, SqlConnection con, int tagId, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-            cmd.Parameters.AddWithValue("@tagId", tagId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-
-            return cmd;
-        }
-
-
-
-        // DeleteFromSocialCloudByStudent
+        // DeleteFromSocialCloud 
         //--------------------------------------------------------------------------------------------------
-        public bool DeleteFromSocialCloudByStudent(int studentId, int postId)
+        public int DeleteFromSocialCloud(int postId)
         {
 
             SqlConnection con;
@@ -258,86 +207,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateCommandDeleteFromSocialCloudByStudent("spDeleteFromSocialCloudByStudent", con, studentId, postId);     // create the command
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                SocialCloud tempSocialCloud = new SocialCloud();
-
-                while (dataReader.Read())
-                {
-                    tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    tempSocialCloud.PostId = Convert.ToInt32(dataReader["postId"]);
-                }
-
-                if ((tempSocialCloud.StudentId == studentId) && (tempSocialCloud.PostId == postId))
-                    return true;
-
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
-        }
-
-        private SqlCommand CreateCommandDeleteFromSocialCloudByStudent(string spName, SqlConnection con, int studentId, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-            cmd.Parameters.AddWithValue("@studentId", studentId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-
-
-            return cmd;
-        }
-
-
-
-        // DeleteFromSocialCloudByTeacher
-        //--------------------------------------------------------------------------------------------------
-        public int DeleteFromSocialCloudByTeacher(int teacherId, int postId)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
-            cmd = CreateCommandDeleteFromSocialCloudByTeacher("spDeleteFromSocialCloudByTeacher", con, teacherId, postId);     // create the command
+            cmd = CreateCommandDeleteFromSocialCloud("spDeleteFromSocialCloud", con, postId);     // create the command
 
 
             try
@@ -362,7 +232,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private SqlCommand CreateCommandDeleteFromSocialCloudByTeacher(string spName, SqlConnection con, int teacherId, int postId)
+        private SqlCommand CreateCommandDeleteFromSocialCloud(string spName, SqlConnection con, int postId)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -375,13 +245,10 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-            cmd.Parameters.AddWithValue("@teacherId", teacherId);
             cmd.Parameters.AddWithValue("@postId", postId);
 
 
             return cmd;
         }
-
-
     }
 }

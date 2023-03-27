@@ -13,16 +13,10 @@ namespace Project_ServerSide.Models
         public string TagName { get => tagName; set => tagName = value; }
 
 
-        public static List<Tag> GetTags()
+        public static List<Tag> GetTags(int groupId)
         {
             Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.GetTags();
-        }//להוסיף לפי groupId
-
-        public int Insert()
-        {
-            Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.InsertNewTag(this);
+            return dbs.GetTags(groupId);
         }
 
         public static List<Tag> ReadTagInPost(int postId)
@@ -30,10 +24,6 @@ namespace Project_ServerSide.Models
             Tag_DBservices dbs = new Tag_DBservices();
             return dbs.ReadTagInPost(postId);
         }
-
-
-
-
 
     }
 }
