@@ -70,19 +70,6 @@ namespace Project_ServerSide.Models
             Students_DBservices dbs = new Students_DBservices();
             return dbs.pullSpecificStudent(this);
         }
-
-        public int DeleteFromGroupe( int groupId)
-        {
-            Students_DBservices dbs = new Students_DBservices();
-            return dbs.DeleteFromGroupe(groupId);
-
-        }
-        //public int DeleteFromStudentTable(int studentId)
-        //{
-        //    Students_DBservices dbs = new Students_DBservices();
-        //    return dbs.DeleteFromStudentTable(studentId);
-
-        //}
     }
 }
 

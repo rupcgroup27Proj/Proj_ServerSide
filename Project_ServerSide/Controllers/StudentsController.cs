@@ -87,28 +87,10 @@ namespace Project_ServerSide.Controllers
         //    //student.Update();
         //}
 
-        // DELETE api/<StudentsController>/5
-        [HttpDelete("groupId/{groupId}")]
-        public IActionResult DeleteFromGroupe(int groupId)
-        {
-            Student s = new Student();
-            int num = s.DeleteFromGroupe(groupId);
-            if (num == 1)
-                return Ok();
-            else
-                return NotFound();
-
-        }
-        //[HttpDelete("studentId/{studentId}")]
-        //public IActionResult DeleteFromStudentTable(int studentId)
+        //// DELETE api/<StudentsController>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
         //{
-        //    Student s = new Student();
-        //    int num = s.DeleteFromStudentTable(studentId);
-        //    if (num == 1)
-        //        return Ok();
-        //    else
-        //        return NotFound();
-
         //}
     }
 }

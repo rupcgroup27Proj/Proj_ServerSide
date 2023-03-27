@@ -19,7 +19,7 @@ public class ExcelController : ControllerBase
 
         // Insert the data into the database
         InsertDataIntoDatabase(dataTable);
-
+        
 
 
         return Ok();
@@ -74,7 +74,7 @@ public class ExcelController : ControllerBase
                     command.Parameters.Add("@pictureUrl", SqlDbType.VarChar).Value = row["PictureUrl"];
                     command.Parameters.Add("@groupId", SqlDbType.Int).Value = row["GroupId"];
 
-
+                 
 
                     command.ExecuteNonQuery();
                 }
@@ -125,3 +125,4 @@ public class ExcelController : ControllerBase
         //    }
     }
 }
+    
