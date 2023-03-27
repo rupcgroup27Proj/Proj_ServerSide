@@ -16,9 +16,9 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-
+        
         //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.config 
+        // This method creates a connection to the database according to the connectionString name in the web.confi
         //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
