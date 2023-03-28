@@ -92,5 +92,20 @@ namespace Project_ServerSide.Controllers
         //public void Delete(int id)
         //{
         //}
+
+        // DELETE api/<StudentsController>/5
+        [HttpDelete("groupId/{groupId}")]
+        public IActionResult DeleteFromGroupe(int groupId)
+        {
+            Student s = new Student();
+            int num = s.DeleteFromGroupe(groupId);
+            if (num == 1)
+                return Ok();
+            else
+                return NotFound();
+
+        }
+       
+
     }
 }

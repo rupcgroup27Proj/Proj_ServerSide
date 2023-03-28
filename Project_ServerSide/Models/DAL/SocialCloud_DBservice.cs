@@ -58,6 +58,7 @@ namespace Project_ServerSide.Models.DAL
                     SocialCloud tempSocialCloud = new SocialCloud();
 
                     tempSocialCloud.PostId = Convert.ToInt32(dataReader["postId"]);
+                    tempSocialCloud.GroupId = Convert.ToInt32(dataReader["groupId"]);
                     tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
                     tempSocialCloud.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
                     tempSocialCloud.GuideId = Convert.ToInt32(dataReader["guideId"]);

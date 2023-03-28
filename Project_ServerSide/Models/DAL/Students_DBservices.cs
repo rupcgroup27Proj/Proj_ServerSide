@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml.Linq;
 using Project_ServerSide.Models;
 using System.Numerics;
+using System.Text.RegularExpressions;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -37,7 +38,6 @@ namespace Project_ServerSide.Models.DAL
         //--------------------------------------------------------------------------------------------------
         public int Insert(Student student)
         {
-
 
             SqlConnection con;
             SqlCommand cmd;
@@ -446,6 +446,75 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
+
+        //--------------------------------------------------------------------------------------------------
+        // This method delete a student to the gruopStudent table 
+        //--------------------------------------------------------------------------------------------------
+        public int DeleteFromGroupe(int groupId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB"); // create the connection
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+
+            cmd = CreateCommandWithStoredProcedureDelete1("spDeleteStudentFromGroups", con, groupId);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                // write to log
+                throw (ex);
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    // close the db connection
+                    con.Close();
+                }
+            }
+
+        }
+
+        //---------------------------------------------------------------------------------
+        // Create the SqlCommand using a stored procedure
+        //---------------------------------------------------------------------------------
+        private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int groupId)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+
+
+
+            return cmd;
+        }
+
+     
 
     }
 }
