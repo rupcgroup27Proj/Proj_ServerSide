@@ -17,10 +17,10 @@ namespace Project_ServerSide.Controllers
         //}
 
         // GET api/<SocialCloudController>/
-        [HttpGet("groupId/{groupId}")]
-        public List<SocialCloud> Get(int groupId)
+        [HttpGet("groupId/{groupId}/type/{type}")]
+        public List<SocialCloud> Get(int groupId, string type)
         {
-            return SocialCloud.ReadByGroupId(groupId);
+            return SocialCloud.ReadByGroupIdAndType(groupId,type);
         }
 
         // POST api/<SocialCloudController>

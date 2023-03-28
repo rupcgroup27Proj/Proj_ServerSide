@@ -27,7 +27,7 @@ namespace Project_ServerSide.Models.DAL
 
         // GetSocialCloud --  שמעלים תמונה להחזיר שם סטודנט או מורה+ תגים(בראל)
         //--------------------------------------------------------------------------------------------------
-        public List<SocialCloud> ReadByGroupId(int groupId)
+        public List<SocialCloud> ReadByGroupIdAndType(int groupId, string type)
         {
 
             SqlConnection con;
@@ -44,7 +44,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateCommandSocialCloud("spReadSocialCloud", con, groupId);// create the command
+            cmd = CreateCommandSocialCloud(con,groupId,type);// create the command
 
             List<SocialCloud> tempList = new List<SocialCloud>();
 
@@ -59,13 +59,32 @@ namespace Project_ServerSide.Models.DAL
 
                     tempSocialCloud.PostId = Convert.ToInt32(dataReader["postId"]);
                     tempSocialCloud.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    tempSocialCloud.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
-                    tempSocialCloud.GuideId = Convert.ToInt32(dataReader["guideId"]);
-                    tempSocialCloud.FileUrl = dataReader["fileUrl"].ToString();
                     tempSocialCloud.Type = dataReader["type"].ToString();
 
+                    if (dataReader["type"].ToString() == "Student")
+                    {
+                        tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
+                        tempSocialCloud.TeacherId = 0;
+                        tempSocialCloud.GuideId = 0;
+                    }
+                    else if (dataReader["type"].ToString() == "Teacher")
+                    {
+                        tempSocialCloud.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
+                        tempSocialCloud.StudentId = 0;
+                        tempSocialCloud.GuideId = 0;
+                    }
+                    else if (dataReader["type"].ToString() == "Guide")
+                    {
+                        tempSocialCloud.GuideId = Convert.ToInt32(dataReader["guideId"]);
+                        tempSocialCloud.TeacherId = 0;
+                        tempSocialCloud.StudentId = 0;
+                    }
+
+                    tempSocialCloud.FileUrl = dataReader["fileUrl"].ToString();
+                    tempSocialCloud.FirstName = dataReader["Firstname"].ToString();
+                    tempSocialCloud.LastName = dataReader["Lastname"].ToString();
                     tempList.Add(tempSocialCloud);
+
 
                 }
                 return tempList;
@@ -77,36 +96,29 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
         }
-
-        private SqlCommand CreateCommandSocialCloud(string spName, SqlConnection con, int groupId)
+        private SqlCommand CreateCommandSocialCloud(SqlConnection con, int groupId, string type)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
+            if (type == "Student")
+                cmd.CommandText = "spReadSocialCloudByStudent";
+            else if (type == "Teacher")
+                cmd.CommandText = "spReadSocialCloudByTeacher";
+            else
+                cmd.CommandText = "spReadSocialCloudByGuide";
 
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            cmd.Connection = con;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@groupId", groupId);
 
 
             return cmd;
         }
+
+
+
 
 
 
