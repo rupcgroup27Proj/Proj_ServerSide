@@ -104,7 +104,7 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw (ex); }
 
-            //get all questionnaires with their id, title and description:
+            //get all questionnaires with their id, title and description
             List<Dictionary<string, string>> questionnaires = getQuestionnaires(groupId, con);
 
             //get the tags of all questionnares
