@@ -18,7 +18,7 @@ namespace Project_ServerSide.Controllers
 
         // GET api/<SocialCloudController>/
         [HttpGet("groupId/{groupId}/type/{type}")]
-        public List<SocialCloud> Get(int groupId, string type)
+        public string Get(int groupId, string type)
         {
             return SocialCloud.ReadByGroupIdAndType(groupId,type);
         }
