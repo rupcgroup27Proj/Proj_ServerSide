@@ -31,10 +31,11 @@ namespace Project_ServerSide.Models
         public List<Tag> Tags { get => tags; set => tags = value; } //מה שהתחלנו
 
 
-        public static List<SocialCloud> ReadByGroupIdAndType(int groupId, string type)
+        public static string ReadByGroupIdAndType(int groupId, string type)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
             return dbs.ReadByGroupIdAndType(groupId,type);
+
         }
 
         public int Insert(string tagsJson)

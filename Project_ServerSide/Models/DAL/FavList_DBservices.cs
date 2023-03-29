@@ -59,6 +59,8 @@ namespace Project_ServerSide.Models.DAL
 
                     tempFavList.StudentId = Convert.ToInt32(dataReader["studentId"]);
                     tempFavList.PostId = Convert.ToInt32(dataReader["postId"]);
+                    tempFavList.FileUrl = Convert.ToString(dataReader["fileUrl"]);
+
 
                     tempList.Add(tempFavList);
 
