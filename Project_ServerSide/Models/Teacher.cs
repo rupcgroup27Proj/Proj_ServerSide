@@ -41,7 +41,7 @@ namespace Project_ServerSide.Models
             return dbs.Login(this);
         }
 
-        public bool Insert()//insetrt new Teacher to DB
+        public bool Insert()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
 

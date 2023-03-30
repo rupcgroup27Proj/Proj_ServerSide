@@ -13,11 +13,8 @@ namespace Project_ServerSide.Controllers
         // GET: api/<SmartRecommandationsController>
         [HttpGet]
         public void Get()
-        {
-            
+        { 
         }
-
-
 
         // GET api/<SmartRecommandationsController>/5
         [HttpGet("studentId/{studentId}")]

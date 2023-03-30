@@ -11,41 +11,6 @@ namespace Project_ServerSide.Controllers
     {
         private int teacherID;
 
-        //GET: api/<TeachersController>
-        [HttpGet]
-
-        //public IActionResult Get()
-        //{
-            
-        //}
-        //[HttpGet("teachertId/{teacherId}/password/{password}")]
-        //public IActionResult Get(int teacherId, string password)
-        //{
-        //    Teacher teacher = new Teacher();
-        //    teacher.TeacherId = teacherId;
-        //    teacher.Password = password;
-        //    Teacher result = teacher.Login();
-        //    if (teacher.TeacherId == null)
-        //    {
-        //        return NotFound();
-
-        //    }
-        //    else
-        //    {
-        //        return Ok(result);
-        //    }
-        //}
-
-
-
-
-        // GET api/<TeachersController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
         // POST api/<TeachersController>
         [HttpPost]
         public bool Post([FromBody] Teacher teacher)
@@ -53,14 +18,5 @@ namespace Project_ServerSide.Controllers
             return teacher.Insert();
 
         }
-
-        // PUT api/<TeachersController>/5
-        //[HttpPut("{id}")]
-        
-        //// DELETE api/<TeachersController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }
