@@ -45,6 +45,25 @@ namespace Project_ServerSide.Controllers
             }
         }
 
+        //read groupId for journey
+        [HttpGet("schoolName/{schoolName}")]
+
+        public IActionResult Get(string schoolName)
+        {
+            JourneyId journeyId = new JourneyId();
+            journeyId.SchoolName = schoolName;
+            JourneyId result = journeyId.readGroupId();
+            if (result.SchoolName == null)
+            {
+                return NotFound();
+
+            }
+            else
+            {
+                return Ok(result);
+            }
+        }
+
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
         public void Post(string schoolName)

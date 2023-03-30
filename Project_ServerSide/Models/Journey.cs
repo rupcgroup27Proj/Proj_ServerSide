@@ -14,6 +14,19 @@ namespace Project_ServerSide.Models
     //תז מדריך
     //מייל מדריך
     //טלפון מדריך
+    public class JourneyId
+    {
+        string schoolName;
+        int groupId;
+        public int GroupId { get => groupId; set => groupId = value; }
+        public string SchoolName { get => schoolName; set => schoolName = value; }
+
+        public JourneyId readGroupId()
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            return dbs.readGroupId(this);
+        }
+    }
 
     public class Journey
     {
@@ -52,7 +65,8 @@ namespace Project_ServerSide.Models
             return dbs.pullSpecificJourney(this);
         }
 
-         public static void Insert(string schoolName) { 
+       
+        public static void Insert(string schoolName) { 
             Journey_DBservices dbs = new Journey_DBservices();
             dbs.Insert(schoolName);
            
