@@ -23,6 +23,10 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
+
+
+        // login GenericUser
+        //--------------------------------------------------------------------------------------------------
         public GenericUser Login(int id, string password, string type)
         {
             SqlConnection con;

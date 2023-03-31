@@ -15,7 +15,7 @@ namespace Project_ServerSide.Models
         string firstName;
         string lastName;
 
-        List<Tag> tags = new List<Tag>(); //מה שהתחלנו
+        List<Tag> tags = new List<Tag>(); 
 
         public int PostId { get => postId; set => postId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
@@ -28,14 +28,13 @@ namespace Project_ServerSide.Models
         public string LastName { get => lastName; set => lastName = value; }
 
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
-        public List<Tag> Tags { get => tags; set => tags = value; } //מה שהתחלנו
+        public List<Tag> Tags { get => tags; set => tags = value; } 
 
 
-        public static string ReadByGroupIdAndType(int groupId, string type)
+        public static string ReadByGroupIdAndType(int groupId)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.ReadByGroupIdAndType(groupId,type);
-
+            return dbs.ReadByGroupIdAndType(groupId);
         }
 
         public int Insert(string tagsJson)

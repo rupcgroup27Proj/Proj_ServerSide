@@ -19,9 +19,6 @@ public class ExcelController : ControllerBase
 
         // Insert the data into the database
         InsertDataIntoDatabase(dataTable);
-        
-
-
         return Ok();
     }
 

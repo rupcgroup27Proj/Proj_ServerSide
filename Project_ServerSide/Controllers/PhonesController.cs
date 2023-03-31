@@ -11,7 +11,6 @@ namespace Project_ServerSide.Controllers
     {
         //GET: api/<PhonesController>
         [HttpGet]
-
         public IActionResult Get()
         {
             Phones phones = new Phones();
@@ -27,8 +26,8 @@ namespace Project_ServerSide.Controllers
             }
         }
 
+        //GET: api/<PhonesController>
         [HttpGet("title/{title}")]
-
         public IActionResult Get(string title)// title is 'embassy'
         {
             Phones phones = new Phones();
@@ -47,22 +46,19 @@ namespace Project_ServerSide.Controllers
         }
 
         // PUT api/<PhonesController>/5
-
-        [HttpPut("{id}")]
+        [HttpPut("id/{id}")]
         public void Put(int id, [FromBody] Phones phones)
         {
             phones.Id = id;
             phones.Update();
         }
 
+        // POST api/<PhonesController>/5
         [HttpPost]
         public bool Post([FromBody] Phones phones)
         {
             return phones.Insert();
-
         }
-
-
 
         //// DELETE api/<PhonesController>/5
         //[HttpDelete("{id}")]

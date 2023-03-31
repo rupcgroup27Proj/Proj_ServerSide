@@ -17,10 +17,6 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-
-        //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.config 
-        //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
 
@@ -33,8 +29,8 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method inserts a student to the student table 
+      
+        // inserts student
         //--------------------------------------------------------------------------------------------------
         public int Insert(Student student)
         {
@@ -76,10 +72,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand
-        //---------------------------------------------------------------------------------
         private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
         {
 
@@ -106,8 +98,9 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
-        //--------------------------------------------------------------------------------------------------
-        // This method read student 
+
+    
+        //read all students
         //--------------------------------------------------------------------------------------------------
 
         public List<Student> Read()
@@ -129,7 +122,6 @@ namespace Project_ServerSide.Models.DAL
 
             //String cStr = BuildUpdateCommand(student);      // helper method to build the insert string
 
-            //cmd = CreateCommand(cStr, con);             // create the command
 
             cmd = CreateReadStudentsCommandSP("spReadStudent", con);
 
@@ -182,9 +174,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the ReadStudents SqlCommand
-        //---------------------------------------------------------------------------------
         private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con)
         {
 
@@ -202,7 +191,8 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        // This method - login 
+
+        //login student
         //---------------------------------------------------------------------------------
         public Student Login(Student student)
         {
@@ -260,8 +250,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the Login SqlCommand
-        //---------------------------------------------------------------------------------
         private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
         {
 
@@ -283,7 +271,9 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        // This method - pull Specific Student by studentID
+
+
+        // Get Specific Student by studentId
         //---------------------------------------------------------------------------------
         public Student pullSpecificStudent(Student student)
         {
@@ -342,8 +332,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the pull Specific Journey SqlCommand
-        //---------------------------------------------------------------------------------
         private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Student student)
         {
 
@@ -357,15 +345,14 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-
             cmd.Parameters.AddWithValue("@Id", student.StudentId);
 
 
             return cmd;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method update a student to the student table 
+
+        // update a student
         //--------------------------------------------------------------------------------------------------
         public int Update(Student student)
         {
@@ -418,9 +405,6 @@ namespace Project_ServerSide.Models.DAL
             return command;
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand using a stored procedure
-        //---------------------------------------------------------------------------------
         private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Student student)
         {
 
@@ -447,8 +431,9 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method delete a student to the gruopStudent table 
+
+
+        //delete a student
         //--------------------------------------------------------------------------------------------------
         public int DeleteFromGroupe(int groupId)
         {
@@ -491,9 +476,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand using a stored procedure
-        //---------------------------------------------------------------------------------
         private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int groupId)
         {
 

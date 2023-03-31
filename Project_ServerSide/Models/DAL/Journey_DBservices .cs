@@ -16,10 +16,7 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-        
-        //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.confi
-        //--------------------------------------------------------------------------------------------------
+ 
         public SqlConnection connect(String conString)
         {
 
@@ -32,19 +29,18 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method inserts a Journey to the Journey table --- by schoolname 
-        //--------------------------------------------------------------------------------------------------
-        public int Insert(string schoolName)
-        {
 
+        // inserts a Journey by schoolname 
+        //--------------------------------------------------------------------------------------------------
+        public int Insert(Journey journey)
+        {
 
             SqlConnection con;
             SqlCommand cmd;
 
             try
             {
-                con = connect("myProjDB"); // create the connection
+                con = connect("myProjDB"); 
             }
             catch (Exception ex)
             {
@@ -52,7 +48,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertJourneyCommandSP("spInsertJourney", con, schoolName);
+            cmd = CreateInsertJourneyCommand("spInsertJourney", con, journey);
 
             try
             {
@@ -76,29 +72,37 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand 
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertJourneyCommandSP(String spName, SqlConnection con, string schoolName)
+        private SqlCommand CreateInsertJourneyCommand(String spName, SqlConnection con, Journey journey)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
+            SqlCommand cmd = new SqlCommand(); 
 
-            cmd.Connection = con;              // assign the connection to the command object
+            cmd.Connection = con;       
 
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+            cmd.CommandText = spName;     
 
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+            cmd.CommandTimeout = 10;        
 
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; 
 
-            cmd.Parameters.AddWithValue("@schoolName", schoolName);
+            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);// מקבל רק אחרי השליחה 
+            cmd.Parameters.AddWithValue("@schoolName", journey.SchoolName);
+            cmd.Parameters.AddWithValue("@teacherFirstName", journey.TeacherFirstName);
+            cmd.Parameters.AddWithValue("@teacherLastName", journey.TeacherLastName);
+            cmd.Parameters.AddWithValue("@teacherId", journey.TeacherId);
+            cmd.Parameters.AddWithValue("@teacherEmail", journey.TeacherEmail);
+            cmd.Parameters.AddWithValue("@phoneTeacher", journey.PhoneTeacher);
+            cmd.Parameters.AddWithValue("@guideFirstName", journey.GuideFirstName);
+            cmd.Parameters.AddWithValue("@guideLastName", journey.GuideLastName);
+            cmd.Parameters.AddWithValue("@guideId", journey.GuideId);
+            cmd.Parameters.AddWithValue("@guideEmail", journey.GuideEmail);
+            cmd.Parameters.AddWithValue("@phoneGuide", journey.PhoneGuide);
 
             return cmd;
         }
-        //--------------------------------------------------------------------------------------------------
-        // This method read Journey 
+       
+
+        // read Journey 
         //--------------------------------------------------------------------------------------------------
 
         public List<Journey> Read()
@@ -120,9 +124,7 @@ namespace Project_ServerSide.Models.DAL
 
             //String cStr = BuildUpdateCommand(Journey);      // helper method to build the insert string
 
-            //cmd = CreateCommand(cStr, con);             // create the command
-
-            cmd = CreateReadJourneysCommandSP("spReadJourney", con);
+            cmd = CreateReadJourneysCommand("spReadJourney", con);
 
             List<Journey> JourneyList = new List<Journey>();
 
@@ -130,20 +132,21 @@ namespace Project_ServerSide.Models.DAL
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
-
                 while (dataReader.Read())
                 {
-
                     Journey u = new Journey();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
-                    u.GuideEmail = dataReader["guideEmail"].ToString();
-                    u.GuideName = dataReader["guidefirstname"].ToString();
-                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
-                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
-                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
                     u.SchoolName = dataReader["schoolName"].ToString();
-                    u.TeacherName = dataReader["teacherFirstName"].ToString();
+                    u.TeacherFirstName = dataReader["teacherFirstName"].ToString();
+                    u.TeacherLastName = dataReader["teacherLastName"].ToString();
+                    u.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
+                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
+                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
+                    u.GuideFirstName = dataReader["guideFirstName"].ToString();
+                    u.GuideLastName = dataReader["guideLastName"].ToString();
+                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
+                    u.GuideEmail = dataReader["guideEmail"].ToString();
+                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
                     u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
                     u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     JourneyList.Add(u);
@@ -168,10 +171,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the ReadJourney SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateReadJourneysCommandSP(String spName, SqlConnection con)
+        private SqlCommand CreateReadJourneysCommand(String spName, SqlConnection con)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -184,11 +184,12 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-
             return cmd;
         }
 
-        // This method - pull Specific Journey by GroupId
+
+
+        // Get Specific Journey by GroupId
         //---------------------------------------------------------------------------------
         public Journey pullSpecificJourney(Journey journey)
         {
@@ -207,7 +208,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreatePullCommandSP("spPullJourney", con, journey);// create the command
+            cmd = CreatePullCommand("spPullSpecificJourney", con, journey);// create the command
             Journey u = new Journey();
             try
             {
@@ -216,14 +217,17 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
-                    u.GuideEmail = dataReader["guideEmail"].ToString();
-                    u.GuideName = dataReader["guidefirstname"].ToString();
-                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
-                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
-                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
                     u.SchoolName = dataReader["schoolName"].ToString();
-                    u.TeacherName = dataReader["teacherFirstName"].ToString();
+                    u.TeacherFirstName = dataReader["teacherFirstName"].ToString();
+                    u.TeacherLastName = dataReader["teacherLastName"].ToString();
+                    u.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
+                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
+                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
+                    u.GuideFirstName = dataReader["guideFirstName"].ToString();
+                    u.GuideLastName = dataReader["guideLastName"].ToString();
+                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
+                    u.GuideEmail = dataReader["guideEmail"].ToString();
+                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
                     u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
                     u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                 }
@@ -247,9 +251,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the pull Specific Journey SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Journey journey)
+        private SqlCommand CreatePullCommand(String spName, SqlConnection con, Journey journey)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -266,11 +268,13 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@GroupId", journey.GroupId);
             cmd.Parameters.AddWithValue("@SchoolName", journey.SchoolName);
 
-
             return cmd;
         }
-        //--------------------------------------------------------------------------------------------------
-        // This method update dates to the groups table 
+
+
+
+       
+        // update dates to the groups table 
         //--------------------------------------------------------------------------------------------------
         public int Update(Journey journey)
         {
@@ -289,7 +293,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateCommandWithStoredProcedure("spInsertNewDates", con, journey);
+            cmd = CreateCommandInsertNewDates("spInsertNewDates", con, journey);
 
             try
             {
@@ -323,10 +327,7 @@ namespace Project_ServerSide.Models.DAL
             return command;
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand using a stored procedure
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Journey journey)
+        private SqlCommand CreateCommandInsertNewDates(String spName, SqlConnection con, Journey journey)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -339,15 +340,11 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
+            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);
+
             cmd.Parameters.AddWithValue("@startDate", journey.StartDate);
 
             cmd.Parameters.AddWithValue("@endDate", journey.EndDate);
-
-            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);
-
-            
-
-
 
             return cmd;
         }
