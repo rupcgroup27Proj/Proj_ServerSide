@@ -52,7 +52,7 @@ namespace Project_ServerSide.Models.DAL
             dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(json);
             dynamic questionnaireJson = parsedJson.questionnaire;
 
-          
+
 
             Questionnaire questionnaire = new Questionnaire
             {
@@ -183,7 +183,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
             con.Close();
-       
+
             string jsonString = JsonConvert.SerializeObject(data);
 
             return jsonString;
@@ -319,12 +319,36 @@ namespace Project_ServerSide.Models.DAL
         public void updateStudentTags(int studentId, List<Tag> tags)
         {
             SqlConnection con;
+            SqlCommand cmd;
+
             try
             { con = connect("myProjDB"); }
             catch (Exception ex)
             { throw (ex); }
 
+            cmd = spUpdateStudentTags(studentId, tags, con);
 
+            try
+            { cmd.ExecuteNonQuery(); }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spUpdateStudentTags(int studentId, List<Tag> tags, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "q_updateStudentTags";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@tagJson", JsonConvert.SerializeObject(tags));
+          
+            return cmd;
         }
     }
 }

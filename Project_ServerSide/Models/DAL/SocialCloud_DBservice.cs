@@ -269,7 +269,7 @@ namespace Project_ServerSide.Models.DAL
         // NewGet postID+Tags 
         //--------------------------------------------------------------------------------------------------
 
-        public string ReadByGroupIdAndType(int groupId,string type)
+        public string ReadByGroupIdAndType(int groupId, string type)
         {
             SqlConnection con;
             try
@@ -282,7 +282,7 @@ namespace Project_ServerSide.Models.DAL
 
             //get the post
             List<Dictionary<string, string>> Posts = getPost(groupId, con, type);
-          
+
             //the list we will send back
             List<SocialCloud> data = new List<SocialCloud>();
 
@@ -334,7 +334,7 @@ namespace Project_ServerSide.Models.DAL
                         tempSocialCloud.Tags.Add(t);
                     }
                 }
-                data.Add(tempSocialCloud);  
+                data.Add(tempSocialCloud);
             }
 
             con.Close();
@@ -346,7 +346,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private List<Dictionary<string, string>> getTags(int groupId, SqlConnection con,string type)
+        private List<Dictionary<string, string>> getTags(int groupId, SqlConnection con, string type)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
@@ -431,5 +431,4 @@ namespace Project_ServerSide.Models.DAL
 
 
 
-        
-    
+

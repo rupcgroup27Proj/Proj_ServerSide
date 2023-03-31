@@ -29,7 +29,7 @@ namespace Project_ServerSide.Controllers
 
         // PUT api/<QuestionnairesController>/5
         [HttpPut("studentId/{studentId}")]
-        public void Put(int studentId, [FromBody] List<Tag> tags)
+        public void UpdateStudentTags(int studentId, [FromBody] List<Tag> tags)
         {
             Questionnaire.updateStudentTags(studentId, tags);
         }
