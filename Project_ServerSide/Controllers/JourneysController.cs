@@ -46,10 +46,28 @@ namespace Project_ServerSide.Controllers
             }
         }
 
-    
-        // POST api/<JourneysController>
-        [HttpPost]
-        public int Post([FromBody] Journey journey)
+        //read groupId for journey
+        [HttpGet("schoolName/{schoolName}")]
+
+        public IActionResult Get(string schoolName)
+        {
+            JourneyId journeyId = new JourneyId();
+            journeyId.SchoolName = schoolName;
+            JourneyId result = journeyId.readGroupId();
+            if (result.SchoolName == null)
+            {
+                return NotFound();
+
+            }
+            else
+            {
+                return Ok(result);
+            }
+        }
+
+        //insert new Journey
+        [HttpPost("schoolName/{schoolName}")]
+        public void Post(string schoolName)
         {         
              return journey.Insert();
 

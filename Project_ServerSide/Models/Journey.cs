@@ -6,6 +6,28 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
+
+    //שם מורה
+    //טלפון מורה
+    //מייל
+    //שם מדריך
+    //תז מדריך
+    //מייל מדריך
+    //טלפון מדריך
+    public class JourneyId
+    {
+        string schoolName;
+        int groupId;
+        public int GroupId { get => groupId; set => groupId = value; }
+        public string SchoolName { get => schoolName; set => schoolName = value; }
+
+        public JourneyId readGroupId()
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            return dbs.readGroupId(this);
+        }
+    }
+
     public class Journey
     {
 
@@ -49,7 +71,8 @@ namespace Project_ServerSide.Models
             return dbs.pullSpecificJourney(this);
         }
 
-         public int Insert() { 
+       
+        public static void Insert(string schoolName) { 
             Journey_DBservices dbs = new Journey_DBservices();
             return dbs.Insert(this);
            
