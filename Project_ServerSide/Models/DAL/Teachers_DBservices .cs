@@ -17,9 +17,6 @@ namespace Project_ServerSide.Models.DAL
         public DataTable dt;
 
 
-        //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.config 
-        //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
 
@@ -32,8 +29,8 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method inserts a teacher to the Teachers table 
+     
+        // inserts a teacher 
         //--------------------------------------------------------------------------------------------------
         public int Insert(Teacher teacher)
         {
@@ -52,7 +49,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertTeacherstCommandSP("spInsertTeachers", con, teacher);
+            cmd = CreateInsertTeacherstCommand("spInsertTeachers", con, teacher);
 
             try
             {
@@ -76,11 +73,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertTeacherstCommandSP(String spName, SqlConnection con, Teacher teacher)
+        private SqlCommand CreateInsertTeacherstCommand(String spName, SqlConnection con, Teacher teacher)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -106,7 +99,8 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        // This method - login 
+
+        // login teacher
         //---------------------------------------------------------------------------------
         public Teacher Login(Teacher teacher)
         {
@@ -125,7 +119,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateLoginCommandSP("spLoginTeachers", con, teacher);// create the command
+            cmd = CreateLoginCommand("spLoginTeachers", con, teacher);// create the command
             Teacher u = new Teacher();
             try
             {
@@ -164,9 +158,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the Login SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Teacher teacher)
+        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Teacher teacher)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -182,7 +174,6 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.Parameters.AddWithValue("@Id", teacher.TeacherId); 
             cmd.Parameters.AddWithValue("@Password", teacher.Password);
-
 
             return cmd;
         }

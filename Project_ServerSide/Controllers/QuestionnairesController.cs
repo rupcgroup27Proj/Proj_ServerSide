@@ -35,7 +35,7 @@ namespace Project_ServerSide.Controllers
         }
 
         // DELETE api/<QuestionnairesController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("id/{id}")]
         public void Delete(int id)
         {
         }

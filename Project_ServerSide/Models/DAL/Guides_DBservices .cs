@@ -17,9 +17,6 @@ namespace Project_ServerSide.Models.DAL
         public DataTable dt;
 
 
-        //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.config 
-        //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
 
@@ -32,19 +29,17 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method inserts a guide to the guides table 
-        //--------------------------------------------------------------------------------------------------
+      
+        // inserts guide
+        //---------------------------------------------------------------------------------
         public int Insert(Guide guide)
         {
-
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
             {
-                con = connect("myProjDB"); // create the connection
+                con = connect("myProjDB"); 
             }
             catch (Exception ex)
             {
@@ -52,11 +47,11 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertGuidestCommandSP("spInsertguides", con, guide);
+            cmd = CreateInsertGuidestCommand("spInsertguides", con, guide);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
@@ -75,12 +70,8 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertGuidestCommandSP(String spName, SqlConnection con, Guide guide)
+     
+        private SqlCommand CreateInsertGuidestCommand(String spName, SqlConnection con, Guide guide)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -103,14 +94,14 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@pictureUrl", guide.PictureUrl);
             cmd.Parameters.AddWithValue("@groupId", guide.GroupId);
 
-
-
             return cmd;
         }
 
-        // This method - login 
+
+
+        // login guide
         //---------------------------------------------------------------------------------
-        public  Guide Login(Guide guide)
+        public Guide Login(Guide guide)
         {
 
             SqlConnection con;
@@ -127,7 +118,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateLoginCommandSP("spLoginGuides", con, guide);// create the command
+            cmd = CreateLoginCommand("spLoginGuides", con, guide);// create the command
             Guide u = new Guide();
             try
             {
@@ -166,10 +157,8 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
-        // Create the Login SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Guide guide)
+  
+        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Guide guide)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -182,10 +171,8 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
 
-
             cmd.Parameters.AddWithValue("@Id", guide.GuideId); 
             cmd.Parameters.AddWithValue("@Password", guide.Password);
-
 
             return cmd;
         }

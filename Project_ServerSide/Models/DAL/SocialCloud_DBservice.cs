@@ -25,104 +25,7 @@ namespace Project_ServerSide.Models.DAL
             con.Open();
             return con;
         }
-
-
-
-        // GetSocialCloud --  שמעלים תמונה להחזיר שם סטודנט או מורה+ תגים(בראל)
-        ////--------------------------------------------------------------------------------------------------
-        //public List<SocialCloud> ReadByGroupIdAndType(int groupId, string type)
-        //{
-
-        //    SqlConnection con;
-        //    SqlCommand cmd;
-
-        //    try
-        //    {
-        //        con = connect("myProjDB"); // create the connection
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // write to log
-        //        throw ex;
-        //    }
-
-
-        //    //get the tags of all post
-
-        //    cmd = CreateCommandSocialCloud(con, groupId, type);// create the command
-
-        //    List<SocialCloud> tempList = new List<SocialCloud>();
-
-        //    try
-        //    {
-        //        SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-
-        //        while (dataReader.Read())
-        //        {
-        //            SocialCloud tempSocialCloud = new SocialCloud();
-
-        //            tempSocialCloud.PostId = Convert.ToInt32(dataReader["postId"]);
-        //            tempSocialCloud.GroupId = Convert.ToInt32(dataReader["groupId"]);
-        //            tempSocialCloud.Type = dataReader["type"].ToString();
-
-        //            if (dataReader["type"].ToString() == "Student")
-        //            {
-        //                tempSocialCloud.StudentId = Convert.ToInt32(dataReader["studentId"]);
-        //                tempSocialCloud.TeacherId = 0;
-        //                tempSocialCloud.GuideId = 0;
-        //            }
-        //            else if (dataReader["type"].ToString() == "Teacher")
-        //            {
-        //                tempSocialCloud.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
-        //                tempSocialCloud.StudentId = 0;
-        //                tempSocialCloud.GuideId = 0;
-        //            }
-        //            else if (dataReader["type"].ToString() == "Guide")
-        //            {
-        //                tempSocialCloud.GuideId = Convert.ToInt32(dataReader["guideId"]);
-        //                tempSocialCloud.TeacherId = 0;
-        //                tempSocialCloud.StudentId = 0;
-        //            }
-
-        //            tempSocialCloud.FileUrl = dataReader["fileUrl"].ToString();
-        //            tempSocialCloud.FirstName = dataReader["Firstname"].ToString();
-        //            tempSocialCloud.LastName = dataReader["Lastname"].ToString();
-        //            tempList.Add(tempSocialCloud);
-
-
-        //        }
-        //        return tempList;
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-
-        //}
-        //private SqlCommand CreateCommandSocialCloud(SqlConnection con, int groupId, string type)
-        //{
-
-        //    SqlCommand cmd = new SqlCommand(); // create the command object
-        //    if (type == "Student")
-        //        cmd.CommandText = "spReadSocialCloudByStudent";
-        //    else if (type == "Teacher")
-        //        cmd.CommandText = "spReadSocialCloudByTeacher";
-        //    else
-        //        cmd.CommandText = "spReadSocialCloudByGuide";
-
-        //    cmd.Connection = con;
-        //    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-        //    cmd.Parameters.AddWithValue("@groupId", groupId);
-
-
-        //    return cmd;
-        //}
-
-
+      
 
         // InsertToSocialCloud  
         //--------------------------------------------------------------------------------------------------
@@ -266,10 +169,11 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        // NewGet postID+Tags 
+
+        // GetSocialCloud(postId+Tags)
         //--------------------------------------------------------------------------------------------------
 
-        public string ReadByGroupIdAndType(int groupId, string type)
+        public string ReadByGroupIdAndType(int groupId)
         {
             SqlConnection con;
             try
@@ -277,11 +181,11 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw (ex); }
 
-            //getthe tags of all post
-            List<Dictionary<string, string>> tags = getTags(groupId, con, type);
+            //get the tags of all post
+            List<Dictionary<string, string>> tags = getTags(groupId, con);
 
             //get the post
-            List<Dictionary<string, string>> Posts = getPost(groupId, con, type);
+            List<Dictionary<string, string>> Posts = getPost(groupId, con);
 
             //the list we will send back
             List<SocialCloud> data = new List<SocialCloud>();
@@ -293,23 +197,23 @@ namespace Project_ServerSide.Models.DAL
                 tempSocialCloud.GroupId = Convert.ToInt32(Post["groupId"]);
                 tempSocialCloud.Type = Post["type"].ToString();
 
-                if (Post["type"].ToString() == "Student")
+                if (Convert.ToInt32(Post["studentId"]) != 1)
                 {
                     tempSocialCloud.StudentId = Convert.ToInt32(Post["studentId"]);
-                    tempSocialCloud.TeacherId = 0;
-                    tempSocialCloud.GuideId = 0;
+                    tempSocialCloud.TeacherId = 1;
+                    tempSocialCloud.GuideId = 1;
                 }
-                else if (Post["type"].ToString() == "Teacher")
+                else if (Convert.ToInt32(Post["teacherId"]) != 1)
                 {
                     tempSocialCloud.TeacherId = Convert.ToInt32(Post["teacherId"]);
-                    tempSocialCloud.StudentId = 0;
-                    tempSocialCloud.GuideId = 0;
+                    tempSocialCloud.StudentId = 1;
+                    tempSocialCloud.GuideId = 1;
                 }
-                else if (Post["type"].ToString() == "Guide")
+                else if (Convert.ToInt32(Post["guideId"]) != 1)
                 {
                     tempSocialCloud.GuideId = Convert.ToInt32(Post["guideId"]);
-                    tempSocialCloud.TeacherId = 0;
-                    tempSocialCloud.StudentId = 0;
+                    tempSocialCloud.TeacherId = 1;
+                    tempSocialCloud.StudentId = 1;
                 }
 
                 tempSocialCloud.FileUrl = Post["fileUrl"].ToString();
@@ -346,12 +250,11 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private List<Dictionary<string, string>> getTags(int groupId, SqlConnection con, string type)
+        private List<Dictionary<string, string>> getTags(int groupId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
-            if (type == "Student" || type == "Teacher" || type == "Guide")
-                cmd.CommandText = "getTagsOfAllGroupPosts";
+            cmd.CommandText = "getTagsOfAllGroupPosts";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
 
@@ -379,15 +282,10 @@ namespace Project_ServerSide.Models.DAL
             { throw; }
         }
 
-        private List<Dictionary<string, string>> getPost(int groupId, SqlConnection con, string type)
+        private List<Dictionary<string, string>> getPost(int groupId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
-            if (type == "Student")
-                cmd.CommandText = "spReadSocialCloudByStudent";
-            else if (type == "Teacher")
-                cmd.CommandText = "spReadSocialCloudByTeacher";
-            else
-                cmd.CommandText = "spReadSocialCloudByGuide";
+            cmd.CommandText = "spReadSocialCloud";
             cmd.Connection = con;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
@@ -400,15 +298,14 @@ namespace Project_ServerSide.Models.DAL
 
                 while (dataReader.Read())
                 {
-
                     Dictionary<string, string> post = new()
         {
             {"postId", dataReader["postId"].ToString()},
             {"groupId", dataReader["groupId"].ToString()},
-            {"type", dataReader["type"].ToString()},//type  -שדה בדאטה בייס 
-            {"studentId", type == "Student" ? dataReader["studentId"].ToString() : "0"},//type שמכניס המשתמש
-            {"teacherId", type == "Teacher" ? dataReader["teacherId"].ToString() : "0"},
-            {"guideId", type == "Guide" ? dataReader["guideId"].ToString() : "0"},
+            {"type", dataReader["type"].ToString()},
+            {"studentId", dataReader["userType"].ToString() == "Student" ? dataReader["userId"].ToString() : "1"},
+            {"teacherId", dataReader["userType"].ToString() == "Teacher" ? dataReader["userId"].ToString() : "1"},
+            {"guideId", dataReader["userType"].ToString() == "Guide" ? dataReader["userId"].ToString() : "1"},
             {"fileUrl", dataReader["fileUrl"].ToString()},
             {"Firstname", dataReader["Firstname"].ToString()},
             {"Lastname", dataReader["Lastname"].ToString()},
@@ -426,6 +323,8 @@ namespace Project_ServerSide.Models.DAL
                 throw;
             }
         }
+
+
     }
 }
 

@@ -16,7 +16,7 @@ namespace Project_ServerSide.Controllers
             return Tag.GetTags(groupId);
         }
 
-        // GET api/<TagsController>/5
+        // GET api/<TagsController>
         [HttpGet("postId/{postId}")]
         public List<Tag> GetTagsByPostId(int postId)
         {
@@ -35,13 +35,13 @@ namespace Project_ServerSide.Controllers
         {
         }
 
-        // PUT api/<TagsController>/5
+        // PUT api/<TagsController>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<TagsController>/5
+        // DELETE api/<TagsController>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

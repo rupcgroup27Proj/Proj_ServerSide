@@ -16,10 +16,6 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-
-        //--------------------------------------------------------------------------------------------------
-        // This method creates a connection to the database according to the connectionString name in the web.config 
-        //--------------------------------------------------------------------------------------------------
         public SqlConnection connect(String conString)
         {
 
@@ -32,12 +28,10 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //--------------------------------------------------------------------------------------------------
-        // This method inserts a Phone to the phones table 
+        // inserts Phone
         //--------------------------------------------------------------------------------------------------
         public int Insert(Phones phones)
         {
-
 
             SqlConnection con;
             SqlCommand cmd;
@@ -52,7 +46,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertPhonesCommandSP("spInsertPhones", con, phones);
+            cmd = CreateInsertPhonesCommand("spInsertPhones", con, phones);
 
             try
             {
@@ -76,11 +70,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand InsertCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateInsertPhonesCommandSP(String spName, SqlConnection con, Phones phones)
+        private SqlCommand CreateInsertPhonesCommand(String spName, SqlConnection con, Phones phones)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -98,17 +88,16 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
 
-
             return cmd;
         }
-        //--------------------------------------------------------------------------------------------------
-        // This method read phones 
+
+      
+        //read all phones 
         //--------------------------------------------------------------------------------------------------
 
         public List<Phones> Read()
 
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
@@ -122,10 +111,7 @@ namespace Project_ServerSide.Models.DAL
                 throw (ex);
             }
 
-
-            //cmd = CreateCommand(cStr, con);             // create the command
-
-            cmd = CreateReadPhonesCommandSP("spReadPhones", con);
+            cmd = CreateReadPhonesCommand("spReadPhones", con);
 
             List<Phones> PhoneList = new List<Phones>();
 
@@ -164,10 +150,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the ReadPhones SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateReadPhonesCommandSP(String spName, SqlConnection con)
+        private SqlCommand CreateReadPhonesCommand(String spName, SqlConnection con)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -185,8 +168,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
         
-        //--------------------------------------------------------------------------------------------------
-        // This method update a phones 
+  
+        //update a phones 
         //--------------------------------------------------------------------------------------------------
         public int Update(Phones phones)
         {
@@ -205,7 +188,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateCommandWithStoredProcedure("spUpdatePhone", con, phones);           
+            cmd = CreateCommandUpdatePhone("spUpdatePhone", con, phones);           
 
             try
             {
@@ -239,10 +222,7 @@ namespace Project_ServerSide.Models.DAL
             return command;
         }
 
-        //---------------------------------------------------------------------------------
-        // Create the SqlCommand using a stored procedure
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Phones phones)
+        private SqlCommand CreateCommandUpdatePhone(String spName, SqlConnection con, Phones phones)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -261,12 +241,12 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
             cmd.Parameters.AddWithValue("@id", phones.Id);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
-
-
             return cmd;
         }
 
-        // This method - pull Specific embassy of Israel
+
+
+        // pull embassy of Israel
         //---------------------------------------------------------------------------------
         public Phones pullEmbassy(Phones phones)
         {
@@ -285,7 +265,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreatePullCommandSP("sppullEmbassy", con, phones);// create the command
+            cmd = CreateCommandPullEmbassy("sppullEmbassy", con, phones);// create the command
             Phones X = new Phones();
             try
             {
@@ -318,9 +298,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the pull Specific  SqlCommand
-        //---------------------------------------------------------------------------------
-        private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Phones phones)
+        private SqlCommand CreateCommandPullEmbassy(String spName, SqlConnection con, Phones phones)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object

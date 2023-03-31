@@ -37,8 +37,6 @@ namespace Project_ServerSide.Controllers
         //}
 
 
-
-
         // GET api/<TeachersController>/5
         //[HttpGet("{id}")]
         //public string Get(int id)

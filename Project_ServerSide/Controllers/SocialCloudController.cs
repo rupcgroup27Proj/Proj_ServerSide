@@ -10,17 +10,10 @@ namespace Project_ServerSide.Controllers
     public class SocialCloudController : ControllerBase
     {
         // GET: api/<SocialCloudController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<SocialCloudController>/
-        [HttpGet("groupId/{groupId}/type/{type}")]
-        public string Get(int groupId, string type)
+        [HttpGet("groupId/{groupId}")]
+        public string Get(int groupId )
         {
-            return SocialCloud.ReadByGroupIdAndType(groupId,type);
+            return SocialCloud.ReadByGroupIdAndType(groupId);
         }
 
         // POST api/<SocialCloudController>
@@ -30,20 +23,7 @@ namespace Project_ServerSide.Controllers
             return socialCloud.Insert(tagsJson);
         }
 
-
-        // PUT api/<SocialCloudController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        // DELETE api/<SocialCloudController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
-
-        // DELETE api/<PostsCommentsController>/5
+        // DELETE api/<SocialCloudController>
         [HttpDelete("postId/{postId}")]
         public int Delete(int postId)
         {

@@ -45,7 +45,7 @@ namespace Project_ServerSide.Models
             return dbs.Login(this);
         }
 
-        public bool Insert()//insetrt new Guide to DB
+        public bool Insert()
         {
             Guides_DBservices dbs = new Guides_DBservices();
 
@@ -56,11 +56,7 @@ namespace Project_ServerSide.Models
             }
             return false;
         }
-        //public List<Guide> Read()
-        //{
-        //    Guides_DBservices dbs = new Guides_DBservices();
-        //    return dbs.Read();
-        //}
+        
 
     }
 }

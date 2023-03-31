@@ -11,7 +11,6 @@ namespace Project_ServerSide.Controllers
     {
         //GET: api/<JourneysController>
         [HttpGet]
-
         public IActionResult Get()
         {
             Journey journey = new Journey();
@@ -26,8 +25,10 @@ namespace Project_ServerSide.Controllers
                 return NotFound("No Journey on the system ");
             }
         }
-        [HttpGet("groupId/{groupId}/schoolName/{schoolName}")]
 
+
+        //GET: api/<JourneysController>
+        [HttpGet("groupId/{groupId}/schoolName/{schoolName}")]
         public IActionResult Get(int groupId, string schoolName)
         {
             Journey journey = new Journey();
@@ -45,31 +46,23 @@ namespace Project_ServerSide.Controllers
             }
         }
 
-        //insert new Journey
-        [HttpPost("schoolName/{schoolName}")]
-        public void Post(string schoolName)
+    
+        // POST api/<JourneysController>
+        [HttpPost]
+        public int Post([FromBody] Journey journey)
         {         
-             Journey.Insert(schoolName);
+             return journey.Insert();
 
         }
-        [HttpPut("{groupId}")]
+
+
+        // PUT api/<JourneysController>
+        [HttpPut("groupId/{groupId}")]
         public void Put(int groupId, [FromBody] Journey journey)
         {
             journey.GroupId = groupId;
             journey.Update();
         }
-        // PUT api/<StudentsController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] Student student)
-        //{
-        //    //student.Id = id;
-        //    //student.Update();
-        //}
-
-        //// DELETE api/<StudentsController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+     
     }
 }
