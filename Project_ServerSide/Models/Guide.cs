@@ -23,6 +23,7 @@ namespace Project_ServerSide.Models
         DateTime endDate;
 
 
+
         public string Password { get => password; set => password = value; }
         public int GuideId { get => guideId; set => guideId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
