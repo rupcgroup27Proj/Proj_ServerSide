@@ -11,7 +11,7 @@ namespace Project_ServerSide.Controllers
     {
         // GET: api/<SocialCloudController>
         [HttpGet("groupId/{groupId}")]
-        public string Get(int groupId )
+        public string Get(int groupId)
         {
             return SocialCloud.ReadByGroupIdAndType(groupId);
         }
@@ -22,6 +22,7 @@ namespace Project_ServerSide.Controllers
         {
             return socialCloud.Insert(tagsJson);
         }
+
 
         // DELETE api/<SocialCloudController>
         [HttpDelete("postId/{postId}")]

@@ -30,9 +30,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // inserts a Journey by schoolname 
+        // insert Journey by schoolname 
         //--------------------------------------------------------------------------------------------------
-        public int Insert(Journey journey)
+        public int Insert(string schoolName)
         {
 
             SqlConnection con;
@@ -48,7 +48,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateInsertJourneyCommand("spInsertJourney", con, journey);
+            cmd = CreateInsertJourneyCommand("spInsertJourney", con, schoolName);
 
             try
             {
@@ -72,7 +72,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private SqlCommand CreateInsertJourneyCommand(String spName, SqlConnection con, Journey journey)
+        private SqlCommand CreateInsertJourneyCommand(String spName, SqlConnection con,  string schoolName)
         {
 
             SqlCommand cmd = new SqlCommand(); 
@@ -85,18 +85,18 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; 
 
-            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);// מקבל רק אחרי השליחה 
-            cmd.Parameters.AddWithValue("@schoolName", journey.SchoolName);
-            cmd.Parameters.AddWithValue("@teacherFirstName", journey.TeacherFirstName);
-            cmd.Parameters.AddWithValue("@teacherLastName", journey.TeacherLastName);
-            cmd.Parameters.AddWithValue("@teacherId", journey.TeacherId);
-            cmd.Parameters.AddWithValue("@teacherEmail", journey.TeacherEmail);
-            cmd.Parameters.AddWithValue("@phoneTeacher", journey.PhoneTeacher);
-            cmd.Parameters.AddWithValue("@guideFirstName", journey.GuideFirstName);
-            cmd.Parameters.AddWithValue("@guideLastName", journey.GuideLastName);
-            cmd.Parameters.AddWithValue("@guideId", journey.GuideId);
-            cmd.Parameters.AddWithValue("@guideEmail", journey.GuideEmail);
-            cmd.Parameters.AddWithValue("@phoneGuide", journey.PhoneGuide);
+            //cmd.Parameters.AddWithValue("@groupId", journey.GroupId);// מקבל רק אחרי השליחה 
+            cmd.Parameters.AddWithValue("@schoolName", schoolName);
+            //cmd.Parameters.AddWithValue("@teacherFirstName", journey.TeacherFirstName);
+            //cmd.Parameters.AddWithValue("@teacherLastName", journey.TeacherLastName);
+            //cmd.Parameters.AddWithValue("@teacherId", journey.TeacherId);
+            //cmd.Parameters.AddWithValue("@teacherEmail", journey.TeacherEmail);
+            //cmd.Parameters.AddWithValue("@phoneTeacher", journey.PhoneTeacher);
+            //cmd.Parameters.AddWithValue("@guideFirstName", journey.GuideFirstName);
+            //cmd.Parameters.AddWithValue("@guideLastName", journey.GuideLastName);
+            //cmd.Parameters.AddWithValue("@guideId", journey.GuideId);
+            //cmd.Parameters.AddWithValue("@guideEmail", journey.GuideEmail);
+            //cmd.Parameters.AddWithValue("@phoneGuide", journey.PhoneGuide);
 
             return cmd;
         }
@@ -350,6 +350,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
         // This method - pull Specific GroupId for jourey - screen2
         //---------------------------------------------------------------------------------
         public JourneyId readGroupId(JourneyId journeyId)
@@ -401,8 +402,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        // Create the pull Specific Journey SqlCommand
-        //---------------------------------------------------------------------------------
         private SqlCommand CreatePullCommandSP1(String spName, SqlConnection con, JourneyId journeyId)
         {
 

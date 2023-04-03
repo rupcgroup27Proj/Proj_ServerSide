@@ -6,14 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-
-    //שם מורה
-    //טלפון מורה
-    //מייל
-    //שם מדריך
-    //תז מדריך
-    //מייל מדריך
-    //טלפון מדריך
     public class JourneyId
     {
         string schoolName;
@@ -30,7 +22,6 @@ namespace Project_ServerSide.Models
 
     public class Journey
     {
-
         int groupId;
         string schoolName;
         string teacherFirstName;
@@ -74,7 +65,7 @@ namespace Project_ServerSide.Models
        
         public static void Insert(string schoolName) { 
             Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.Insert(this);
+             dbs.Insert(schoolName);
            
         }
         public List<Journey> Read()
