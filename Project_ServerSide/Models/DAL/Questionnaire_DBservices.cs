@@ -347,7 +347,44 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@tagJson", JsonConvert.SerializeObject(tags));
-          
+
+            return cmd;
+        }
+
+
+        public void DeleteQuestionnaire(int questionnaireId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+
+            cmd = spDeleteQuestionnaire(con, questionnaireId);
+
+            try
+            { cmd.ExecuteNonQuery(); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spDeleteQuestionnaire(SqlConnection con, int questionnaireId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "q_deleteQuestionnaire";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@questionnaireId", questionnaireId);
+
             return cmd;
         }
     }

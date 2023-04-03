@@ -2,6 +2,7 @@
 using Project_ServerSide.Models;
 using Project_ServerSide.Models.DAL;
 using Project_ServerSide.Models.SmartQuestionnaires;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -35,9 +36,11 @@ namespace Project_ServerSide.Controllers
         }
 
         // DELETE api/<QuestionnairesController>/5
-        [HttpDelete("id/{id}")]
-        public void Delete(int id)
+        [HttpDelete("questionnaireId/{questionnaireId}")]
+        public void DeleteQuestionnaire(int questionnaireId)
         {
+            Questionnaire_DBservices dbs = new Questionnaire_DBservices();
+            dbs.DeleteQuestionnaire(questionnaireId);
         }
     }
 }
