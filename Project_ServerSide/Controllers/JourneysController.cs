@@ -10,7 +10,7 @@ namespace Project_ServerSide.Controllers
     public class JourneysController : ControllerBase
     {
         //GET: api/<JourneysController>
-        [HttpGet]
+        [HttpGet("GetJourneyList/")]
         public IActionResult GetJourneyList()
         {
             Journey journey = new Journey();
@@ -28,7 +28,7 @@ namespace Project_ServerSide.Controllers
 
 
         //GET: api/<JourneysController>
-        [HttpGet("groupId/{groupId}/schoolName/{schoolName}")]
+        [HttpGet("GetSpecificJourney/groupId/{groupId}/schoolName/{schoolName}")]
         public IActionResult GetSpecificJourney(int groupId, string schoolName)
         {
             Journey journey = new Journey();
