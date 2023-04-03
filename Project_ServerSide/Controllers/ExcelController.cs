@@ -28,6 +28,7 @@ public class ExcelController : ControllerBase
     private DataTable ParseExcelFile(IFormFile file)
     {
         var dataTable = new DataTable();
+        //System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
         using (var stream = new MemoryStream())
         {

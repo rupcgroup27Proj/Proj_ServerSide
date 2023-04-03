@@ -7,6 +7,8 @@ using System.Data;
 using System.Text;
 using System.Xml.Linq;
 using Project_ServerSide.Models;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -27,7 +29,7 @@ namespace Project_ServerSide.Models.DAL
 
         // GetStudentFavList
         //--------------------------------------------------------------------------------------------------
-        public List<FavList> FavListByStudentId(int studentId)
+        public string FavListByStudentId(int studentId)
         {
 
             SqlConnection con;
@@ -43,67 +45,180 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
+            //getthe tags of all post
+            List<Dictionary<string, string>> tags = getTags(studentId, con);
 
-            cmd = CreateCommandFavListByStudentId("spReadFavListByStudentId", con, studentId);// create the command
+            //get the post
+            List<Dictionary<string, string>> Posts = getPost(studentId, con);
 
-            List<FavList> tempList = new List<FavList>();
+            //the list we will send back
+            List<FavList> data = new List<FavList>();
+
+            foreach (var Post in Posts)
+            {
+                FavList temp= new FavList();
+                temp.PostId = Convert.ToInt32(Post["postId"]);
+                temp.StudentId = Convert.ToInt32(Post["studentId"]);
+                temp.FileUrl = Post["fileUrl"].ToString();
+             
+                temp.Tags = new List<Tag>();
+
+                //fill the post with all its tags
+                foreach (var tag in tags)
+                {
+                    if (tag["postId"] == Post["postId"])
+                    {
+                        Tag t = new Tag
+                        {
+                            TagId = Convert.ToInt32(tag["tagId"]),
+                            TagName = tag["tagName"]
+                        };
+
+                        temp.Tags.Add(t);
+                    }
+                }
+                data.Add(temp);
+            }
+
+            con.Close();
+
+
+            string jsonString = JsonConvert.SerializeObject(data);
+
+            return jsonString;
+
+        }
+
+        private List<Dictionary<string, string>> getTags(int studentId, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "getTagsOfAllPostsbyStudentID";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
 
             try
             {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
+                SqlDataReader dataReader = cmd.ExecuteReader();
+                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
 
                 while (dataReader.Read())
                 {
-                    FavList tempFavList = new FavList();
+                    Dictionary<string, string> tag = new()
+                    {
+                        {"postId", dataReader["postId"].ToString()},
+                        {"tagId", dataReader["tagId"].ToString()},
+                        {"tagName", dataReader["tagName"].ToString()}
+                    };
 
-                    tempFavList.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    tempFavList.PostId = Convert.ToInt32(dataReader["postId"]);
-                    tempFavList.FileUrl = Convert.ToString(dataReader["fileUrl"]);
-
-
-                    tempList.Add(tempFavList);
-
+                    result.Add(tag);
                 }
-                return tempList;
-
+                dataReader.Close();//Close the dataReader so that i could open another one on the same connection.
+                return result;
             }
             catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
-            }
-
+            { throw; }
         }
 
-        private SqlCommand CreateCommandFavListByStudentId(string spName, SqlConnection con, int studentId)
+        private List<Dictionary<string, string>> getPost(int studentId, SqlConnection con)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.CommandText = "spReadpostlikes";
+            cmd.Connection = con;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
 
 
-            return cmd;
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader();
+                List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+                while (dataReader.Read())
+                {
+
+                    Dictionary<string, string> post = new()
+        {
+            {"postId", dataReader["postId"].ToString()},
+            {"studentId",dataReader["Id"].ToString()},
+            {"fileUrl", dataReader["fileUrl"].ToString()},
+
+
+        };
+
+                    result.Add(post);
+                }
+
+                dataReader.Close();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
+  
+
+//    cmd = CreateCommandFavListByStudentId("spReadFavListByStudentId", con, studentId);// create the command
+
+//    List<FavList> tempList = new List<FavList>();
+
+//    try
+//    {
+//        SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+
+//        while (dataReader.Read())
+//        {
+//            FavList tempFavList = new FavList();
+
+//            tempFavList.StudentId = Convert.ToInt32(dataReader["studentId"]);
+//            tempFavList.PostId = Convert.ToInt32(dataReader["postId"]);
+//            tempFavList.FileUrl = Convert.ToString(dataReader["fileUrl"]);
+
+
+//            tempList.Add(tempFavList);
+
+//        }
+//        return tempList;
+
+//    }
+//    catch (Exception ex)
+//    {
+
+//        throw ex;
+//    }
+
+//    finally
+//    {
+//        if (con != null)
+//        {
+//            // close the db connection
+//            con.Close();
+//        }
+//    }
+
+//}
+
+//private SqlCommand CreateCommandFavListByStudentId(string spName, SqlConnection con, int studentId)
+//        {
+
+//            SqlCommand cmd = new SqlCommand(); // create the command object
+
+//            cmd.Connection = con;              // assign the connection to the command object
+
+//            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+//            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+//            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+
+//            cmd.Parameters.AddWithValue("@studentId", studentId);
+
+
+//            return cmd;
+//        }
 
 
         // InsertPostToStudentFavList

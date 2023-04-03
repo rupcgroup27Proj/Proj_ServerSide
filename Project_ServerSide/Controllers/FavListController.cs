@@ -18,7 +18,7 @@ namespace Project_ServerSide.Controllers
 
         // GET api/<FavListController>/5
         [HttpGet("studentId/{studentId}")]
-        public List <FavList> Get(int studentId)
+        public string Get(int studentId)
         {
             return FavList.ReadByStudentId(studentId);
         }
