@@ -16,7 +16,6 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
-
         public SqlConnection connect(String conString)
         {
 
@@ -30,7 +29,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
       
-        // inserts guide
+        // insert guide
         //---------------------------------------------------------------------------------
         public int Insert(Guide guide)
         {

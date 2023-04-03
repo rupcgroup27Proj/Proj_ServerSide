@@ -11,7 +11,7 @@ namespace Project_ServerSide.Controllers
     {
         //GET: api/<JourneysController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetJourneyList()
         {
             Journey journey = new Journey();
             List<Journey> JourneyList = journey.Read();
@@ -29,7 +29,7 @@ namespace Project_ServerSide.Controllers
 
         //GET: api/<JourneysController>
         [HttpGet("groupId/{groupId}/schoolName/{schoolName}")]
-        public IActionResult Get(int groupId, string schoolName)
+        public IActionResult GetSpecificJourney(int groupId, string schoolName)
         {
             Journey journey = new Journey();
             journey.GroupId = groupId;
@@ -46,10 +46,9 @@ namespace Project_ServerSide.Controllers
             }
         }
 
-        //read groupId for journey
+        //read groupId for journey schoolName
         [HttpGet("schoolName/{schoolName}")]
-
-        public IActionResult Get(string schoolName)
+        public IActionResult GetGroupIdBySchoolName(string schoolName)
         {
             JourneyId journeyId = new JourneyId();
             journeyId.SchoolName = schoolName;
@@ -67,12 +66,11 @@ namespace Project_ServerSide.Controllers
 
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
-        public void Post(string schoolName)
+        public void PostSchoolName(string schoolName)
         {         
-             return journey.Insert();
+              Journey.Insert(schoolName);
 
         }
-
 
         // PUT api/<JourneysController>
         [HttpPut("groupId/{groupId}")]

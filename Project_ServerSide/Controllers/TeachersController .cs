@@ -9,8 +9,6 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        private int teacherID;
-
         // POST api/<TeachersController>
         [HttpPost]
         public bool Post([FromBody] Teacher teacher)

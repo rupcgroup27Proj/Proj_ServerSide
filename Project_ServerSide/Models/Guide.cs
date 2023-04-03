@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-
     public class Guide
     {
         string type;
@@ -22,8 +21,6 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
-
-
         public string Password { get => password; set => password = value; }
         public int GuideId { get => guideId; set => guideId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
@@ -38,8 +35,6 @@ namespace Project_ServerSide.Models
         public bool IsAdmin { get => isAdmin; set => isAdmin = value; }
 
 
-        static List<Guide> GuidetList = new List<Guide>();
-
         public Guide Login()
         {
             Guides_DBservices dbs = new Guides_DBservices();
@@ -50,15 +45,11 @@ namespace Project_ServerSide.Models
         {
             Guides_DBservices dbs = new Guides_DBservices();
 
-            if (dbs.Insert(this) == 1)
-            {
-                GuidetList.Add(this);
-                return true;
-            }
+            if (dbs.Insert(this) == 2)        
+                return true;            
             return false;
         }
-        
-
+       
     }
 }
 

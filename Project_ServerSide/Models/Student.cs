@@ -35,8 +35,6 @@ namespace Project_ServerSide.Models
         public DateTime EndDate { get => endDate; set => endDate = value; }
         public string Type { get => type; set => type = value; }
 
-        static List<Student> StudentList = new List<Student>();
-
         public Student Login()
         {
             Students_DBservices dbs = new Students_DBservices();
@@ -49,22 +47,21 @@ namespace Project_ServerSide.Models
 
         }
 
-        public bool Insert()//insetrt new students to DB
+        public bool Insert()
         {
             Students_DBservices dbs = new Students_DBservices();
 
-            if (dbs.Insert(this) == 1)
-            {
-                StudentList.Add(this);
-                return true;
-            }
+            if (dbs.Insert(this) == 2)           
+                return true;          
             return false;
         }
+
         public List<Student> Read()
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Read();
         }
+
         public Student pullSpecificStudent()
         {
             Students_DBservices dbs = new Students_DBservices();

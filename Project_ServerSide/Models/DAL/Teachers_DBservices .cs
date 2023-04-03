@@ -30,7 +30,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
      
-        // inserts a teacher 
+        // insert teacher 
         //--------------------------------------------------------------------------------------------------
         public int Insert(Teacher teacher)
         {
@@ -54,6 +54,7 @@ namespace Project_ServerSide.Models.DAL
             try
             {
                 int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                Console.WriteLine(numEffected);
                 return numEffected;
             }
             catch (Exception ex)
@@ -94,7 +95,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@email", teacher.Email);
             cmd.Parameters.AddWithValue("@pictureUrl", teacher.PictureUrl);
             cmd.Parameters.AddWithValue("@groupId", teacher.GroupId);
-
 
             return cmd;
         }

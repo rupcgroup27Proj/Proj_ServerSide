@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-
     public class Teacher
     {
         string type;
@@ -33,7 +32,7 @@ namespace Project_ServerSide.Models
         public DateTime EndDate { get => endDate; set => endDate = value; }
         public string Type { get => type; set => type = value; }
 
-        static List<Teacher> StudentList = new List<Teacher>();
+
 
         public Teacher Login()
         {
@@ -44,12 +43,8 @@ namespace Project_ServerSide.Models
         public bool Insert()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
-
-            if (dbs.Insert(this) == 1)
-            {
-                StudentList.Add(this);
-                return true;
-            }
+            if (dbs.Insert(this) == 2)           
+               return true;            
             return false;
         }
 
