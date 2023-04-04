@@ -8,11 +8,14 @@ namespace Project_ServerSide.Models
         int studentId;
         int postId;
         string fileUrl;
+        List<Tag> tags = new List<Tag>();
         public int StudentId { get => studentId; set => studentId = value; }
         public int PostId { get => postId; set => postId = value; }
         public string FileUrl { get => fileUrl; set => fileUrl = value; }
 
-        public static List<FavList> ReadByStudentId(int studentId)
+        public List<Tag> Tags { get => tags; set => tags = value; }
+
+        public static string ReadByStudentId(int studentId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.FavListByStudentId(studentId);
