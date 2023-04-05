@@ -37,15 +37,11 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB");}
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            {throw (ex);}
+               
+                
             dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(tags);
 
             // Access the array of tag objects using the "Tags" property

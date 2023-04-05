@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
+using Project_ServerSide.Models.DAL;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,6 +47,13 @@ namespace Project_ServerSide.Controllers
             }
         }
 
+        [HttpGet("GetJourneyDatesAndSchoolName/groupId/{groupId}")]
+        public object GetJourneyDatesAndSchoolName(int groupId)
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            return dbs.GetJourneyDatesAndSchoolName(groupId); 
+        }
+
         //read groupId for journey schoolName
         [HttpGet("schoolName/{schoolName}")]
         public IActionResult GetGroupIdBySchoolName(string schoolName)
@@ -67,9 +75,8 @@ namespace Project_ServerSide.Controllers
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
         public void PostSchoolName(string schoolName)
-        {         
-              Journey.Insert(schoolName);
-
+        {
+            Journey.Insert(schoolName);
         }
 
         // PUT api/<JourneysController>
@@ -79,6 +86,12 @@ namespace Project_ServerSide.Controllers
             journey.GroupId = groupId;
             journey.Update();
         }
-     
+
+        [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")]
+        public void UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            dbs.UpdateJourneyDates(groupId, startDate, endDate);
+        }
     }
 }

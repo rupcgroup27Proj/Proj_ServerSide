@@ -56,10 +56,10 @@ namespace Project_ServerSide.Models
             return false;
         }
 
-        public List<Student> Read()
+        public List<Student> Read(int groupId)
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.Read();
+            return dbs.Read(groupId);
         }
 
         public Student pullSpecificStudent()

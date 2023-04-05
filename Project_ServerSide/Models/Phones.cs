@@ -14,8 +14,8 @@ namespace Project_ServerSide.Models
         string phone;
         string notes;
         int groupId;
-        
-       
+
+
         public string Phone { get => phone; set => phone = value; }
         public string Title { get => title; set => title = value; }
         public string Notes { get => notes; set => notes = value; }
@@ -25,7 +25,7 @@ namespace Project_ServerSide.Models
 
         static List<Phones> PhoneList = new List<Phones>();
 
-      
+
         public int Update()
         {
             Phones_DBservices dbs = new Phones_DBservices();
@@ -45,10 +45,16 @@ namespace Project_ServerSide.Models
             return false;
         }
 
-        public List<Phones> Read()
+        public List<Phones> Read(int groupId)
         {
             Phones_DBservices dbs = new Phones_DBservices();
-            return dbs.Read();
+            return dbs.Read(groupId);
+        }
+
+        public int Delete(int id)
+        {
+            Phones_DBservices dbs = new Phones_DBservices();
+            return dbs.Delete(id);
         }
 
         public Phones pullEmbassy()

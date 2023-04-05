@@ -8,6 +8,7 @@ using System.Text;
 using System.Xml.Linq;
 using Project_ServerSide.Models;
 using System.Numerics;
+using System.Text.Json;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -16,7 +17,7 @@ namespace Project_ServerSide.Models.DAL
         public SqlDataAdapter da;
         public DataTable dt;
 
- 
+
         public SqlConnection connect(String conString)
         {
 
@@ -40,7 +41,7 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                con = connect("myProjDB"); 
+                con = connect("myProjDB");
             }
             catch (Exception ex)
             {
@@ -72,18 +73,18 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private SqlCommand CreateInsertJourneyCommand(String spName, SqlConnection con,  string schoolName)
+        private SqlCommand CreateInsertJourneyCommand(String spName, SqlConnection con, string schoolName)
         {
 
-            SqlCommand cmd = new SqlCommand(); 
+            SqlCommand cmd = new SqlCommand();
 
-            cmd.Connection = con;       
+            cmd.Connection = con;
 
-            cmd.CommandText = spName;     
+            cmd.CommandText = spName;
 
-            cmd.CommandTimeout = 10;        
+            cmd.CommandTimeout = 10;
 
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; 
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
             //cmd.Parameters.AddWithValue("@groupId", journey.GroupId);// מקבל רק אחרי השליחה 
             cmd.Parameters.AddWithValue("@schoolName", schoolName);
@@ -100,7 +101,7 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
-       
+
 
         // read Journey 
         //--------------------------------------------------------------------------------------------------
@@ -272,8 +273,65 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+        //get specific journey's Dates and schoolName
+        public object GetJourneyDatesAndSchoolName(int groupId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
 
-       
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetJourneyDatesAndSchoolName(con, groupId);
+
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                object journey = new object();
+                while (dataReader.Read())
+                {
+                    object tmpJ = new
+                    {
+                        groupId = Convert.ToInt32(dataReader["groupId"]),
+                        schoolName = dataReader["schoolName"].ToString(),
+                        startDate = Convert.ToDateTime(dataReader["StartDate"]),
+                        endDate = Convert.ToDateTime(dataReader["EndDate"])
+                    };
+                    journey = tmpJ;
+                }
+                return journey;
+            }
+
+            catch (Exception ex)
+            { throw; }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+
+        }
+
+        private SqlCommand spGetJourneyDatesAndSchoolName(SqlConnection con, int groupId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "spGetJourneyDatesAndSchoolName";
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+
+            return cmd;
+        }
+
+
+
+
         // update dates to the groups table 
         //--------------------------------------------------------------------------------------------------
         public int Update(Journey journey)
@@ -317,15 +375,6 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private String BuildUpdateCommand(Journey journey)
-        {
-
-            StringBuilder sb = new StringBuilder();
-
-            string command = sb.AppendFormat("update Groups set startDate = '{0}', endDate = {1} where groupId = {2}", journey.StartDate, journey.EndDate,journey.GroupId).ToString();
-
-            return command;
-        }
 
         private SqlCommand CreateCommandInsertNewDates(String spName, SqlConnection con, Journey journey)
         {
@@ -418,6 +467,44 @@ namespace Project_ServerSide.Models.DAL
 
             cmd.Parameters.AddWithValue("@SchoolName", journeyId.SchoolName);
 
+
+            return cmd;
+        }
+
+
+        public void UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spUpdateJourneyDates(con, groupId, startDate, endDate);
+
+            try
+            { int numEffected = cmd.ExecuteNonQuery(); }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spUpdateJourneyDates(SqlConnection con, int groupId, DateTime startDate, DateTime endDate)
+        {
+            SqlCommand cmd = new SqlCommand(); 
+            cmd.Connection = con;            
+            cmd.CommandText = "spUpdateJourneyDates";    
+            cmd.CommandTimeout = 10;           
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+            cmd.Parameters.AddWithValue("@startDate", startDate);
+            cmd.Parameters.AddWithValue("@endDate", endDate);
 
             return cmd;
         }

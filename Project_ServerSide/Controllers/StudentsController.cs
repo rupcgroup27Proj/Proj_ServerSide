@@ -10,20 +10,12 @@ namespace Project_ServerSide.Controllers
     public class StudentsController : ControllerBase
     {
         //GET: api/<StudentsController>
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("groupId/{groupId}")]
+        public List<Student> GetGroupStudents(int groupId)
         {
             Student student = new Student();
-            List<Student> StudentList = student.Read();
-
-            if (StudentList.Count > 0)
-            {
-                return Ok(StudentList);
-            }
-            else
-            {
-                return NotFound("No Student on the system ");
-            }
+            return student.Read(groupId);
+           
         }
 
         //GET: api/<StudentsController>

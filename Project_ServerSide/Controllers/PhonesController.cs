@@ -10,11 +10,11 @@ namespace Project_ServerSide.Controllers
     public class PhonesController : ControllerBase
     {
         //GET: api/<PhonesController>
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("groupId/{groupId}")]
+        public IActionResult Get(int groupId)
         {
             Phones phones = new Phones();
-            List<Phones> PhonesList = phones.Read();
+            List<Phones> PhonesList = phones.Read(groupId);
 
             if (PhonesList.Count > 0)
             {
@@ -22,7 +22,7 @@ namespace Project_ServerSide.Controllers
             }
             else
             {
-                return NotFound("No Phones on the system ");
+                return NotFound("No Phones on the system");
             }
         }
 
@@ -60,6 +60,16 @@ namespace Project_ServerSide.Controllers
             return phones.Insert();
         }
 
+        [HttpDelete("id/{id}")]
+        public IActionResult Delete(int id)
+        {
+            Phones phones = new Phones();
+            
+            if (phones.Delete(id) > 0)
+                return Ok("Success");
+            else
+                return NotFound("Delete failed");
+        }
         //// DELETE api/<PhonesController>/5
         //[HttpDelete("{id}")]
         //public void Delete(int id)

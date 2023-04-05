@@ -29,7 +29,7 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-      
+
         // inserts student
         //--------------------------------------------------------------------------------------------------
         public int Insert(Student student)
@@ -89,9 +89,9 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@password", student.Password);
             cmd.Parameters.AddWithValue("@firstName", student.FirstName);
             cmd.Parameters.AddWithValue("@lastName", student.LastName);
-            cmd.Parameters.AddWithValue("@phone", student.Phone);
+            cmd.Parameters.AddWithValue("@phone", Convert.ToInt32(student.Phone));
             cmd.Parameters.AddWithValue("@email", student.Email);
-            cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
+            cmd.Parameters.AddWithValue("@parentPhone", Convert.ToInt32(student.ParentPhone));
             cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
             cmd.Parameters.AddWithValue("@groupId", student.GroupId);
 
@@ -99,31 +99,26 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-    
-        //read all students
+
+        //read all students group students
         //--------------------------------------------------------------------------------------------------
 
-        public List<Student> Read()
-
+        public List<Student> Read(int groupId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
+
+
             catch (Exception ex)
             {
                 // write to log
                 throw (ex);
             }
 
-            //String cStr = BuildUpdateCommand(student);      // helper method to build the insert string
-
-
-            cmd = CreateReadStudentsCommandSP("spReadStudent", con);
+            cmd = CreateReadStudentsCommandSP("spReadStudent", con, groupId);
 
             List<Student> StudentList = new List<Student>();
 
@@ -144,14 +139,8 @@ namespace Project_ServerSide.Models.DAL
                     u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
                     u.PictureUrl = dataReader["PictureUrl"].ToString();
                     u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    //if (dataReader["StartDate"] == null)
-                    //    u.StartDate = new DateTime(2222, 2, 22);
-                    //else
-                        u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
-                    //if (dataReader["EndDate"] == null)
-                    //    u.EndDate = new DateTime(2222, 2, 22);
-                    //else
-                        u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
+                    u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
+                    u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
                     StudentList.Add(u);
 
                 }
@@ -174,7 +163,7 @@ namespace Project_ServerSide.Models.DAL
 
         }
 
-        private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con)
+        private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con, int groupId)
         {
 
             SqlCommand cmd = new SqlCommand(); // create the command object
@@ -186,7 +175,7 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
 
             cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            cmd.Parameters.AddWithValue("@groupId", groupId);
 
             return cmd;
         }
@@ -371,7 +360,7 @@ namespace Project_ServerSide.Models.DAL
             }
 
 
-            cmd = CreateCommandWithStoredProcedure("spUpdateStudent", con, student);           
+            cmd = CreateCommandWithStoredProcedure("spUpdateStudent", con, student);
 
             try
             {
@@ -399,8 +388,8 @@ namespace Project_ServerSide.Models.DAL
         {
 
             StringBuilder sb = new StringBuilder();
-            
-            string command = sb.AppendFormat("update Students set phone = '{0}', email = {1}, parentPhone = {2} where id = {3}", student.Phone, student.Email, student.ParentPhone,student.StudentId).ToString();
+
+            string command = sb.AppendFormat("update Students set phone = '{0}', email = {1}, parentPhone = {2} where id = {3}", student.Phone, student.Email, student.ParentPhone, student.StudentId).ToString();
 
             return command;
         }
@@ -496,7 +485,7 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-     
+
 
     }
 }
