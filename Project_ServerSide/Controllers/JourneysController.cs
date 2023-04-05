@@ -74,9 +74,10 @@ namespace Project_ServerSide.Controllers
 
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
-        public void PostSchoolName(string schoolName)
-        {
-            Journey.Insert(schoolName);
+        public int PostSchoolName(string schoolName)
+        {         
+              return Journey.Insert(schoolName);
+
         }
 
         // PUT api/<JourneysController>

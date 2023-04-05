@@ -53,8 +53,14 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                int groupId = 0;
+                while (dataReader.Read())
+                {
+                    groupId = Convert.ToInt32(dataReader["groupId"]);
+                }
+                Console.WriteLine(groupId);
+                return groupId;
             }
             catch (Exception ex)
             {

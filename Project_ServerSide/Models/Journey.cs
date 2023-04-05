@@ -63,9 +63,9 @@ namespace Project_ServerSide.Models
         }
 
        
-        public static void Insert(string schoolName) { 
+        public static int Insert(string schoolName) { 
             Journey_DBservices dbs = new Journey_DBservices();
-             dbs.Insert(schoolName);
+            return dbs.Insert(schoolName);
            
         }
         public List<Journey> Read()
