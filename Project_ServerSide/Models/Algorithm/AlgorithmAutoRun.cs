@@ -14,11 +14,11 @@ public class AlgorithmAutoRun
 
         const int day = 86400000;
         DateTime startDate = new DateTime(2023, 3, 6, 3, 0, 0);//Should change the date to the right day
-        Timer timer = new Timer(AutoRun, null, 0, day); //call TimerCallback every 1 second
+        Timer timer = new Timer(AutoRun, null, 0, day); //call TimerCallback once a day
     }
 
-    private static void AutoRun(Object o)
+    private static void AutoRun(object o)
     {
-        Algorithm.RunAlgorithm(false, 0);
+        Algorithm.RunAlgorithm();
     }
 }

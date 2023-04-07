@@ -37,6 +37,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
         public void InsertNewQuestionnaire(int groupId, string sq)
         {
             SqlConnection con;
@@ -94,6 +95,7 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
+
 
 
         public string GetAllQuestionnaires(int groupId)
@@ -316,6 +318,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
         public void updateStudentTags(int studentId, List<Tag> tags)
         {
             SqlConnection con;
@@ -327,6 +330,7 @@ namespace Project_ServerSide.Models.DAL
             { throw (ex); }
 
             cmd = spUpdateStudentTags(studentId, tags, con);
+            Console .WriteLine(tags);
 
             try
             { cmd.ExecuteNonQuery(); }
@@ -350,6 +354,7 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
+
 
 
         public void DeleteQuestionnaire(int questionnaireId)
