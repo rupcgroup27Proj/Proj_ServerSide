@@ -93,7 +93,7 @@ namespace Project_ServerSide.Models.DAL
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
-            cmd.CommandText = "getTagsOfAllPostsbyStudentID";
+            cmd.CommandText = "getAllFavTagsByStudentId";
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
 
@@ -123,7 +123,7 @@ namespace Project_ServerSide.Models.DAL
         private List<Dictionary<string, string>> getPost(int studentId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
-            cmd.CommandText = "spReadpostlikes";
+            cmd.CommandText = "getFavPostsByStudentId";
             cmd.Connection = con;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
@@ -158,68 +158,6 @@ namespace Project_ServerSide.Models.DAL
             }
         }
   
-
-//    cmd = CreateCommandFavListByStudentId("spReadFavListByStudentId", con, studentId);// create the command
-
-//    List<FavList> tempList = new List<FavList>();
-
-//    try
-//    {
-//        SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-
-//        while (dataReader.Read())
-//        {
-//            FavList tempFavList = new FavList();
-
-//            tempFavList.StudentId = Convert.ToInt32(dataReader["studentId"]);
-//            tempFavList.PostId = Convert.ToInt32(dataReader["postId"]);
-//            tempFavList.FileUrl = Convert.ToString(dataReader["fileUrl"]);
-
-
-//            tempList.Add(tempFavList);
-
-//        }
-//        return tempList;
-
-//    }
-//    catch (Exception ex)
-//    {
-
-//        throw ex;
-//    }
-
-//    finally
-//    {
-//        if (con != null)
-//        {
-//            // close the db connection
-//            con.Close();
-//        }
-//    }
-
-//}
-
-//private SqlCommand CreateCommandFavListByStudentId(string spName, SqlConnection con, int studentId)
-//        {
-
-//            SqlCommand cmd = new SqlCommand(); // create the command object
-
-//            cmd.Connection = con;              // assign the connection to the command object
-
-//            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-//            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-//            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
-//            cmd.Parameters.AddWithValue("@studentId", studentId);
-
-
-//            return cmd;
-//        }
-
 
         // InsertPostToStudentFavList
         //--------------------------------------------------------------------------------------------------
@@ -348,6 +286,43 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@postId", postId);
 
+
+            return cmd;
+        }
+
+
+        public void LowerStudentTags(int studentId, List<Tag> tags)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spLowerStudentTags(studentId, tags, con);
+            Console.WriteLine(tags);
+
+            try
+            { cmd.ExecuteNonQuery(); }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spLowerStudentTags(int studentId, List<Tag> tags, SqlConnection con)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "q_LowerStudentTags";
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@tagJson", JsonConvert.SerializeObject(tags));
 
             return cmd;
         }

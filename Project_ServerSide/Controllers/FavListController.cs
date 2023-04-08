@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
+using Project_ServerSide.Models.SmartQuestionnaires;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -9,37 +9,25 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class FavListController : ControllerBase
     {
-        // GET: api/<FavListController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<FavListController>/5
         [HttpGet("studentId/{studentId}")]
         public string Get(int studentId)
         {
             return FavList.ReadByStudentId(studentId);
         }
 
-        // POST api/<FavListController>
+
         [HttpPost("studentId/{studentId}/postId/{postId}")]
-        public bool Post(int studentId, int postId)
+        public bool Post(int studentId, int postId, [FromBody] List<Tag> tags)
         {
+            Questionnaire.updateStudentTags(studentId, tags);
             return FavList.Insert(studentId, postId);
         }
 
-        // PUT api/<FavListController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
 
-        // DELETE api/<FavListController>/5
-        [HttpDelete("studentId/{studentId}/postId/{postId}")]
-        public int Delete(int studentId, int postId)
+        [HttpPut("studentId/{studentId}/postId/{postId}")]
+        public int Delete(int studentId, int postId, [FromBody] List<Tag> tags)
         {
+            FavList.LowerStudentTags(studentId, tags);
             return FavList.Delete(studentId, postId); 
         }
     }

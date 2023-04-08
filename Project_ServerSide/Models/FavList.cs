@@ -10,6 +10,8 @@ namespace Project_ServerSide.Models
         string fileUrl;
 
         List<Tag> tags = new List<Tag>();
+
+
         public int StudentId { get => studentId; set => studentId = value; }
         public int PostId { get => postId; set => postId = value; }
         public string FileUrl { get => fileUrl; set => fileUrl = value; }
@@ -33,5 +35,12 @@ namespace Project_ServerSide.Models
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.DeletePostFromListFav(studentId, postId);
         }
+
+        public static void LowerStudentTags(int studentId, List<Tag> tags)
+        {
+            FavList_DBservices dbs = new FavList_DBservices();
+            dbs.LowerStudentTags(studentId, tags);
+        }
+
     }
 }
