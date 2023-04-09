@@ -9,12 +9,7 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class FavListController : ControllerBase
     {
-        // GET: api/<FavListController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+       
 
         // GET api/<FavListController>/5
         [HttpGet("studentId/{studentId}")]
@@ -30,11 +25,6 @@ namespace Project_ServerSide.Controllers
             return FavList.Insert(studentId, postId);
         }
 
-        // PUT api/<FavListController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
 
         // DELETE api/<FavListController>/5
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
