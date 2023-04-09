@@ -21,6 +21,7 @@ namespace Project_ServerSide.Models
         public static bool Insert(int studentId, int postId)
         {
             PostsLikes_DBservices dbs = new PostsLikes_DBservices();
+
             return dbs.InsertPostsLikes(studentId, postId);
         }
 

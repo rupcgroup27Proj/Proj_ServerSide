@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -38,9 +39,17 @@ namespace Project_ServerSide.Controllers
 
         // DELETE api/<FavListController>/5
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
-        public int Delete(int studentId, int postId)
+        public IActionResult Delete(int studentId, int postId)
         {
-            return FavList.Delete(studentId, postId); 
+            FavList s = new FavList();
+            int num = FavList.Delete(studentId, postId);
+            if (num == 1)
+                return Ok(new { message = "Resource deleted successfully" });
+            else
+                return NotFound(new { message = "Resource not found" });
         }
+
+
+
     }
 }

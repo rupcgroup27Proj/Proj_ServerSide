@@ -25,9 +25,10 @@ namespace Project_ServerSide.Controllers
 
         // POST api/<PostsCommentsController>
         [HttpPost]
-        public int Post([FromBody] PostsComments postsComments)
+        public bool Post([FromBody] PostsComments postsComments)
         {
             return postsComments.Insert();
+
         }
 
         // PUT api/<PostsCommentsController>/5
@@ -36,11 +37,17 @@ namespace Project_ServerSide.Controllers
         //{
         //}
 
-        // DELETE api/<PostsCommentsController>/5
         [HttpDelete("commentId/{commentId}")]
-        public int Delete(int commentId)
+        public IActionResult Delete(int commentId)
         {
-            return PostsComments.Delete(commentId);
+            PostsComments s = new PostsComments();
+            int num = PostsComments.Delete(commentId);
+            if (num == 1)
+                return Ok(new { message = "Resource deleted successfully" });
+            else
+                return NotFound(new { message = "Resource not found" });
         }
+
     }
+}
 }

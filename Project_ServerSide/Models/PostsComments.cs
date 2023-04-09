@@ -22,10 +22,12 @@ namespace Project_ServerSide.Models
             return dbs.GetCommentsByPostId(postId);
         }
 
-        public int Insert()
+        public bool Insert()
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.InsertPostsComments(this);
+            if (dbs.InsertPostsComments(this) == 1)
+                return true;
+            return false;
         }
 
         public static int Delete(int commentId)

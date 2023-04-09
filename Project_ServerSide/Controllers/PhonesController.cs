@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,12 +46,16 @@ namespace Project_ServerSide.Controllers
             }
         }
 
-        // PUT api/<PhonesController>/5
+        // PUT api/<PhonesController>/id/5
         [HttpPut("id/{id}")]
-        public void Put(int id, [FromBody] Phones phones)
+        public IActionResult Put(int id, [FromBody] Phones phones)
         {
             phones.Id = id;
-            phones.Update();
+
+            if (phones.Update() == 1)
+                return Ok(phones);
+            else
+                return NotFound();
         }
 
         // POST api/<PhonesController>/5

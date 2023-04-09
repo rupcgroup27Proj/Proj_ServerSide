@@ -29,6 +29,7 @@ namespace Project_ServerSide.Controllers
         public bool Post(int studentId, int postId)
         {
             return PostsLikes.Insert(studentId, postId);
+
         }
 
         // PUT api/<PostsLikesController>/5
@@ -39,9 +40,14 @@ namespace Project_ServerSide.Controllers
 
         // DELETE api/<PostsLikesController>/5
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
-        public int Delete(int studentId, int postId)
+        public IActionResult Delete(int studentId, int postId)
         {
-            return PostsLikes.Delete(studentId, postId);
+            PostsLikes s = new PostsLikes();
+            int num = PostsLikes.Delete(studentId, postId);
+            if (num == 1)
+                return Ok(new { message = "Resource deleted successfully" });
+            else
+                return NotFound(new { message = "Resource not found" });
         }
     }
 }

@@ -48,10 +48,14 @@ namespace Project_ServerSide.Controllers
 
         // PUT api/<StudentsController>/5
         [HttpPut("studentId/{studentId}")]
-        public void Put(int studentId, [FromBody] Student student)
+        public IActionResult Put(int studentId, [FromBody] Student student)
         {
             student.StudentId = studentId;
-            student.Update();
+            if (student.Update() == 1)
+                return Ok(student);
+            else
+                return NotFound();
+         
         }
 
 
