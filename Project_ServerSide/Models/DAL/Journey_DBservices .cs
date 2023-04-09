@@ -280,6 +280,7 @@ namespace Project_ServerSide.Models.DAL
 
 
         //get specific journey's Dates and schoolName
+        //--------------------------------------------------------------------------------------------------
         public object GetJourneyDatesAndSchoolName(int groupId)
         {
             SqlConnection con;
@@ -336,8 +337,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-
         // update dates to the groups table 
         //--------------------------------------------------------------------------------------------------
         public int Update(Journey journey)
@@ -380,7 +379,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
 
         private SqlCommand CreateCommandInsertNewDates(String spName, SqlConnection con, Journey journey)
         {
@@ -478,6 +476,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+        //?????????????????
         public void UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
             SqlConnection con;

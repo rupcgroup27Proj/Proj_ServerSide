@@ -132,6 +132,7 @@ namespace Project_ServerSide.Models.DAL
             try
             {
                 int numEffected = cmd.ExecuteNonQuery();
+                Console.WriteLine(numEffected);
                 if (numEffected == 1)
                 {
                     return true;

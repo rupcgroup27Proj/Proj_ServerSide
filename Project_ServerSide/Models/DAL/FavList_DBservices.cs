@@ -238,11 +238,11 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                con = connect("myProjDB"); // create the connection
+                con = connect("myProjDB"); 
             }
             catch (Exception ex)
             {
-                // write to log
+          
                 throw ex;
             }
 
@@ -250,12 +250,12 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery(); 
                 return numEffected;
             }
             catch (Exception ex)
             {
-                // write to log
+            
                 throw ex;
             }
 
@@ -263,7 +263,7 @@ namespace Project_ServerSide.Models.DAL
             {
                 if (con != null)
                 {
-                    // close the db connection
+                  
                     con.Close();
                 }
             }
@@ -273,15 +273,15 @@ namespace Project_ServerSide.Models.DAL
         private SqlCommand CreateCommandDeletePostFromListFav(string spName, SqlConnection con, int studentId, int postId)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
+            SqlCommand cmd = new SqlCommand();
 
-            cmd.Connection = con;              // assign the connection to the command object
+            cmd.Connection = con;          
 
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+            cmd.CommandText = spName;      
 
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+            cmd.CommandTimeout = 10;      
 
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+            cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@postId", postId);

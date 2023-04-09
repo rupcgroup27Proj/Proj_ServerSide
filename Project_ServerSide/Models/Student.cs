@@ -46,7 +46,6 @@ namespace Project_ServerSide.Models
             return dbs.Update(this);
 
         }
-
         public bool Insert()
         {
             Students_DBservices dbs = new Students_DBservices();
