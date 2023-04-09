@@ -1,5 +1,0 @@
-﻿
-TO DO:
-
-1. In AlgorithmAutoRun, change the code to the // code.
-2. 

@@ -14,8 +14,8 @@ namespace Project_ServerSide.Models
         DateTime createdAt;
         string firstName;
         string lastName;
+        List<Tag> tags = new List<Tag>();
 
-        List<Tag> tags = new List<Tag>(); 
 
         public int PostId { get => postId; set => postId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
@@ -26,9 +26,8 @@ namespace Project_ServerSide.Models
         public string Type { get => type; set => type = value; }
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
-
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
-        public List<Tag> Tags { get => tags; set => tags = value; } 
+        public List<Tag> Tags { get => tags; set => tags = value; }
 
 
         public static string ReadByGroupIdAndType(int groupId)
@@ -41,16 +40,12 @@ namespace Project_ServerSide.Models
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
             return dbs.InsertSocialCloud(this, tagsJson);
-        } 
+        }
 
         public static int Delete(int postId)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
             return dbs.DeleteFromSocialCloud(postId);
         }
-
-     
-
-
     }
 }

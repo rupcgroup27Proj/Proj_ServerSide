@@ -2,9 +2,6 @@
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 using Project_ServerSide.Models.SmartQuestionnaires;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
 
 
 namespace Project_ServerSide.Models.DAL
@@ -330,7 +327,7 @@ namespace Project_ServerSide.Models.DAL
             { throw (ex); }
 
             cmd = spUpdateStudentTags(studentId, tags, con);
-            Console .WriteLine(tags);
+            Console.WriteLine(tags);
 
             try
             { cmd.ExecuteNonQuery(); }

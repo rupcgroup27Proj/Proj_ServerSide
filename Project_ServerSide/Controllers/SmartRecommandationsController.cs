@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models.Algorithm;
-using System.Reflection.Metadata.Ecma335;
+
 
 namespace Project_ServerSide.Controllers
 {
@@ -14,6 +14,7 @@ namespace Project_ServerSide.Controllers
         {
             return Algorithm.GetStudentRecommandations(studentId);
         }
+
 
         [HttpPut]
         public void RenAlgorithm()

@@ -7,7 +7,8 @@ namespace Project_ServerSide.Models
         int tagId;
         int groupId;
         string tagName;
-        
+
+
         public int TagId { get => tagId; set => tagId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
         public string TagName { get => tagName; set => tagName = value; }
@@ -30,8 +31,5 @@ namespace Project_ServerSide.Models
             Tag_DBservices dbs = new Tag_DBservices();
             return dbs.GetBuiltInTags();
         }
-
-
-
     }
 }

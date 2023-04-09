@@ -2,6 +2,7 @@
 using System.Threading;
 namespace Project_ServerSide.Models.Algorithm;
 
+
 public class AlgorithmAutoRun
 {
     public static void Main()

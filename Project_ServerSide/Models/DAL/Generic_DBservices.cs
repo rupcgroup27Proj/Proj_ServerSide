@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Numerics;
+
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -23,10 +16,7 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-
-
         // login GenericUser
-        //--------------------------------------------------------------------------------------------------
         public GenericUser Login(int id, string password, string type)
         {
             SqlConnection con;
@@ -64,22 +54,21 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex) { throw; }
         }
 
+
         private SqlCommand LoginCommand(SqlConnection con, int id, string password, string type)
         {
-
             SqlCommand cmd = new SqlCommand();
             if (type == "Student")
                 cmd.CommandText = "spLoginStudent";
             else if (type == "Teacher")
                 cmd.CommandText = "spLoginTeachers";
             else
-                cmd.CommandText = "spLoginGuides"; 
+                cmd.CommandText = "spLoginGuides";
             cmd.Connection = con;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", id);
             cmd.Parameters.AddWithValue("@Password", password);
             return cmd;
         }
-
     }
 }

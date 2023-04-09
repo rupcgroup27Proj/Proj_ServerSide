@@ -6,39 +6,23 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-    public class JourneyId
-    {
-        string schoolName;
-        int groupId;
-        public int GroupId { get => groupId; set => groupId = value; }
-        public string SchoolName { get => schoolName; set => schoolName = value; }
-
-        public JourneyId readGroupId()
-        {
-            Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.readGroupId(this);
-        }
-    }
-
     public class Journey
     {
         int groupId;
         string schoolName;
         string teacherFirstName;
-        string teacherLastName; 
+        string teacherLastName;
         int teacherId;
         string teacherEmail;
         double phoneTeacher;
         string guideFirstName;
-        string guideLastName;   
+        string guideLastName;
         int guideId;
         string guideEmail;
         double phoneGuide;
         DateTime startDate;
         DateTime endDate;
 
-
-        static List<Journey> JourneyList = new List<Journey>();
 
         public int GroupId { get => groupId; set => groupId = value; }
         public string SchoolName { get => schoolName; set => schoolName = value; }
@@ -54,7 +38,7 @@ namespace Project_ServerSide.Models
         public double PhoneGuide { get => phoneGuide; set => phoneGuide = value; }
         public DateTime StartDate { get => startDate; set => startDate = value; }
         public DateTime EndDate { get => endDate; set => endDate = value; }
-     
+
 
         public Journey pullSpecificJourney()
         {
@@ -62,12 +46,13 @@ namespace Project_ServerSide.Models
             return dbs.pullSpecificJourney(this);
         }
 
-       
-        public static int Insert(string schoolName) { 
+        public static int Insert(string schoolName)
+        {
             Journey_DBservices dbs = new Journey_DBservices();
             return dbs.Insert(schoolName);
-           
+
         }
+
         public List<Journey> Read()
         {
             Journey_DBservices dbs = new Journey_DBservices();

@@ -11,10 +11,6 @@ namespace Project_ServerSide.Models.DAL
 {
     public class SocialCloud_DBservice
     {
-        public SqlDataAdapter da;
-        public DataTable dt;
-
-
         public SqlConnection connect(String conString)
         {
             // read the connection string from the configuration file
@@ -25,11 +21,9 @@ namespace Project_ServerSide.Models.DAL
             con.Open();
             return con;
         }
-      
+
 
         // InsertToSocialCloud  
-        //--------------------------------------------------------------------------------------------------
-
         public int InsertSocialCloud(SocialCloud socialCloud, string tags)
         {
 
@@ -37,11 +31,11 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            { con = connect("myProjDB");}
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {throw (ex);}
-               
-                
+            { throw (ex); }
+
+
             dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(tags);
 
             // Access the array of tag objects using the "Tags" property
@@ -53,7 +47,7 @@ namespace Project_ServerSide.Models.DAL
             // Serialize the list of Tag objects back into JSON format
             string tagsJsonString = JsonConvert.SerializeObject(tagsList);
 
-            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud, tagsJsonString);             // create the command
+            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud, tagsJsonString);
 
             try
             {
@@ -61,20 +55,12 @@ namespace Project_ServerSide.Models.DAL
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud, string tagsJson)
@@ -104,7 +90,6 @@ namespace Project_ServerSide.Models.DAL
 
 
         // DeleteFromSocialCloud 
-        //--------------------------------------------------------------------------------------------------
         public int DeleteFromSocialCloud(int postId)
         {
 
@@ -166,9 +151,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // GetSocialCloud(postId+Tags)
-        //--------------------------------------------------------------------------------------------------
 
+        // GetSocialCloud(postId+Tags)
         public string ReadByGroupIdAndType(int groupId)
         {
             SqlConnection con;
@@ -315,12 +299,8 @@ namespace Project_ServerSide.Models.DAL
                 return result;
             }
             catch (Exception ex)
-            {
-                throw;
-            }
+            { throw; }
         }
-
-
     }
 }
 

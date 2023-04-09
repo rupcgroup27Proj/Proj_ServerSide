@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -15,11 +14,13 @@ namespace Project_ServerSide.Controllers
             return PostsComments.ReadByPostId(postId);
         }
 
+
         [HttpPost]
         public bool Post([FromBody] PostsComments postsComments)
         {
             return postsComments.Insert();
         }
+
 
         [HttpDelete("commentId/{commentId}")]
         public IActionResult Delete(int commentId)

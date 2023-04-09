@@ -22,6 +22,7 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
+
         public string Type { get => type; set => type = value; }
         public int GroupId { get => groupId; set => groupId = value; }
         public int Id { get => id; set => id = value; }

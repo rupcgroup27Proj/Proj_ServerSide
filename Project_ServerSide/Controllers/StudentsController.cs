@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -16,6 +15,7 @@ namespace Project_ServerSide.Controllers
             return student.Read(groupId);
         }
 
+
         [HttpGet("studentId/{studentId}")]
         public IActionResult Get(int studentId)
         {
@@ -27,11 +27,13 @@ namespace Project_ServerSide.Controllers
 
         }
 
+
         [HttpPost]
         public bool Post([FromBody] Student student)
         {
             return student.Insert();
         }
+
 
         [HttpPut("studentId/{studentId}")]
         public IActionResult Put(int studentId, [FromBody] Student student)
@@ -40,13 +42,14 @@ namespace Project_ServerSide.Controllers
             return (student.Update() == 1) ? Ok(student) : NotFound();
         }
 
+
         [HttpDelete("groupId/{groupId}")]
         public IActionResult DeleteFromGroupe(int groupId)
         {
             Student s = new Student();
             int num = s.DeleteFromGroupe(groupId);
 
-            return (num == 1) ? Ok(): NotFound();
+            return (num == 1) ? Ok() : NotFound();
         }
     }
 }

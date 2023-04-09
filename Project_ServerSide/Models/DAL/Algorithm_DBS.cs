@@ -35,8 +35,9 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        // ================================ | MAIN FUNCTIONS | ================================== //
 
+        // ================================ | MAIN FUNCTIONS | ================================== //
+     
         public double[,] GetPreferences()
         {
             //Get the preferences of all students (tagCount for each tag by students)
@@ -264,7 +265,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
 
 
         // ================================ | STORED PROCEDURES | ================================== //

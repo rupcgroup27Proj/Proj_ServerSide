@@ -1,5 +1,6 @@
 ﻿namespace Project_ServerSide.Models.Algorithm
 {
+
     public class StudentTagJSON
     {
         int studentId;

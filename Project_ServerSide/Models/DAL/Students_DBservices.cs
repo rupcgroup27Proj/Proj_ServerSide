@@ -14,13 +14,8 @@ namespace Project_ServerSide.Models.DAL
 {
     public class Students_DBservices
     {
-        public SqlDataAdapter da;
-        public DataTable dt;
-
         public SqlConnection connect(String conString)
         {
-
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -30,8 +25,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // inserts student
-        //--------------------------------------------------------------------------------------------------
+
         public int Insert(Student student)
         {
 
@@ -100,9 +94,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //read all students group students
-        //--------------------------------------------------------------------------------------------------
 
+        //read all students group students
         public List<Student> Read(int groupId)
         {
             SqlConnection con;
@@ -110,13 +103,8 @@ namespace Project_ServerSide.Models.DAL
 
             try
             { con = connect("myProjDB"); }
-
-
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
             cmd = CreateReadStudentsCommandSP("spReadStudent", con, groupId);
 
@@ -125,7 +113,6 @@ namespace Project_ServerSide.Models.DAL
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
 
                 while (dataReader.Read())
                 {
@@ -147,60 +134,41 @@ namespace Project_ServerSide.Models.DAL
                 return StudentList;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
 
         private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con, int groupId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
-
             return cmd;
         }
 
 
+
         //login student
-        //---------------------------------------------------------------------------------
         public Student Login(Student student)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
+            cmd = CreateLoginCommandSP("spLoginStudent", con, student);
 
-            cmd = CreateLoginCommandSP("spLoginStudent", con, student);// create the command
             Student u = new Student();
             try
             {
@@ -222,48 +190,32 @@ namespace Project_ServerSide.Models.DAL
                 return u;
 
             }
+
             catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            { throw; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
 
         private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", student.StudentId);
             cmd.Parameters.AddWithValue("@Password", student.Password);
-
-
             return cmd;
         }
 
 
 
         // Get Specific Student by studentId
-        //---------------------------------------------------------------------------------
         public Student pullSpecificStudent(Student student)
         {
 
@@ -271,25 +223,20 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
+            cmd = CreatePullCommandSP("spPullStudentById", con, student);
 
-            cmd = CreatePullCommandSP("spPullStudentById", con, student);// create the command
             Student Y = new Student();
+
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (dataReader.Read())
                 {
-
                     Y.StudentId = Convert.ToInt32(dataReader["Id"]);
                     Y.Password = dataReader["Password"].ToString();
                     Y.Email = dataReader["Email"].ToString();
@@ -305,18 +252,11 @@ namespace Project_ServerSide.Models.DAL
 
             }
             catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            { throw; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
@@ -324,41 +264,27 @@ namespace Project_ServerSide.Models.DAL
         private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Student student)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", student.StudentId);
-
-
             return cmd;
         }
 
 
+
         // update a student
-        //--------------------------------------------------------------------------------------------------
         public int Update(Student student)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
 
             cmd = CreateCommandWithStoredProcedure("spUpdateStudent", con, student);
 
@@ -368,77 +294,42 @@ namespace Project_ServerSide.Models.DAL
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
+
             }
 
-        }
-
-        private String BuildUpdateCommand(Student student)
-        {
-
-            StringBuilder sb = new StringBuilder();
-
-            string command = sb.AppendFormat("update Students set phone = '{0}', email = {1}, parentPhone = {2} where id = {3}", student.Phone, student.Email, student.ParentPhone, student.StudentId).ToString();
-
-            return command;
         }
 
         private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Student student)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@id", student.StudentId);
-
             cmd.Parameters.AddWithValue("@email", student.Email);
-
             cmd.Parameters.AddWithValue("@phone", student.Phone);
-
             cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
-
-
-
             return cmd;
         }
 
 
 
         //delete a student
-        //--------------------------------------------------------------------------------------------------
         public int DeleteFromGroupe(int groupId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
 
             cmd = CreateCommandWithStoredProcedureDelete1("spDeleteStudentFromGroups", con, groupId);
@@ -449,44 +340,24 @@ namespace Project_ServerSide.Models.DAL
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int groupId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
-
-
-
             return cmd;
         }
-
-
-
     }
 }
 

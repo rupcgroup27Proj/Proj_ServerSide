@@ -12,12 +12,8 @@ namespace Project_ServerSide.Models.DAL
 {
     public class PostsComments_DBservices
     {
-
-        public SqlDataAdapter da;
-        public DataTable dt;
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -26,33 +22,25 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
+
         // GetPostsComments
-        //--------------------------------------------------------------------------------------------------
         public List<PostsComments> GetCommentsByPostId(int postId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
-
-            cmd = CreateCommandPostsCommentsByPostId("spReadPostsCommentsByPostId", con, postId);// create the command
+            cmd = CreateCommandPostsCommentsByPostId("spReadPostsCommentsByPostId", con, postId);
 
             List<PostsComments> tempList = new List<PostsComments>();
 
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
 
                 while (dataReader.Read())
                 {
@@ -65,7 +53,6 @@ namespace Project_ServerSide.Models.DAL
                     tempPostsComments.FirstName = dataReader["firstName"].ToString();
                     tempPostsComments.LastName = dataReader["lastName"].ToString();
 
-
                     tempList.Add(tempPostsComments);
 
                 }
@@ -73,64 +60,40 @@ namespace Project_ServerSide.Models.DAL
 
             }
             catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateCommandPostsCommentsByPostId(string spName, SqlConnection con, int postId)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@postId", postId);
-
-
             return cmd;
         }
 
 
-        // InsertCommentToPost
-        //--------------------------------------------------------------------------------------------------
 
+        // InsertCommentToPost
         public int InsertPostsComments(PostsComments postsComments)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
-
-            cmd = CreateCommandInsertPostsComments("spInsertPostsComments", con, postsComments);             // create the command
+            cmd = CreateCommandInsertPostsComments("spInsertPostsComments", con, postsComments);
 
             try
             {
@@ -138,106 +101,65 @@ namespace Project_ServerSide.Models.DAL
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateCommandInsertPostsComments(String spName, SqlConnection con, PostsComments postsComments)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", postsComments.StudentId);
             cmd.Parameters.AddWithValue("@postId", postsComments.PostId);
             cmd.Parameters.AddWithValue("@commentText", postsComments.CommentText);
-
-
             return cmd;
         }
 
 
 
         // DeleteFromPostsComments
-        //--------------------------------------------------------------------------------------------------
         public int DeleteFromPostsComments(int commentId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
-            cmd = CreateCommandDeleteFromPostsComments("spDeleteFromPostsComments", con,  commentId);     // create the command
+            cmd = CreateCommandDeleteFromPostsComments("spDeleteFromPostsComments", con, commentId);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
-        private SqlCommand CreateCommandDeleteFromPostsComments(string spName, SqlConnection con,int commentId)
+        private SqlCommand CreateCommandDeleteFromPostsComments(string spName, SqlConnection con, int commentId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@commentId", commentId);
-
-
             return cmd;
         }
-
-
     }
 }

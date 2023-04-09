@@ -22,6 +22,7 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
+
         public string Password { get => password; set => password = value; }
         public int StudentId { get => studentId; set => studentId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
@@ -35,24 +36,23 @@ namespace Project_ServerSide.Models
         public DateTime EndDate { get => endDate; set => endDate = value; }
         public string Type { get => type; set => type = value; }
 
+
         public Student Login()
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Login(this);
         }
+
         public int Update()
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.Update(this);
-
         }
+
         public bool Insert()
         {
             Students_DBservices dbs = new Students_DBservices();
-
-            if (dbs.Insert(this) == 2)           
-                return true;          
-            return false;
+            return (dbs.Insert(this) == 2) ? true : false;
         }
 
         public List<Student> Read(int groupId)
@@ -67,12 +67,10 @@ namespace Project_ServerSide.Models
             return dbs.pullSpecificStudent(this);
         }
 
-
         public int DeleteFromGroupe(int groupId)
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.DeleteFromGroupe(groupId);
-
         }
     }
 }

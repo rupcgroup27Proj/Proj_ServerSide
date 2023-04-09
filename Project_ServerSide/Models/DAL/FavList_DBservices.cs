@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+
 
 namespace Project_ServerSide.Models.DAL
 {
     public class FavList_DBservices
     {
-        public SqlDataAdapter da;
-        public DataTable dt;
         public SqlConnection connect(String conString)
         {
             // read the connection string from the configuration file
@@ -27,8 +18,8 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        // GetStudentFavList
-        //--------------------------------------------------------------------------------------------------
+        // ================================ | MAIN FUNCTIONS | ================================== //
+
         public string FavListByStudentId(int studentId)
         {
 
@@ -36,16 +27,11 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
-            //getthe tags of all post
+            //get the tags of all post
             List<Dictionary<string, string>> tags = getTags(studentId, con);
 
             //get the post
@@ -56,14 +42,13 @@ namespace Project_ServerSide.Models.DAL
 
             foreach (var Post in Posts)
             {
-                FavList temp= new FavList();
+                FavList temp = new FavList();
                 temp.PostId = Convert.ToInt32(Post["postId"]);
                 temp.StudentId = Convert.ToInt32(Post["studentId"]);
                 temp.FileUrl = Post["fileUrl"].ToString();
                 temp.FirstName = Post["firstName"].ToString();
                 temp.LastName = Post["lastName"].ToString();
                 temp.Type = Post["type"].ToString();
-
 
                 temp.Tags = new List<Tag>();
 
@@ -90,8 +75,8 @@ namespace Project_ServerSide.Models.DAL
             string jsonString = JsonConvert.SerializeObject(data);
 
             return jsonString;
-
         }
+
 
         private List<Dictionary<string, string>> getTags(int studentId, SqlConnection con)
         {
@@ -124,6 +109,7 @@ namespace Project_ServerSide.Models.DAL
             { throw; }
         }
 
+
         private List<Dictionary<string, string>> getPost(int studentId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
@@ -131,7 +117,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.Connection = con;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
-
 
             try
             {
@@ -142,16 +127,14 @@ namespace Project_ServerSide.Models.DAL
                 {
 
                     Dictionary<string, string> post = new()
-        {
-            {"postId", dataReader["postId"].ToString()},
-            {"studentId",dataReader["Id"].ToString()},
-            {"fileUrl", dataReader["fileUrl"].ToString()},
-            {"firstName", dataReader["firstName"].ToString()},
-            {"lastName", dataReader["lastName"].ToString()},
-            {"type", dataReader["type"].ToString()},
-
-
-        };
+                      {
+                         {"postId", dataReader["postId"].ToString()},
+                         {"studentId",dataReader["Id"].ToString()},
+                         {"fileUrl", dataReader["fileUrl"].ToString()},
+                         {"firstName", dataReader["firstName"].ToString()},
+                         {"lastName", dataReader["lastName"].ToString()},
+                         {"type", dataReader["type"].ToString()},
+                       };
 
                     result.Add(post);
                 }
@@ -160,14 +143,9 @@ namespace Project_ServerSide.Models.DAL
                 return result;
             }
             catch (Exception ex)
-            {
-                throw;
-            }
+            { throw; }
         }
-  
 
-        // InsertPostToStudentFavList
-        //--------------------------------------------------------------------------------------------------
 
         public bool InsertFavPost(int studentId, int postId)
         {
@@ -176,125 +154,51 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
-
-            cmd = CreateCommandInsertFavPost("spInsertFavPostToStudent", con, studentId, postId);             // create the command
+            cmd = CreateCommandInsertFavPost("spInsertFavPostToStudent", con, studentId, postId);
 
             try
             {
                 int numEffected = cmd.ExecuteNonQuery();
-                if (numEffected == 1)
-                {
-                    return true;
-                }
-                else return false;
+                return (numEffected == 1) ? true : false;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
-        }
-
-        private SqlCommand CreateCommandInsertFavPost(String spName, SqlConnection con, int studentId, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-            cmd.Parameters.AddWithValue("@studentId", studentId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-
-
-            return cmd;
         }
 
 
-        // DeletePostFromListFav
-        //--------------------------------------------------------------------------------------------------
         public int DeletePostFromListFav(int studentId, int postId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); 
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-          
-                throw ex;
-            }
+            { throw ex; }
 
             cmd = CreateCommandDeletePostFromListFav("spDeletePostFromListFav", con, studentId, postId);     // create the command
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); 
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
-            {
-            
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                  
                     con.Close();
-                }
             }
-
-        }
-
-        private SqlCommand CreateCommandDeletePostFromListFav(string spName, SqlConnection con, int studentId, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand();
-
-            cmd.Connection = con;          
-
-            cmd.CommandText = spName;      
-
-            cmd.CommandTimeout = 10;      
-
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@studentId", studentId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-
-
-            return cmd;
         }
 
 
@@ -322,6 +226,34 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
+
+        // ================================ | STORED PROCEDURES | ================================== //
+
+        private SqlCommand CreateCommandInsertFavPost(String spName, SqlConnection con, int studentId, int postId)
+        {
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@postId", postId);
+            return cmd;
+        }
+
+        private SqlCommand CreateCommandDeletePostFromListFav(string spName, SqlConnection con, int studentId, int postId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@postId", postId);
+            return cmd;
+        }
+
         private SqlCommand spLowerStudentTags(int studentId, List<Tag> tags, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
@@ -330,7 +262,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@tagJson", JsonConvert.SerializeObject(tags));
-
             return cmd;
         }
     }

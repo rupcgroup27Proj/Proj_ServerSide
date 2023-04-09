@@ -2,7 +2,6 @@
 using Project_ServerSide.Models;
 using System.ComponentModel.Design;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -16,11 +15,13 @@ namespace Project_ServerSide.Controllers
             return PostsLikes.ReadByStudentId(studentId);
         }
 
+
         [HttpPost("studentId/{studentId}/postId/{postId}")]
         public bool Post(int studentId, int postId)
         {
             return PostsLikes.Insert(studentId, postId);
         }
+
 
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
         public IActionResult Delete(int studentId, int postId)

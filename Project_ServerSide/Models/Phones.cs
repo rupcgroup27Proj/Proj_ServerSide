@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-
     public class Phones
     {
         int id;
@@ -23,26 +22,16 @@ namespace Project_ServerSide.Models
         public int GroupId { get => groupId; set => groupId = value; }
 
 
-        static List<Phones> PhoneList = new List<Phones>();
-
-
         public int Update()
         {
             Phones_DBservices dbs = new Phones_DBservices();
             return dbs.Update(this);
-
         }
 
         public bool Insert()
         {
             Phones_DBservices dbs = new Phones_DBservices();
-
-            if (dbs.Insert(this) == 1)
-            {
-                PhoneList.Add(this);
-                return true;
-            }
-            return false;
+            return (dbs.Insert(this) == 1) ? true : false;
         }
 
         public List<Phones> Read(int groupId)
@@ -62,7 +51,6 @@ namespace Project_ServerSide.Models
             Phones_DBservices dbs = new Phones_DBservices();
             return dbs.pullEmbassy(this);
         }
-
     }
 }
 

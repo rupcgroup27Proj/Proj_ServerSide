@@ -4,9 +4,9 @@ namespace Project_ServerSide.Models
 {
     public class PostsLikes
     {
-
         int studentId;
         int postId;
+
 
         public int StudentId { get => studentId; set => studentId = value; }
         public int PostId { get => postId; set => postId = value; }

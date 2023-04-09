@@ -21,6 +21,7 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
+
         public string Password { get => password; set => password = value; }
         public int GuideId { get => guideId; set => guideId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
@@ -44,12 +45,8 @@ namespace Project_ServerSide.Models
         public bool Insert()
         {
             Guides_DBservices dbs = new Guides_DBservices();
-
-            if (dbs.Insert(this) == 2)        
-                return true;            
-            return false;
+            return (dbs.Insert(this) == 2) ? true : false;
         }
-       
     }
 }
 

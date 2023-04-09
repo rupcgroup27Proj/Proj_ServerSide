@@ -20,6 +20,7 @@ namespace Project_ServerSide.Models
         DateTime startDate;
         DateTime endDate;
 
+
         public string Password { get => password; set => password = value; }
         public int TeacherId { get => teacherId; set => teacherId = value; }
         public string FirstName { get => firstName; set => firstName = value; }
@@ -33,7 +34,6 @@ namespace Project_ServerSide.Models
         public string Type { get => type; set => type = value; }
 
 
-
         public Teacher Login()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
@@ -43,11 +43,8 @@ namespace Project_ServerSide.Models
         public bool Insert()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
-            if (dbs.Insert(this) == 2)           
-               return true;            
-            return false;
+            return (dbs.Insert(this) == 2) ? true : false;
         }
-
     }
 }
 

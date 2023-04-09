@@ -14,11 +14,13 @@ namespace Project_ServerSide.Controllers
             return Tag.GetTags(groupId);
         }
 
+
         [HttpGet("postId/{postId}")]
         public List<Tag> GetTagsByPostId(int postId)
         {
             return Tag.ReadTagInPost(postId);
         }
+
 
         [HttpGet("builtInTags")]
         public List<Tag> GetBuiltInTags()

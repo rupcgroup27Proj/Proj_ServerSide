@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
-using System.Text.RegularExpressions;
 
 
 namespace Project_ServerSide.Controllers
@@ -18,6 +17,7 @@ namespace Project_ServerSide.Controllers
             return (PhonesList.Count > 0) ? Ok(PhonesList) : NotFound("No Phones on the system");
         }
 
+
         [HttpGet("title/{title}")]
         public IActionResult Get(string title)// title is 'embassy'
         {
@@ -28,6 +28,7 @@ namespace Project_ServerSide.Controllers
             return (res.Title == null) ? NotFound() : Ok(res);
         }
 
+
         [HttpPut("id/{id}")]
         public IActionResult Put(int id, [FromBody] Phones phones)
         {
@@ -36,11 +37,13 @@ namespace Project_ServerSide.Controllers
             return (phones.Update() == 1) ? Ok(phones) : NotFound();
         }
 
+
         [HttpPost]
         public bool Post([FromBody] Phones phones)
         {
             return phones.Insert();
         }
+
 
         [HttpDelete("id/{id}")]
         public IActionResult Delete(int id)

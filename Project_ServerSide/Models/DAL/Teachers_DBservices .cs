@@ -13,14 +13,9 @@ namespace Project_ServerSide.Models.DAL
 {
     public class Teachers_DBservices
     {
-        public SqlDataAdapter da;
-        public DataTable dt;
-
 
         public SqlConnection connect(String conString)
         {
-
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -29,64 +24,43 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-     
-        // insert teacher 
-        //--------------------------------------------------------------------------------------------------
+
+
         public int Insert(Teacher teacher)
         {
-
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
             cmd = CreateInsertTeacherstCommand("spInsertTeachers", con, teacher);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                Console.WriteLine(numEffected);
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
+
             }
 
         }
 
         private SqlCommand CreateInsertTeacherstCommand(String spName, SqlConnection con, Teacher teacher)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", teacher.TeacherId);
             cmd.Parameters.AddWithValue("@password", teacher.Password);
             cmd.Parameters.AddWithValue("@firstName", teacher.FirstName);
@@ -95,39 +69,31 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@email", teacher.Email);
             cmd.Parameters.AddWithValue("@pictureUrl", teacher.PictureUrl);
             cmd.Parameters.AddWithValue("@groupId", teacher.GroupId);
-
             return cmd;
         }
 
 
-        // login teacher
-        //---------------------------------------------------------------------------------
+
         public Teacher Login(Teacher teacher)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
-
-            cmd = CreateLoginCommand("spLoginTeachers", con, teacher);// create the command
+            cmd = CreateLoginCommand("spLoginTeachers", con, teacher);
             Teacher u = new Teacher();
+
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
 
                 while (dataReader.Read())
                 {
-                    u.TeacherId = Convert.ToInt32(dataReader["Id"]); 
+                    u.TeacherId = Convert.ToInt32(dataReader["Id"]);
                     u.Password = dataReader["Password"].ToString();
                     u.Email = dataReader["Email"].ToString();
                     u.FirstName = dataReader["Firstname"].ToString();
@@ -142,41 +108,24 @@ namespace Project_ServerSide.Models.DAL
 
             }
             catch (Exception ex)
-            {
-
-                throw;
-            }
-
+            { throw; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Teacher teacher)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
-            cmd.Parameters.AddWithValue("@Id", teacher.TeacherId); 
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Id", teacher.TeacherId);
             cmd.Parameters.AddWithValue("@Password", teacher.Password);
-
             return cmd;
         }
-
     }
 }

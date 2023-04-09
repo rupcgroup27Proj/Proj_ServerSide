@@ -14,12 +14,14 @@ namespace Project_ServerSide.Controllers
             return SocialCloud.ReadByGroupIdAndType(groupId);
         }
 
+
         [HttpPost("tagsJson/{tagsJson}")]
         public IActionResult Post([FromBody] SocialCloud socialCloud, string tagsJson)
         {
             return socialCloud.Insert(tagsJson) != 0 ? Ok() : NotFound();
         }
-      
+
+
         [HttpDelete("postId/{postId}")]
         public IActionResult Delete(int postId)
         {

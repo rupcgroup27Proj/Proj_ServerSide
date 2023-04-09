@@ -13,11 +13,8 @@ namespace Project_ServerSide.Models.DAL
 {
     public class Tag_DBservices
     {
-        public SqlDataAdapter da;
-        public DataTable dt;
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -27,11 +24,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //Get all built-in tags - Barel                                              
-        //--------------------------------------------------------------------------------------------------
+        //Get all built-in tags - Barel 
         public List<Tag> GetBuiltInTags()
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
@@ -78,8 +73,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
         //ReadTagList                                               
-        //--------------------------------------------------------------------------------------------------
         public List<Tag> GetTags(int groupId)
         {
 
@@ -87,20 +82,68 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
+            { throw (ex); }
 
-
-            cmd = CreateCommandGetTags("spGetTags", con , groupId);             // create the command
-
+            cmd = CreateCommandGetTags("spGetTags", con, groupId);
 
             List<Tag> tempList = new List<Tag>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    Tag tempTagList = new Tag();
+
+                    tempTagList.TagId = Convert.ToInt32(dataReader["tagId"]);
+                    tempTagList.TagName = dataReader["tagName"].ToString();
+
+                    tempList.Add(tempTagList);
+                }
+                return tempList;
+
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand CreateCommandGetTags(string spName, SqlConnection con, int groupId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+            return cmd;
+        }
+
+
+
+        //ReadTagInPost                                                
+        public List<Tag> ReadTagInPost(int postId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw ex; }
+
+
+            cmd = CreateCommandGetTagsByPostId("spGetTagsByPostId", con, postId);// create the command
+
+            List<Tag> tempList = new List<Tag>();
+
             try
             {
                 SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
@@ -119,117 +162,24 @@ namespace Project_ServerSide.Models.DAL
 
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
-            }
-        }
-
-        private SqlCommand CreateCommandGetTags(string spName, SqlConnection con , int groupId)
-        {
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-            cmd.Parameters.AddWithValue("@groupId", groupId);
-
-            return cmd;
-        }
-
-
-
-        //ReadTagInPost                                                
-        //--------------------------------------------------------------------------------------------------
-        public List<Tag> ReadTagInPost(int postId)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
-
-            cmd = CreateCommandGetTagsByPostId("spGetTagsByPostId", con, postId);// create the command
-
-            List<Tag> tempList = new List<Tag>();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    Tag tempTagList = new Tag();
-
-                    tempTagList.TagId= Convert.ToInt32(dataReader["tagId"]);
-                    tempTagList.TagName = dataReader["tagName"].ToString();
-
-                    tempList.Add(tempTagList);
-
-                }
-                return tempList;
-
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            finally
-            {
-                if (con != null)
-                {
-                    // close the db connection
-                    con.Close();
-                }
             }
 
         }
 
         private SqlCommand CreateCommandGetTagsByPostId(string spName, SqlConnection con, int postId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@postId", postId);
-
-
             return cmd;
         }
-
-
     }
 }

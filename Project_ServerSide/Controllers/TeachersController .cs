@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -11,7 +10,7 @@ namespace Project_ServerSide.Controllers
     {
         [HttpPost]
         public bool Post([FromBody] Teacher teacher)
-        {         
+        {
             return teacher.Insert();
         }
     }

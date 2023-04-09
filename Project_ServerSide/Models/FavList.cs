@@ -11,8 +11,6 @@ namespace Project_ServerSide.Models
         string firstName;
         string lastName;
         string type;
-
-
         List<Tag> tags = new List<Tag>();
 
 
@@ -22,8 +20,8 @@ namespace Project_ServerSide.Models
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
         public string Type { get => type; set => type = value; }
-
         public List<Tag> Tags { get => tags; set => tags = value; }
+
 
         public static string ReadByStudentId(int studentId)
         {
@@ -31,7 +29,7 @@ namespace Project_ServerSide.Models
             return dbs.FavListByStudentId(studentId);
         }
 
-        public static bool Insert(int studentId ,int postId)
+        public static bool Insert(int studentId, int postId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.InsertFavPost(studentId, postId);

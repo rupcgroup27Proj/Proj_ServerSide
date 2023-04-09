@@ -2,9 +2,7 @@
 using Project_ServerSide.Models;
 using Project_ServerSide.Models.DAL;
 using Project_ServerSide.Models.SmartQuestionnaires;
-using System.Text.RegularExpressions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -19,6 +17,7 @@ namespace Project_ServerSide.Controllers
             return Ok(dbs.GetAllQuestionnaires(groupId));
         }
 
+
         [HttpPost("groupId/{groupId}/json/{questionnaire}")]
         public void Post(int groupId, string questionnaire)
         {
@@ -26,11 +25,13 @@ namespace Project_ServerSide.Controllers
             dbs.InsertNewQuestionnaire(groupId, questionnaire);
         }
 
+
         [HttpPut("studentId/{studentId}")]
         public void UpdateStudentTags(int studentId, [FromBody] List<Tag> tags)
         {
             Questionnaire.updateStudentTags(studentId, tags);
         }
+
 
         [HttpDelete("questionnaireId/{questionnaireId}")]
         public void DeleteQuestionnaire(int questionnaireId)

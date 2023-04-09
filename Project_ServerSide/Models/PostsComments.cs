@@ -12,6 +12,7 @@ namespace Project_ServerSide.Models
         string firstName;
         string lastName;
 
+
         public int CommentId { get => commentId; set => commentId = value; }
         public int PostId { get => postId; set => postId = value; }
         public int StudentId { get => studentId; set => studentId = value; }
@@ -19,6 +20,7 @@ namespace Project_ServerSide.Models
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
         public string FirstName { get => firstName; set => firstName = value; }
         public string LastName { get => lastName; set => lastName = value; }
+
 
         public static List<PostsComments> ReadByPostId(int postId)
         {
@@ -29,9 +31,7 @@ namespace Project_ServerSide.Models
         public bool Insert()
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            if (dbs.InsertPostsComments(this) == 1)
-                return true;
-            return false;
+            return (dbs.InsertPostsComments(this) == 1) ? true : false;
         }
 
         public static int Delete(int commentId)

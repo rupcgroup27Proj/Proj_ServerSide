@@ -13,9 +13,6 @@ namespace Project_ServerSide.Models.DAL
 {
     public class PostsLikes_DBservices
     {
-
-        public SqlDataAdapter da;
-        public DataTable dt;
         public SqlConnection connect(String conString)
         {
             // read the connection string from the configuration file
@@ -29,23 +26,15 @@ namespace Project_ServerSide.Models.DAL
 
 
         // GetStudentPostsLikes  
-        //--------------------------------------------------------------------------------------------------
         public List<PostsLikes> PostsLikesByStudentId(int studentId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
+            { throw ex; }
 
             cmd = CreateCommandPostsLikesByStudentId("spReadPostsLikesByStudentId", con, studentId);// create the command
 
@@ -70,46 +59,29 @@ namespace Project_ServerSide.Models.DAL
 
             }
             catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
 
         private SqlCommand CreateCommandPostsLikesByStudentId(string spName, SqlConnection con, int studentId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
-
-
             return cmd;
         }
 
 
-        // InsertPostToStudentPostsLikes  
-        //--------------------------------------------------------------------------------------------------
 
+        // InsertPostToStudentPostsLikes  
         public bool InsertPostsLikes(int studentId, int postId)
         {
 
@@ -117,126 +89,77 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
 
             cmd = CreateCommandInsertPostsLikes("spInsertPostsLikesToStudent", con, studentId, postId);             // create the command
 
             try
             {
                 int numEffected = cmd.ExecuteNonQuery();
-                Console.WriteLine(numEffected);
-                if (numEffected == 1)
-                {
-                    return true;
-                }
-                else return false;
+                return (numEffected == 1) ? true : false;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw (ex);
-            }
-
+            { throw (ex); }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
 
         private SqlCommand CreateCommandInsertPostsLikes(String spName, SqlConnection con, int studentId, int postId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@postId", postId);
-
-
             return cmd;
         }
 
 
 
         // DeleteFromPostsLikes  
-        //--------------------------------------------------------------------------------------------------
         public int DeleteFromPostsLikes(int studentId, int postId)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
-            cmd = CreateCommandDeleteFromPostsLikes("spDeleteFromPostsLikes", con, studentId, postId);     // create the command
+            cmd = CreateCommandDeleteFromPostsLikes("spDeleteFromPostsLikes", con, studentId, postId);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
-
+            { throw ex; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
-
         }
 
         private SqlCommand CreateCommandDeleteFromPostsLikes(string spName, SqlConnection con, int studentId, int postId)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@studentId", studentId);
             cmd.Parameters.AddWithValue("@postId", postId);
-
-
             return cmd;
         }
     }

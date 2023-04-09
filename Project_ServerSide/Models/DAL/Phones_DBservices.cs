@@ -26,8 +26,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // inserts Phone
-        //--------------------------------------------------------------------------------------------------
         public int Insert(Phones phones)
         {
 
@@ -43,7 +41,7 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
@@ -67,13 +65,10 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@title", phones.Title);
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
-
             return cmd;
         }
 
 
-        //read all phones 
-        //--------------------------------------------------------------------------------------------------
 
         public List<Phones> Read(int groupId)
         {
@@ -124,14 +119,11 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
-
             return cmd;
         }
 
 
 
-        //update a phones 
-        //--------------------------------------------------------------------------------------------------
         public int Update(Phones phones)
         {
             SqlConnection con;
@@ -139,7 +131,6 @@ namespace Project_ServerSide.Models.DAL
 
             try
             { con = connect("myProjDB"); }
-
             catch (Exception ex)
             { throw (ex); }
 
@@ -147,7 +138,7 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
@@ -159,8 +150,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
-
         private SqlCommand CreateCommandUpdatePhone(String spName, SqlConnection con, Phones phones)
         {
             SqlCommand cmd = new SqlCommand();
@@ -173,11 +162,10 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
             cmd.Parameters.AddWithValue("@id", phones.Id);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
-
             return cmd;
         }
 
-        //Delete a phoneNumber
+
         public int Delete(int id)
         {
             SqlConnection con;
@@ -185,7 +173,6 @@ namespace Project_ServerSide.Models.DAL
 
             try
             { con = connect("myProjDB"); }
-
             catch (Exception ex)
             { throw (ex); }
 
@@ -214,12 +201,11 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@id", id);
-           
             return cmd;
         }
 
+
         // pull embassy of Israel
-        //---------------------------------------------------------------------------------
         public Phones pullEmbassy(Phones phones)
         {
             SqlConnection con;
@@ -227,7 +213,6 @@ namespace Project_ServerSide.Models.DAL
 
             try
             { con = connect("myProjDB"); }
-
             catch (Exception ex)
             { throw (ex); }
 
@@ -266,7 +251,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@title", phones.Title);
-
             return cmd;
         }
     }

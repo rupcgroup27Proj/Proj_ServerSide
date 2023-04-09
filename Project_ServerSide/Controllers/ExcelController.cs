@@ -6,13 +6,14 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Runtime.Versioning;
 
+
 namespace ExcelUpload.Controllers
 {
     [ApiController]
     public class ExcelController : ControllerBase
     {
         [HttpPost("api/excel/upload/groupId/{groupId}")]
-        public IActionResult UploadExcelFile(IFormFile file,int groupId)
+        public IActionResult UploadExcelFile(IFormFile file, int groupId)
         {
             // Set the license context for EPPlus
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -21,7 +22,7 @@ namespace ExcelUpload.Controllers
             var dataTable = ParseExcelFile(file);
 
             // Insert the data into the database
-            InsertDataIntoDatabase(dataTable,groupId);
+            InsertDataIntoDatabase(dataTable, groupId);
 
             return Ok();
         }
@@ -57,7 +58,7 @@ namespace ExcelUpload.Controllers
             return dataTable;
         }
 
-        private void InsertDataIntoDatabase(DataTable dataTable,int groupId)
+        private void InsertDataIntoDatabase(DataTable dataTable, int groupId)
         {
             // Connect to the database
             var connectionString = "Data Source=Media.ruppin.ac.il;Initial Catalog=igroup127_prod; User ID=igroup127; Password=igroup127_29833";
