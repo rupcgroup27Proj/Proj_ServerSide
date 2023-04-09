@@ -8,6 +8,10 @@ namespace Project_ServerSide.Models
         int studentId;
         int postId;
         string fileUrl;
+        string firstName;
+        string lastName;
+        string type;
+
 
         List<Tag> tags = new List<Tag>();
 
@@ -15,6 +19,9 @@ namespace Project_ServerSide.Models
         public int StudentId { get => studentId; set => studentId = value; }
         public int PostId { get => postId; set => postId = value; }
         public string FileUrl { get => fileUrl; set => fileUrl = value; }
+        public string FirstName { get => firstName; set => firstName = value; }
+        public string LastName { get => lastName; set => lastName = value; }
+        public string Type { get => type; set => type = value; }
 
         public List<Tag> Tags { get => tags; set => tags = value; }
 
