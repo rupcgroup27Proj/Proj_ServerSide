@@ -4,14 +4,15 @@ using OfficeOpenXml;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Runtime.Versioning;
 
 namespace ExcelUpload.Controllers
 {
     [ApiController]
     public class ExcelController : ControllerBase
     {
-        [HttpPost("api/excel/upload")]
-        public IActionResult UploadExcelFile(IFormFile file)
+        [HttpPost("api/excel/upload/groupId/{groupId}")]
+        public IActionResult UploadExcelFile(IFormFile file,int groupId)
         {
             // Set the license context for EPPlus
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
@@ -20,7 +21,7 @@ namespace ExcelUpload.Controllers
             var dataTable = ParseExcelFile(file);
 
             // Insert the data into the database
-            InsertDataIntoDatabase(dataTable);
+            InsertDataIntoDatabase(dataTable,groupId);
 
             return Ok();
         }
@@ -56,7 +57,7 @@ namespace ExcelUpload.Controllers
             return dataTable;
         }
 
-        private void InsertDataIntoDatabase(DataTable dataTable)
+        private void InsertDataIntoDatabase(DataTable dataTable,int groupId)
         {
             // Connect to the database
             var connectionString = "Data Source=Media.ruppin.ac.il;Initial Catalog=igroup127_prod; User ID=igroup127; Password=igroup127_29833";
@@ -80,7 +81,7 @@ namespace ExcelUpload.Controllers
                         command.Parameters.Add("@email", SqlDbType.VarChar).Value = row["Email"];
                         command.Parameters.Add("@parentPhone", SqlDbType.VarChar).Value = row["ParentPhone"];
                         command.Parameters.Add("@pictureUrl", SqlDbType.VarChar).Value = row["PictureUrl"];
-                        command.Parameters.Add("@groupId", SqlDbType.Int).Value = row["GroupId"];
+                        command.Parameters.Add("@groupId", SqlDbType.Int).Value = groupId;
 
                         command.ExecuteNonQuery();
                     }

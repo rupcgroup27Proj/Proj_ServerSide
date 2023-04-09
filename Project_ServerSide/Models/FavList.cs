@@ -34,6 +34,7 @@ namespace Project_ServerSide.Models
         {
             FavList_DBservices dbs = new FavList_DBservices();
             return dbs.DeletePostFromListFav(studentId, postId);
+
         }
 
         public static void LowerStudentTags(int studentId, List<Tag> tags)

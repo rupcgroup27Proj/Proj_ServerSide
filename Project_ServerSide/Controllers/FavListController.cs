@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 using Project_ServerSide.Models.SmartQuestionnaires;
+using System.Text.RegularExpressions;
 
 
 namespace Project_ServerSide.Controllers
@@ -24,11 +25,19 @@ namespace Project_ServerSide.Controllers
         }
 
 
+
         [HttpPut("studentId/{studentId}/postId/{postId}")]
-        public int Delete(int studentId, int postId, [FromBody] List<Tag> tags)
+        public IActionResult Delete(int studentId, int postId, [FromBody] List<Tag> tags)
         {
             FavList.LowerStudentTags(studentId, tags);
-            return FavList.Delete(studentId, postId); 
+            int num = FavList.Delete(studentId, postId); 
+             if (num == 1)
+                return Ok(new { message = "Resource deleted successfully" });
+            else
+                return NotFound(new { message = "Resource not found" });
         }
+
+
+
     }
 }
