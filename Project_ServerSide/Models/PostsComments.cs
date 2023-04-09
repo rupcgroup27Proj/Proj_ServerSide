@@ -9,16 +9,16 @@ namespace Project_ServerSide.Models
         int studentId;
         string commentText;
         DateTime createdAt;
-        string stuFirstName;
-        string stuLastName;
+        string firstName;
+        string lastName;
 
         public int CommentId { get => commentId; set => commentId = value; }
         public int PostId { get => postId; set => postId = value; }
         public int StudentId { get => studentId; set => studentId = value; }
         public string CommentText { get => commentText; set => commentText = value; }
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
-        public string StuFirstName { get => stuFirstName; set => stuFirstName = value; }
-        public string StuLastName { get => stuLastName; set => stuLastName = value; }
+        public string FirstName { get => firstName; set => firstName = value; }
+        public string LastName { get => lastName; set => lastName = value; }
 
         public static List<PostsComments> ReadByPostId(int postId)
         {

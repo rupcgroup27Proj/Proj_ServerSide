@@ -9,7 +9,6 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class GuidesController : ControllerBase
     {
-        // POST api/<TeachersController>
         [HttpPost]
         public bool Post([FromBody] Guide guide)
         {         

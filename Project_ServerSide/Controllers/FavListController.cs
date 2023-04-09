@@ -16,7 +16,6 @@ namespace Project_ServerSide.Controllers
             return FavList.ReadByStudentId(studentId);
         }
 
-
         [HttpPost("studentId/{studentId}/postId/{postId}")]
         public bool Post(int studentId, int postId, [FromBody] List<Tag> tags)
         {
@@ -24,20 +23,14 @@ namespace Project_ServerSide.Controllers
             return FavList.Insert(studentId, postId);
         }
 
-
-
         [HttpPut("studentId/{studentId}/postId/{postId}")]
         public IActionResult Delete(int studentId, int postId, [FromBody] List<Tag> tags)
         {
             FavList.LowerStudentTags(studentId, tags);
-            int num = FavList.Delete(studentId, postId); 
-             if (num == 1)
+             if (FavList.Delete(studentId, postId) == 1)
                 return Ok(new { message = "Resource deleted successfully" });
             else
                 return NotFound(new { message = "Resource not found" });
         }
-
-
-
     }
 }

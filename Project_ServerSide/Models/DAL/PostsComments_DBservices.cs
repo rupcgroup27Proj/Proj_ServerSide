@@ -62,8 +62,8 @@ namespace Project_ServerSide.Models.DAL
                     tempPostsComments.StudentId = Convert.ToInt32(dataReader["studentId"]);
                     tempPostsComments.CommentText = dataReader["commentText"].ToString();
                     tempPostsComments.CreatedAt = Convert.ToDateTime(dataReader["createdAt"]);
-                    tempPostsComments.StuFirstName = dataReader["firstName"].ToString();
-                    tempPostsComments.StuLastName = dataReader["lastName"].ToString();
+                    tempPostsComments.FirstName = dataReader["firstName"].ToString();
+                    tempPostsComments.LastName = dataReader["lastName"].ToString();
 
 
                     tempList.Add(tempPostsComments);

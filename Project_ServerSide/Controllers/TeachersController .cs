@@ -9,12 +9,10 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class TeachersController : ControllerBase
     {
-        // POST api/<TeachersController>
         [HttpPost]
         public bool Post([FromBody] Teacher teacher)
         {         
             return teacher.Insert();
-
         }
     }
 }

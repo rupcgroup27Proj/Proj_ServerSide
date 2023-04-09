@@ -10,25 +10,15 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class JourneysController : ControllerBase
     {
-        //GET: api/<JourneysController>
         [HttpGet("GetJourneyList/")]
         public IActionResult GetJourneyList()
         {
             Journey journey = new Journey();
             List<Journey> JourneyList = journey.Read();
 
-            if (JourneyList.Count > 0)
-            {
-                return Ok(JourneyList);
-            }
-            else
-            {
-                return NotFound("No Journey on the system ");
-            }
+            return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system ");
         }
 
-
-        //GET: api/<JourneysController>
         [HttpGet("GetSpecificJourney/groupId/{groupId}/schoolName/{schoolName}")]
         public IActionResult GetSpecificJourney(int groupId, string schoolName)
         {
@@ -36,22 +26,15 @@ namespace Project_ServerSide.Controllers
             journey.GroupId = groupId;
             journey.SchoolName = schoolName;
             Journey result = journey.pullSpecificJourney();
-            if (result.GroupId == null)
-            {
-                return NotFound();
 
-            }
-            else
-            {
-                return Ok(result);
-            }
+            return (result.GroupId == null) ? NotFound() : Ok(result);
         }
 
         [HttpGet("GetJourneyDatesAndSchoolName/groupId/{groupId}")]
         public object GetJourneyDatesAndSchoolName(int groupId)
         {
             Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.GetJourneyDatesAndSchoolName(groupId); 
+            return dbs.GetJourneyDatesAndSchoolName(groupId);
         }
 
         //read groupId for journey schoolName
@@ -61,38 +44,30 @@ namespace Project_ServerSide.Controllers
             JourneyId journeyId = new JourneyId();
             journeyId.SchoolName = schoolName;
             JourneyId result = journeyId.readGroupId();
-            if (result.SchoolName == null)
-            {
-                return NotFound();
 
-            }
-            else
-            {
-                return Ok(result);
-            }
+            return (result.SchoolName == null) ? NotFound() : Ok(result);
         }
 
         //insert new Journey
         [HttpPost("schoolName/{schoolName}")]
         public int PostSchoolName(string schoolName)
-        {         
-              return Journey.Insert(schoolName);
-
+        {
+            return Journey.Insert(schoolName);
         }
 
         // PUT api/<JourneysController>
         [HttpPut("groupId/{groupId}")]
-        public void Put(int groupId, [FromBody] Journey journey)
+        public IActionResult Put(int groupId, [FromBody] Journey journey)
         {
             journey.GroupId = groupId;
-            journey.Update();
+            return (journey.Update() == 1) ? Ok() : NotFound();
         }
 
         [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")]
-        public void UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
+        public IActionResult UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
             Journey_DBservices dbs = new Journey_DBservices();
-            dbs.UpdateJourneyDates(groupId, startDate, endDate);
+            return (dbs.UpdateJourneyDates(groupId, startDate, endDate) == 1) ? Ok() : NotFound();
         }
     }
 }

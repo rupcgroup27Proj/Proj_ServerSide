@@ -2,7 +2,6 @@
 using Project_ServerSide.Models;
 using System.Text.RegularExpressions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Project_ServerSide.Controllers
 {
@@ -10,55 +9,33 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class PhonesController : ControllerBase
     {
-        //GET: api/<PhonesController>
         [HttpGet("groupId/{groupId}")]
         public IActionResult Get(int groupId)
         {
             Phones phones = new Phones();
             List<Phones> PhonesList = phones.Read(groupId);
 
-            if (PhonesList.Count > 0)
-            {
-                return Ok(PhonesList);
-            }
-            else
-            {
-                return NotFound("No Phones on the system");
-            }
+            return (PhonesList.Count > 0) ? Ok(PhonesList) : NotFound("No Phones on the system");
         }
 
-        //GET: api/<PhonesController>
         [HttpGet("title/{title}")]
         public IActionResult Get(string title)// title is 'embassy'
         {
             Phones phones = new Phones();
             phones.Title = title;
-
             Phones res = phones.pullEmbassy();
-            if (res.Title == null)
-            {
-                return NotFound();
 
-            }
-            else
-            {
-                return Ok(res);
-            }
+            return (res.Title == null) ? NotFound() : Ok(res);
         }
 
-        // PUT api/<PhonesController>/id/5
         [HttpPut("id/{id}")]
         public IActionResult Put(int id, [FromBody] Phones phones)
         {
             phones.Id = id;
 
-            if (phones.Update() == 1)
-                return Ok(phones);
-            else
-                return NotFound();
+            return (phones.Update() == 1) ? Ok(phones) : NotFound();
         }
 
-        // POST api/<PhonesController>/5
         [HttpPost]
         public bool Post([FromBody] Phones phones)
         {
@@ -69,16 +46,8 @@ namespace Project_ServerSide.Controllers
         public IActionResult Delete(int id)
         {
             Phones phones = new Phones();
-            
-            if (phones.Delete(id) > 0)
-                return Ok("Success");
-            else
-                return NotFound("Delete failed");
+
+            return (phones.Delete(id) > 0) ? Ok("Success") : NotFound("Delete failed");
         }
-        //// DELETE api/<PhonesController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
     }
 }

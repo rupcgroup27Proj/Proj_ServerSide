@@ -9,66 +9,44 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        //GET: api/<StudentsController>
         [HttpGet("groupId/{groupId}")]
         public List<Student> GetGroupStudents(int groupId)
         {
             Student student = new Student();
             return student.Read(groupId);
-           
         }
 
-        //GET: api/<StudentsController>
         [HttpGet("studentId/{studentId}")]
         public IActionResult Get(int studentId)
         {
-            Student student=new Student();
+            Student student = new Student();
             student.StudentId = studentId;
-
             Student res = student.pullSpecificStudent();
-            if (res.StudentId == 0)
-            {
-                return NotFound();
 
-            }
-            else
-            {
-                return Ok(res);
-            }
+            return (res.StudentId == 0) ? NotFound() : Ok(res);
+
         }
 
-
-        //POST api/<StudentsController>/5
         [HttpPost]
         public bool Post([FromBody] Student student)
-        {         
+        {
             return student.Insert();
         }
 
-
-        // PUT api/<StudentsController>/5
         [HttpPut("studentId/{studentId}")]
         public IActionResult Put(int studentId, [FromBody] Student student)
         {
             student.StudentId = studentId;
-            if (student.Update() == 1)
-                return Ok(student);
-            else
-                return NotFound();
-         
+            return (student.Update() == 1) ? Ok(student) : NotFound();
         }
 
-
-        // DELETE api/<StudentsController>/5
         [HttpDelete("groupId/{groupId}")]
         public IActionResult DeleteFromGroupe(int groupId)
         {
             Student s = new Student();
             int num = s.DeleteFromGroupe(groupId);
-            if (num == 1)
-                return Ok();
-            else
-                return NotFound();
+
+            return (num == 1) ? Ok(): NotFound();
         }
     }
 }

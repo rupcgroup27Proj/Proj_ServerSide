@@ -7,10 +7,6 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class GenericController : ControllerBase
     {
-        //GET: api/<GenericController>
-        [HttpGet]
-
-        //login for all users by there types
         [HttpGet("id/{id}/password/{password}/type/{type}")]
         public GenericUser Get(int id, string password, string type)
         {

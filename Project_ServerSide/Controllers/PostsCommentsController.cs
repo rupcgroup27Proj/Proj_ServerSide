@@ -9,33 +9,17 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class PostsCommentsController : ControllerBase
     {
-        // GET: api/<PostsCommentsController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<PostsCommentsController>/5
         [HttpGet("postId/{postId}")]
         public List<PostsComments> Get(int postId)
         {
             return PostsComments.ReadByPostId(postId);
         }
 
-        // POST api/<PostsCommentsController>
         [HttpPost]
         public bool Post([FromBody] PostsComments postsComments)
         {
             return postsComments.Insert();
-
         }
-
-        // PUT api/<PostsCommentsController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
 
         [HttpDelete("commentId/{commentId}")]
         public IActionResult Delete(int commentId)
@@ -47,7 +31,6 @@ namespace Project_ServerSide.Controllers
             else
                 return NotFound(new { message = "Resource not found" });
         }
-
     }
 }
 

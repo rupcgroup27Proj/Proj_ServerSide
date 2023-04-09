@@ -10,35 +10,18 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class PostsLikesController : ControllerBase
     {
-        // GET: api/<PostsLikesController>
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/<PostsLikesController>/5
         [HttpGet("studentId/{studentId}")]
         public List<PostsLikes> Get(int studentId)
         {
             return PostsLikes.ReadByStudentId(studentId);
         }
 
-        // POST api/<PostsLikesController>
         [HttpPost("studentId/{studentId}/postId/{postId}")]
         public bool Post(int studentId, int postId)
         {
             return PostsLikes.Insert(studentId, postId);
-
         }
 
-        // PUT api/<PostsLikesController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
-
-        // DELETE api/<PostsLikesController>/5
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
         public IActionResult Delete(int studentId, int postId)
         {

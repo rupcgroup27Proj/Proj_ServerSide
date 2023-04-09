@@ -476,8 +476,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //?????????????????
-        public void UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
+        public int UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -490,9 +489,14 @@ namespace Project_ServerSide.Models.DAL
             cmd = spUpdateJourneyDates(con, groupId, startDate, endDate);
 
             try
-            { int numEffected = cmd.ExecuteNonQuery(); }
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+
             catch (Exception ex)
             { throw (ex); }
+
             finally
             {
                 if (con != null)
@@ -502,10 +506,10 @@ namespace Project_ServerSide.Models.DAL
 
         private SqlCommand spUpdateJourneyDates(SqlConnection con, int groupId, DateTime startDate, DateTime endDate)
         {
-            SqlCommand cmd = new SqlCommand(); 
-            cmd.Connection = con;            
-            cmd.CommandText = "spUpdateJourneyDates";    
-            cmd.CommandTimeout = 10;           
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "spUpdateJourneyDates";
+            cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
             cmd.Parameters.AddWithValue("@startDate", startDate);
