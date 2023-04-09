@@ -10,19 +10,20 @@ using Project_ServerSide.Models;
 using System.Numerics;
 using System.Collections;
 using Project_ServerSide.Models.Algorithm;
+using System.Data.Common;
 
 namespace Project_ServerSide.Models.DAL
 {
     public class Algorithm_DBS
     {
-        //////////////////////////////////////////
-        const int CoreTagsQuantity = 3;
-        const int normScalar = 5;  //used for normalizing between 0 to 5.
-        List<int> tags = new List<int>();
-        List<StudentTagJSON> studentsTags = new List<StudentTagJSON>();
+        //________________________________________________________________________
+        const int normScalar = 5;  //used for normalizing tagCount between 0 to 5.
         double maxTagCount = 0;
         double minTagCount = 0;
-        //////////////////////////////////////////
+        List<int> tags = new List<int>();
+        List<StudentTagJSON> studentsTags = new List<StudentTagJSON>();
+        //________________________________________________________________________
+
 
         public SqlConnection connect(String conString)
         {
@@ -34,91 +35,66 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //Functions
+        // ================================ | MAIN FUNCTIONS | ================================== //
+
         public double[,] GetPreferences()
         {
+            //Get the preferences of all students (tagCount for each tag by students)
             SqlConnection con;
             SqlCommand cmd;
 
-            //Get all tags
             try
             { con = connect("myProjDB"); }
             catch (Exception ex)
             { throw (ex); }
 
-            cmd = spGetTags(con);
             try
             {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                //Get all tag ids
+                cmd = spGetTags(con);
+                SqlDataReader dataReader1 = cmd.ExecuteReader();
                 tags.Clear();
 
-                while (dataReader.Read())
-                    tags.Add(Convert.ToInt32(dataReader["tagId"]));
-            }
-
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-
-            //Get the maximum TagCount and minimum TagCount for normalization.
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = spGetMaxMin(con);
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-
-                while (dataReader.Read())
+                while (dataReader1.Read())
                 {
-                    maxTagCount = Convert.ToDouble(dataReader["Max"]);
-                    minTagCount = Convert.ToDouble(dataReader["Min"]);
+                    tags.Add(Convert.ToInt32(dataReader1["tagId"]));
                 }
-            }
-
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
+                dataReader1.Close();
 
 
-            //Get all studentTags and tagCounts
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
+                //Get the maximum TagCount and minimum TagCount for normalization.
+                cmd = spGetMaxMin(con);
+                SqlDataReader dataReader2 = cmd.ExecuteReader();
 
-            cmd = spGetStudentdTags(con);
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                while (dataReader2.Read())
+                {
+                    maxTagCount = Convert.ToDouble(dataReader2["Max"]);
+                    minTagCount = Convert.ToDouble(dataReader2["Min"]);
+                }
+                dataReader2.Close();
+
+
+                //Get all studentTags and tagCounts: ["studentId"|"TagId"|"TagCount"]
+                cmd = spGetStudentsTags(con);
+                SqlDataReader dataReader3 = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 studentsTags.Clear();
                 double tmpTagCount = 0;
-                while (dataReader.Read())
+
+                while (dataReader3.Read())
                 {
                     StudentTagJSON studentTag = new StudentTagJSON();
-                    studentTag.StudentId = Convert.ToInt32(dataReader["studentId"]);
-                    studentTag.TagId = Convert.ToInt32(dataReader["TagId"]);
-                    tmpTagCount = Convert.ToDouble(dataReader["TagCount"]);
-                    studentTag.TagCount = ((tmpTagCount - minTagCount) / maxTagCount - minTagCount) * normScalar;
+                    studentTag.StudentId = Convert.ToInt32(dataReader3["studentId"]);
+                    studentTag.TagId = Convert.ToInt32(dataReader3["tagId"]);
+                    tmpTagCount = Convert.ToDouble(dataReader3["tagCount"]);
+                    studentTag.TagCount = (maxTagCount == minTagCount) ? 
+                       0 : ((tmpTagCount - minTagCount) / maxTagCount - minTagCount) * normScalar;
 
-                    studentsTags.Add(studentTag);
+                    studentsTags.Add(studentTag);//Reformatting the tags, changing each TagCount to a normalized value
+                                                 //so that the algorithm will work better
                 }
-            }
+                dataReader3.Close();
 
+            }
             catch (Exception ex)
             { throw (ex); }
 
@@ -128,8 +104,15 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
 
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+            ///Now that we have created "studentTags", we have all tags of group 0 connected to each student.
+            ///Each tag is built in the following format: {studentId: 1, tagId: 1, tagCount: 2.34}...
+            ///If a student didn't encounterd a specific tag yet, tagCount = 0 automatically.
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+
             //Create the matrix - tags and studentTags are already sorted corresponding to each other.
-            var idList = studentsTags.Select(o => o.StudentId).Distinct().ToList(); //Create a list with all ids (there are 3 objects for the same student, we need only one)
+            //Create a list with all student IDs (there are "CoreTagsQuantity" (3 right now) objects for the same student, we need only one)
+            var idList = studentsTags.Select(o => o.StudentId).Distinct().ToList();
             int Rows = idList.Count;
             int Cols = tags.Count + 1;
 
@@ -139,12 +122,88 @@ namespace Project_ServerSide.Models.DAL
             for (int i = 0; i < Rows; i++)
             {
                 preferencesMatrix[i, 0] = idList[i];
-                var objectsWithId = studentsTags.Where(o => o.StudentId == idList[i]).ToList(); //Runs over studentsTags, returns all objects where their ids
-                                                                                                //equals to the row's StudentId.
+                //Runs over studentsTags, returns all Tag objects (with tagCount) where their ids equals to the row's StudentId.
+                var objectsWithId = studentsTags.Where(o => o.StudentId == idList[i]).ToList();
+
                 for (int j = 0; j < objectsWithId.Count; j++)
                     preferencesMatrix[i, j + 1] = objectsWithId[j].TagCount; //Fills the columns with the tags count
             }
-            return preferencesMatrix;
+
+            return preferencesMatrix;//studentId | tag1 | tag2 //
+                                     //     1    | 4.5  | 1.35 //
+        }                            //     2    |  0   | 1.2  //
+
+
+        public List<int> GetStudentsIds()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetStudentsTags(con);
+            List<int> studentsIds = new List<int>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    int studentId = Convert.ToInt32(dataReader["studentId"]);
+                    studentsIds.Add(studentId);
+                }
+                dataReader.Close();
+                return studentsIds.Select(id => id).Distinct().ToList();
+            }
+
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+
+        public List<int> GetTagsIds()
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetTags(con);
+            List<int> tagsIds = new List<int>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    tagsIds.Add(Convert.ToInt32(dataReader["tagId"]));
+                }
+                dataReader.Close();
+                return tagsIds;
+            }
+
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
         }
 
 
@@ -158,34 +217,14 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw (ex); }
 
-            cmd = spClearPredictionTable(con);
-
             try
             {
-                cmd.ExecuteNonQuery(); // execute the command
+                cmd = spClearPredictionTable(con);
+                cmd.ExecuteNonQuery();
+
+                cmd = spFillPredictionTable(con, predictionsTable);
+                cmd.ExecuteNonQuery();
             }
-
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = spFillPredictionTable(con, predictionsTable);
-
-            try
-            { cmd.ExecuteNonQuery(); } // execute the command 
-            catch (Exception ex)
-            { throw (ex); }
-
             finally
             {
                 if (con != null)
@@ -227,7 +266,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //Stored Procedure
+
+        // ================================ | STORED PROCEDURES | ================================== //
+
         private SqlCommand spGetTags(SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
@@ -248,7 +289,7 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        private SqlCommand spGetStudentdTags(SqlConnection con)
+        private SqlCommand spGetStudentsTags(SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;

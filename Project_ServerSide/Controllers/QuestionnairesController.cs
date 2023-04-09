@@ -12,6 +12,7 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class QuestionnairesController : ControllerBase
     {
+
         // GET: api/<QuestionnairesController>
         [HttpGet("groupId/{groupId}")]
         public IActionResult GetAllQuestionnaires(int groupId)
@@ -19,6 +20,7 @@ namespace Project_ServerSide.Controllers
             Questionnaire_DBservices dbs = new Questionnaire_DBservices();
             return Ok(dbs.GetAllQuestionnaires(groupId));
         }
+
 
         // POST api/<QuestionnairesController>
         [HttpPost("groupId/{groupId}/json/{questionnaire}")]
@@ -28,12 +30,14 @@ namespace Project_ServerSide.Controllers
             dbs.InsertNewQuestionnaire(groupId, questionnaire);
         }
 
+
         // PUT api/<QuestionnairesController>/5
         [HttpPut("studentId/{studentId}")]
         public void UpdateStudentTags(int studentId, [FromBody] List<Tag> tags)
         {
             Questionnaire.updateStudentTags(studentId, tags);
         }
+
 
         // DELETE api/<QuestionnairesController>/5
         [HttpDelete("questionnaireId/{questionnaireId}")]
