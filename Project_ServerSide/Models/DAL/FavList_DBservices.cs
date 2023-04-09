@@ -60,7 +60,11 @@ namespace Project_ServerSide.Models.DAL
                 temp.PostId = Convert.ToInt32(Post["postId"]);
                 temp.StudentId = Convert.ToInt32(Post["studentId"]);
                 temp.FileUrl = Post["fileUrl"].ToString();
-             
+                temp.FirstName = Post["firstName"].ToString();
+                temp.LastName = Post["lastName"].ToString();
+                temp.Type = Post["type"].ToString();
+
+
                 temp.Tags = new List<Tag>();
 
                 //fill the post with all its tags
@@ -142,6 +146,9 @@ namespace Project_ServerSide.Models.DAL
             {"postId", dataReader["postId"].ToString()},
             {"studentId",dataReader["Id"].ToString()},
             {"fileUrl", dataReader["fileUrl"].ToString()},
+            {"firstName", dataReader["firstName"].ToString()},
+            {"lastName", dataReader["lastName"].ToString()},
+            {"type", dataReader["type"].ToString()},
 
 
         };
