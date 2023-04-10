@@ -1,5 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Newtonsoft.Json;
 using Project_ServerSide.Models.SmartQuestionnaires;
 
@@ -35,7 +37,7 @@ namespace Project_ServerSide.Models.DAL
 
 
 
-        public void InsertNewQuestionnaire(int groupId, string sq)
+        public void InsertNewQuestionnaire(int groupId, JsonObject sq)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -45,30 +47,10 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw (ex); }
 
-
-            string json = sq; // JSON data from the client
-            dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(json);
-            dynamic questionnaireJson = parsedJson.questionnaire;
-
-
-
-            Questionnaire questionnaire = new Questionnaire
-            {
-                Title = questionnaireJson.title,
-                Description = questionnaireJson.description,
-                Tags = questionnaireJson.tags.ToObject<List<Tag>>(),
-                Questions = questionnaireJson.questions.ToObject<List<Question>>()
-            };
-
-            string questionnaireJsonString = JsonConvert.SerializeObject(questionnaire);
-
-            cmd = spPostQuestionnare(con, groupId, questionnaireJsonString);
-
+            cmd = spPostQuestionnare(con, groupId, sq);
 
             try
-            {
-                cmd.ExecuteNonQuery();
-            }
+            {cmd.ExecuteNonQuery();}
 
             catch (Exception ex)
             { throw (ex); }
@@ -80,15 +62,16 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
-        private SqlCommand spPostQuestionnare(SqlConnection con, int groupId, string json)
+        private SqlCommand spPostQuestionnare(SqlConnection con, int groupId, JsonObject json) 
         {
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(json);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = "InsertQuestionnaire";
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
-            cmd.Parameters.AddWithValue("@jsonData", json);
+            cmd.Parameters.AddWithValue("@jsonData", jsonString);
 
             return cmd;
         }

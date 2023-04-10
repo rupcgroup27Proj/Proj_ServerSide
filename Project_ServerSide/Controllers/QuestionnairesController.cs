@@ -2,7 +2,7 @@
 using Project_ServerSide.Models;
 using Project_ServerSide.Models.DAL;
 using Project_ServerSide.Models.SmartQuestionnaires;
-
+using System.Text.Json.Nodes;
 
 namespace Project_ServerSide.Controllers
 {
@@ -18,8 +18,8 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpPost("groupId/{groupId}/json/{questionnaire}")]
-        public void Post(int groupId, string questionnaire)
+        [HttpPost("groupId/{groupId}")]
+        public void Post(int groupId, [FromBody] JsonObject questionnaire) 
         {
             Questionnaire_DBservices dbs = new Questionnaire_DBservices();
             dbs.InsertNewQuestionnaire(groupId, questionnaire);
