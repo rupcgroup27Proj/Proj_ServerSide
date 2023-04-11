@@ -12,7 +12,7 @@ namespace Project_ServerSide.Models
         string lastName;
         string type;
         List<Tag> tags = new List<Tag>();
-
+        string description;
 
         public int StudentId { get => studentId; set => studentId = value; }
         public int PostId { get => postId; set => postId = value; }
@@ -21,7 +21,7 @@ namespace Project_ServerSide.Models
         public string LastName { get => lastName; set => lastName = value; }
         public string Type { get => type; set => type = value; }
         public List<Tag> Tags { get => tags; set => tags = value; }
-
+        public string Description { get => description; set => description = value; }
 
         public static string ReadByStudentId(int studentId)
         {

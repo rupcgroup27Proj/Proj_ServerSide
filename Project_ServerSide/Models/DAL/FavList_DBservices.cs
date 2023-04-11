@@ -49,7 +49,7 @@ namespace Project_ServerSide.Models.DAL
                 temp.FirstName = Post["firstName"].ToString();
                 temp.LastName = Post["lastName"].ToString();
                 temp.Type = Post["type"].ToString();
-
+                temp.Description = Post["description"].ToString();
                 temp.Tags = new List<Tag>();
 
                 //fill the post with all its tags
@@ -134,6 +134,7 @@ namespace Project_ServerSide.Models.DAL
                          {"firstName", dataReader["firstName"].ToString()},
                          {"lastName", dataReader["lastName"].ToString()},
                          {"type", dataReader["type"].ToString()},
+                         {"description", dataReader["description"].ToString()},
                        };
 
                     result.Add(post);
