@@ -200,7 +200,9 @@ namespace Project_ServerSide.Models.DAL
                 tempSocialCloud.FirstName = Post["Firstname"].ToString();
                 tempSocialCloud.LastName = Post["Lastname"].ToString();
                 tempSocialCloud.CreatedAt = Convert.ToDateTime(Post["createdAt"]);
-
+                tempSocialCloud.Likes = Convert.ToInt32(Post["likes"]);
+                tempSocialCloud.Comments = Convert.ToInt32(Post["comments"]);
+              
                 tempSocialCloud.Tags = new List<Tag>();
 
                 //fill the post with all its tags
@@ -279,18 +281,20 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     Dictionary<string, string> post = new()
-        {
-            {"postId", dataReader["postId"].ToString()},
-            {"groupId", dataReader["groupId"].ToString()},
-            {"type", dataReader["type"].ToString()},
-            {"studentId", dataReader["userType"].ToString() == "Student" ? dataReader["userId"].ToString() : "1"},
-            {"teacherId", dataReader["userType"].ToString() == "Teacher" ? dataReader["userId"].ToString() : "1"},
-            {"guideId", dataReader["userType"].ToString() == "Guide" ? dataReader["userId"].ToString() : "1"},
-            {"fileUrl", dataReader["fileUrl"].ToString()},
-            {"Firstname", dataReader["Firstname"].ToString()},
-            {"Lastname", dataReader["Lastname"].ToString()},
-            {"createdAt", dataReader["createdAt"].ToString()},
-        };
+                    {
+                     {"postId", dataReader["postId"].ToString()},
+                     {"groupId", dataReader["groupId"].ToString()},
+                     {"type", dataReader["type"].ToString()},
+                     {"studentId", dataReader["userType"].ToString() == "Student" ? dataReader["userId"].ToString() : "1"},
+                     {"teacherId", dataReader["userType"].ToString() == "Teacher" ? dataReader["userId"].ToString() : "1"},
+                     {"guideId", dataReader["userType"].ToString() == "Guide" ? dataReader["userId"].ToString() : "1"},
+                     {"fileUrl", dataReader["fileUrl"].ToString()},
+                     {"Firstname", dataReader["Firstname"].ToString()},
+                     {"Lastname", dataReader["Lastname"].ToString()},
+                     {"createdAt", dataReader["createdAt"].ToString()},
+                     {"likes", dataReader["likes"].ToString()},
+                     {"comments", dataReader["comments"].ToString()}
+                    };
 
                     result.Add(post);
                 }
