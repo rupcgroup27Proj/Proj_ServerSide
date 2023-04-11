@@ -16,6 +16,7 @@ namespace Project_ServerSide.Models
         string lastName;
         int likes;
         int comments;
+        string description;
         List<Tag> tags = new List<Tag>();
 
 
@@ -31,8 +32,9 @@ namespace Project_ServerSide.Models
         public DateTime CreatedAt { get => createdAt; set => createdAt = value; }
         public int Likes { get => likes; set => likes = value; }
         public int Comments { get => comments; set => comments = value; }
+        public string Description { get => description; set => description = value; }
         public List<Tag> Tags { get => tags; set => tags = value; }
-
+       
 
         public static string ReadByGroupIdAndType(int groupId)
         {

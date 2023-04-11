@@ -25,7 +25,7 @@ namespace Project_ServerSide.Controllers
         [HttpDelete("postId/{postId}")]
         public IActionResult Delete(int postId)
         {
-            return SocialCloud.Delete(postId) == 3 ? Ok() : NotFound();
+            return SocialCloud.Delete(postId) != 0 ? Ok() : NotFound();
         }
     }
 }

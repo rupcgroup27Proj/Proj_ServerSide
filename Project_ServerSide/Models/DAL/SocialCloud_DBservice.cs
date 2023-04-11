@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -66,22 +67,18 @@ namespace Project_ServerSide.Models.DAL
         private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud, string tagsJson)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand(); 
+            cmd.Connection = con;           
+            cmd.CommandText = spName;      
+            cmd.CommandTimeout = 10;      
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; 
             cmd.Parameters.AddWithValue("@groupId", socialCloud.GroupId);
             cmd.Parameters.AddWithValue("@studentId", socialCloud.StudentId);
             cmd.Parameters.AddWithValue("@teacherId", socialCloud.TeacherId);
             cmd.Parameters.AddWithValue("@guideId", socialCloud.GuideId);
             cmd.Parameters.AddWithValue("@fileUrl", socialCloud.FileUrl);
             cmd.Parameters.AddWithValue("@type", socialCloud.Type);
+            cmd.Parameters.AddWithValue("@description", socialCloud.Description);
             cmd.Parameters.AddWithValue("@tagsJson", tagsJson);
 
             return cmd;
@@ -97,36 +94,25 @@ namespace Project_ServerSide.Models.DAL
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            {  throw ex; }
 
-            cmd = CreateCommandDeleteFromSocialCloud("spDeleteFromSocialCloud", con, postId);     // create the command
+            cmd = CreateCommandDeleteFromSocialCloud("spDeleteFromSocialCloud", con, postId);    
 
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw ex; }
 
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
@@ -134,19 +120,12 @@ namespace Project_ServerSide.Models.DAL
         private SqlCommand CreateCommandDeleteFromSocialCloud(string spName, SqlConnection con, int postId)
         {
 
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand(); 
+            cmd.Connection = con;            
+            cmd.CommandText = spName;   
+            cmd.CommandTimeout = 10;     
+            cmd.CommandType = CommandType.StoredProcedure; 
             cmd.Parameters.AddWithValue("@postId", postId);
-
-
             return cmd;
         }
 
@@ -202,7 +181,8 @@ namespace Project_ServerSide.Models.DAL
                 tempSocialCloud.CreatedAt = Convert.ToDateTime(Post["createdAt"]);
                 tempSocialCloud.Likes = Convert.ToInt32(Post["likes"]);
                 tempSocialCloud.Comments = Convert.ToInt32(Post["comments"]);
-              
+                tempSocialCloud.Description = Post["description"].ToString();
+
                 tempSocialCloud.Tags = new List<Tag>();
 
                 //fill the post with all its tags
@@ -293,7 +273,8 @@ namespace Project_ServerSide.Models.DAL
                      {"Lastname", dataReader["Lastname"].ToString()},
                      {"createdAt", dataReader["createdAt"].ToString()},
                      {"likes", dataReader["likes"].ToString()},
-                     {"comments", dataReader["comments"].ToString()}
+                     {"comments", dataReader["comments"].ToString()},
+                     {"description", dataReader["description"].ToString()}
                     };
 
                     result.Add(post);
