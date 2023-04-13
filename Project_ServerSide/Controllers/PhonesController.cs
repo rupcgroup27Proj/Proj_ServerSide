@@ -12,7 +12,7 @@ namespace Project_ServerSide.Controllers
         public IActionResult Get(int groupId)
         {
             Phones phones = new Phones();
-            List<Phones> PhonesList = phones.Read(groupId);
+            List<Phones> PhonesList = phones.ReadPhoneList(groupId);
 
             return (PhonesList.Count > 0) ? Ok(PhonesList) : NotFound("No Phones on the system");
         }
@@ -29,19 +29,19 @@ namespace Project_ServerSide.Controllers
         }
 
 
+        [HttpPost]
+        public bool Post([FromBody] Phones phones)
+        {
+            return phones.InsertPhone();
+        }
+
+
         [HttpPut("id/{id}")]
         public IActionResult Put(int id, [FromBody] Phones phones)
         {
             phones.Id = id;
 
-            return (phones.Update() == 1) ? Ok(phones) : NotFound();
-        }
-
-
-        [HttpPost]
-        public bool Post([FromBody] Phones phones)
-        {
-            return phones.Insert();
+            return (phones.UpdatePhone() == 1) ? Ok(phones) : NotFound();
         }
 
 
@@ -50,7 +50,7 @@ namespace Project_ServerSide.Controllers
         {
             Phones phones = new Phones();
 
-            return (phones.Delete(id) > 0) ? Ok("Success") : NotFound("Delete failed");
+            return (phones.DeletePhone(id) > 0) ? Ok("Success") : NotFound("Delete failed");
         }
     }
 }

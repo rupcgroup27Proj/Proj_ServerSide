@@ -23,8 +23,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // GetPostsComments
-        public List<PostsComments> GetCommentsByPostId(int postId)
+        // get post comments by postId
+        //-----------------------------------------------------------------------------------
+        public List<PostsComments> ReadpostsComments(int postId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -81,8 +82,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        // InsertCommentToPost
+        // insert comment to post
+        //-----------------------------------------------------------------------------------
         public int InsertPostsComments(PostsComments postsComments)
         {
             SqlConnection con;
@@ -123,9 +124,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        // DeleteFromPostsComments
-        public int DeleteFromPostsComments(int commentId)
+        // delete from comment from post
+        //-----------------------------------------------------------------------------------
+        public int DeletePostsComments(int commentId)
         {
             SqlConnection con;
             SqlCommand cmd;

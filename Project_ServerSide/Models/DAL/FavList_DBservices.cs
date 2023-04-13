@@ -9,7 +9,6 @@ namespace Project_ServerSide.Models.DAL
     {
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -18,9 +17,9 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        // ================================ | MAIN FUNCTIONS | ================================== //
-
-        public string FavListByStudentId(int studentId)
+        //get fav list by studendId
+        //-----------------------------------------------------------------------------------
+        public string ReadFavListByStudentId(int studentId)
         {
 
             SqlConnection con;
@@ -77,7 +76,6 @@ namespace Project_ServerSide.Models.DAL
             return jsonString;
         }
 
-
         private List<Dictionary<string, string>> getTags(int studentId, SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
@@ -108,7 +106,6 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw; }
         }
-
 
         private List<Dictionary<string, string>> getPost(int studentId, SqlConnection con)
         {
@@ -148,7 +145,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        public bool InsertFavPost(int studentId, int postId)
+        //insert post to fav list
+        //-----------------------------------------------------------------------------------
+        public bool InsertFav(int studentId, int postId)
         {
 
             SqlConnection con;
@@ -175,8 +174,23 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
+        private SqlCommand CreateCommandInsertFavPost(String spName, SqlConnection con, int studentId, int postId)
+        {
 
-        public int DeletePostFromListFav(int studentId, int postId)
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@postId", postId);
+            return cmd;
+        }
+
+        
+        //delet post from fav list
+        //-----------------------------------------------------------------------------------
+        public int DeleteFav(int studentId, int postId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -186,7 +200,7 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw ex; }
 
-            cmd = CreateCommandDeletePostFromListFav("spDeletePostFromListFav", con, studentId, postId);     // create the command
+            cmd = CreateCommandDeletePostFromFavList("spDeletePostFromListFav", con, studentId, postId);     // create the command
 
             try
             {
@@ -202,7 +216,21 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
+        private SqlCommand CreateCommandDeletePostFromFavList(string spName, SqlConnection con, int studentId, int postId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@postId", postId);
+            return cmd;
+        }
 
+       
+        //???????????????????????????????????????
+        //-----------------------------------------------------------------------------------
         public void LowerStudentTags(int studentId, List<Tag> tags)
         {
             SqlConnection con;
@@ -225,34 +253,6 @@ namespace Project_ServerSide.Models.DAL
                 if (con != null)
                     con.Close();
             }
-        }
-
-
-        // ================================ | STORED PROCEDURES | ================================== //
-
-        private SqlCommand CreateCommandInsertFavPost(String spName, SqlConnection con, int studentId, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@studentId", studentId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-            return cmd;
-        }
-
-        private SqlCommand CreateCommandDeletePostFromListFav(string spName, SqlConnection con, int studentId, int postId)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@studentId", studentId);
-            cmd.Parameters.AddWithValue("@postId", postId);
-            return cmd;
         }
 
         private SqlCommand spLowerStudentTags(int studentId, List<Tag> tags, SqlConnection con)

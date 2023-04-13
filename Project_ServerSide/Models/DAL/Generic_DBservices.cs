@@ -16,7 +16,9 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        // login GenericUser
+
+        //login GenericUser
+        //-----------------------------------------------------------------------------------
         public GenericUser Login(int id, string password, string type)
         {
             SqlConnection con;
@@ -53,8 +55,6 @@ namespace Project_ServerSide.Models.DAL
             }
             catch (Exception ex) { throw; }
         }
-
-
         private SqlCommand LoginCommand(SqlConnection con, int id, string password, string type)
         {
             SqlCommand cmd = new SqlCommand();

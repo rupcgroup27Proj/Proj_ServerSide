@@ -6,7 +6,6 @@ using System.Xml.Linq;
 
 namespace Project_ServerSide.Models
 {
-
     public class Student
     {
         string type;
@@ -43,34 +42,34 @@ namespace Project_ServerSide.Models
             return dbs.Login(this);
         }
 
-        public int Update()
+        public List<Student> GetGroupStudents(int groupId)
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.Update(this);
+            return dbs.GetGroupStudents(groupId);
         }
 
-        public bool Insert()
+        public Student GetSpecificStudent()
         {
             Students_DBservices dbs = new Students_DBservices();
-            return (dbs.Insert(this) == 2) ? true : false;
+            return dbs.GetSpecificStudent(this);
         }
 
-        public List<Student> Read(int groupId)
+        public bool InsertStudent()
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.Read(groupId);
+            return (dbs.InsertStudent(this) == 2) ? true : false;
+        }
+  
+        public int UpdateStudent()
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            return dbs.UpdateStudent(this);
         }
 
-        public Student pullSpecificStudent()
+        public int DeleteFromGroup(int groupId)
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.pullSpecificStudent(this);
-        }
-
-        public int DeleteFromGroupe(int groupId)
-        {
-            Students_DBservices dbs = new Students_DBservices();
-            return dbs.DeleteFromGroupe(groupId);
+            return dbs.DeleteFromGroup(groupId);
         }
     }
 }

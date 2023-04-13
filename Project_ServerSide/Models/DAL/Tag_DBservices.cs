@@ -24,7 +24,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //Get all built-in tags - Barel 
+        //get all built-in tags
+        //-----------------------------------------------------------------------------------
         public List<Tag> GetBuiltInTags()
         {
             SqlConnection con;
@@ -72,10 +73,9 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-
-
-        //ReadTagList                                               
-        public List<Tag> GetTags(int groupId)
+        //read tag list
+        //-----------------------------------------------------------------------------------
+        public List<Tag> GetAllTagsByGroupId(int groupId)
         {
 
             SqlConnection con;
@@ -126,60 +126,5 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-
-
-        //ReadTagInPost                                                
-        public List<Tag> ReadTagInPost(int postId)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw ex; }
-
-
-            cmd = CreateCommandGetTagsByPostId("spGetTagsByPostId", con, postId);// create the command
-
-            List<Tag> tempList = new List<Tag>();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    Tag tempTagList = new Tag();
-
-                    tempTagList.TagId = Convert.ToInt32(dataReader["tagId"]);
-                    tempTagList.TagName = dataReader["tagName"].ToString();
-
-                    tempList.Add(tempTagList);
-
-                }
-                return tempList;
-
-            }
-            catch (Exception ex)
-            { throw ex; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-        }
-
-        private SqlCommand CreateCommandGetTagsByPostId(string spName, SqlConnection con, int postId)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@postId", postId);
-            return cmd;
-        }
     }
 }

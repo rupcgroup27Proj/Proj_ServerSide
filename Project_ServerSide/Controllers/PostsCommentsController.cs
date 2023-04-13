@@ -11,14 +11,14 @@ namespace Project_ServerSide.Controllers
         [HttpGet("postId/{postId}")]
         public List<PostsComments> Get(int postId)
         {
-            return PostsComments.ReadByPostId(postId);
+            return PostsComments.ReadpostsComments(postId);
         }
 
 
         [HttpPost]
         public bool Post([FromBody] PostsComments postsComments)
         {
-            return postsComments.Insert();
+            return postsComments.InsertPostsComments();
         }
 
 
@@ -26,7 +26,7 @@ namespace Project_ServerSide.Controllers
         public IActionResult Delete(int commentId)
         {
             PostsComments s = new PostsComments();
-            int num = PostsComments.Delete(commentId);
+            int num = PostsComments.DeletePostsComments(commentId);
             if (num == 1)
                 return Ok(new { message = "Resource deleted successfully" });
             else

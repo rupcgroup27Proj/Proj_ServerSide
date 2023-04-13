@@ -7,7 +7,6 @@ namespace Project_ServerSide.Models.DAL
     {
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -17,33 +16,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        public int Insert(Guide guide)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw ex; }
-
-            cmd = CreateInsertGuidestCommand("spInsertguides", con, guide);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            { throw ex; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-
-
+        //login guide - יש את הgeneric
+        //-----------------------------------------------------------------------------------
         public Guide Login(Guide guide)
         {
 
@@ -90,6 +64,46 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
+        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Guide guide)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Id", guide.GuideId);
+            cmd.Parameters.AddWithValue("@Password", guide.Password);
+            return cmd;
+        }
+
+
+        //insert guide
+        //-----------------------------------------------------------------------------------
+        public int InsertGuide(Guide guide)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw ex; }
+
+            cmd = CreateInsertGuidestCommand("spInsertguides", con, guide);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            { throw ex; }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
 
         private SqlCommand CreateInsertGuidestCommand(String spName, SqlConnection con, Guide guide)
         {
@@ -110,16 +124,5 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Guide guide)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", guide.GuideId);
-            cmd.Parameters.AddWithValue("@Password", guide.Password);
-            return cmd;
-        }
     }
 }

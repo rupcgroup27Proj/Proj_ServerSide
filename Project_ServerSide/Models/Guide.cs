@@ -42,10 +42,10 @@ namespace Project_ServerSide.Models
             return dbs.Login(this);
         }
 
-        public bool Insert()
+        public bool InsertGuide()
         {
             Guides_DBservices dbs = new Guides_DBservices();
-            return (dbs.Insert(this) == 2) ? true : false;
+            return (dbs.InsertGuide(this) == 2) ? true : false;
         }
     }
 }

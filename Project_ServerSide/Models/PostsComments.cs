@@ -22,22 +22,22 @@ namespace Project_ServerSide.Models
         public string LastName { get => lastName; set => lastName = value; }
 
 
-        public static List<PostsComments> ReadByPostId(int postId)
+        public static List<PostsComments> ReadpostsComments(int postId)
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.GetCommentsByPostId(postId);
+            return dbs.ReadpostsComments(postId);
         }
 
-        public bool Insert()
+        public bool InsertPostsComments()
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
             return (dbs.InsertPostsComments(this) == 1) ? true : false;
         }
 
-        public static int Delete(int commentId)
+        public static int DeletePostsComments(int commentId)
         {
             PostsComments_DBservices dbs = new PostsComments_DBservices();
-            return dbs.DeleteFromPostsComments(commentId);
+            return dbs.DeletePostsComments(commentId);
         }
     }
 }

@@ -8,22 +8,14 @@ namespace Project_ServerSide.Models
         int groupId;
         string tagName;
 
-
         public int TagId { get => tagId; set => tagId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
         public string TagName { get => tagName; set => tagName = value; }
 
-
-        public static List<Tag> GetTags(int groupId)
+        public static List<Tag> GetAllTagsByGroupId(int groupId)
         {
             Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.GetTags(groupId);
-        }
-
-        public static List<Tag> ReadTagInPost(int postId)
-        {
-            Tag_DBservices dbs = new Tag_DBservices();
-            return dbs.ReadTagInPost(postId);
+            return dbs.GetAllTagsByGroupId(groupId);
         }
 
         static public List<Tag> GetBuiltInTags()

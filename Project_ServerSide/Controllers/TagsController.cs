@@ -11,14 +11,7 @@ namespace Project_ServerSide.Controllers
         [HttpGet("groupId/{groupId}")]
         public List<Tag> GetAllTagsByGroupId(int groupId)
         {
-            return Tag.GetTags(groupId);
-        }
-
-
-        [HttpGet("postId/{postId}")]
-        public List<Tag> GetTagsByPostId(int postId)
-        {
-            return Tag.ReadTagInPost(postId);
+            return Tag.GetAllTagsByGroupId(groupId);
         }
 
 

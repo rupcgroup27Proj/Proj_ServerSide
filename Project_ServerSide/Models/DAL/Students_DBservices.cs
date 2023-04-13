@@ -24,79 +24,68 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-
-
-        public int Insert(Student student)
+        //login student -?????????????/להוריד 
+        //-----------------------------------------------------------------------------------
+        public Student Login(Student student)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
-            {
-                con = connect("myProjDB"); // create the connection
-            }
+            { con = connect("myProjDB"); }
             catch (Exception ex)
-            {
-                // write to log
-                throw ex;
-            }
+            { throw (ex); }
 
-            cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
+            cmd = CreateLoginCommandSP("spLoginStudent", con, student);
 
+            Student u = new Student();
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
-                return numEffected;
-            }
-            catch (Exception ex)
-            {
-                // write to log
-                throw ex;
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    u.StudentId = Convert.ToInt32(dataReader["Id"]);
+                    u.Password = dataReader["Password"].ToString();
+                    u.Email = dataReader["Email"].ToString();
+                    u.FirstName = dataReader["Firstname"].ToString();
+                    u.LastName = dataReader["Lastname"].ToString();
+                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
+                    u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
+                    u.PictureUrl = dataReader["PictureUrl"].ToString();
+                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    u.Type = "Student".ToString();
+                }
+                return u;
+
             }
 
+            catch (Exception ex)
+            { throw; }
             finally
             {
                 if (con != null)
-                {
-                    // close the db connection
                     con.Close();
-                }
             }
 
         }
 
-        private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
+        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
         {
-
-            SqlCommand cmd = new SqlCommand(); // create the command object
-
-            cmd.Connection = con;              // assign the connection to the command object
-
-            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
-
-            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
-
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
-
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", student.StudentId);
-            cmd.Parameters.AddWithValue("@password", student.Password);
-            cmd.Parameters.AddWithValue("@firstName", student.FirstName);
-            cmd.Parameters.AddWithValue("@lastName", student.LastName);
-            cmd.Parameters.AddWithValue("@phone", Convert.ToInt32(student.Phone));
-            cmd.Parameters.AddWithValue("@email", student.Email);
-            cmd.Parameters.AddWithValue("@parentPhone", Convert.ToInt32(student.ParentPhone));
-            cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
-            cmd.Parameters.AddWithValue("@groupId", student.GroupId);
-
-
+            cmd.Parameters.AddWithValue("@Password", student.Password);
             return cmd;
         }
 
 
-
-        //read all students group students
-        public List<Student> Read(int groupId)
+        //read all students group 
+        //-----------------------------------------------------------------------------------
+        public List<Student> GetGroupStudents(int groupId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -155,68 +144,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        //login student
-        public Student Login(Student student)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateLoginCommandSP("spLoginStudent", con, student);
-
-            Student u = new Student();
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    u.StudentId = Convert.ToInt32(dataReader["Id"]);
-                    u.Password = dataReader["Password"].ToString();
-                    u.Email = dataReader["Email"].ToString();
-                    u.FirstName = dataReader["Firstname"].ToString();
-                    u.LastName = dataReader["Lastname"].ToString();
-                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
-                    u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
-                    u.PictureUrl = dataReader["PictureUrl"].ToString();
-                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.Type = "Student".ToString();
-                }
-                return u;
-
-            }
-
-            catch (Exception ex)
-            { throw; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-        }
-
-        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", student.StudentId);
-            cmd.Parameters.AddWithValue("@Password", student.Password);
-            return cmd;
-        }
-
-
-
-        // Get Specific Student by studentId
-        public Student pullSpecificStudent(Student student)
+        // get Specific Student 
+        //-----------------------------------------------------------------------------------
+        public Student GetSpecificStudent(Student student)
         {
 
             SqlConnection con;
@@ -274,9 +204,75 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+        //insert student 
+        //-----------------------------------------------------------------------------------
+        public int InsertStudent(Student student)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
 
-        // update a student
-        public int Update(Student student)
+            try
+            {
+                con = connect("myProjDB"); 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            cmd = CreateInsertStudentCommandSP("spInsertStudent", con, student);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); 
+                return numEffected;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            finally
+            {
+                if (con != null)
+                {
+                    con.Close();
+                }
+            }
+
+        }
+
+        private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
+        {
+
+            SqlCommand cmd = new SqlCommand(); // create the command object
+
+            cmd.Connection = con;              // assign the connection to the command object
+
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; // the type of the command, can also be stored procedure
+
+            cmd.Parameters.AddWithValue("@Id", student.StudentId);
+            cmd.Parameters.AddWithValue("@password", student.Password);
+            cmd.Parameters.AddWithValue("@firstName", student.FirstName);
+            cmd.Parameters.AddWithValue("@lastName", student.LastName);
+            cmd.Parameters.AddWithValue("@phone", Convert.ToInt32(student.Phone));
+            cmd.Parameters.AddWithValue("@email", student.Email);
+            cmd.Parameters.AddWithValue("@parentPhone", Convert.ToInt32(student.ParentPhone));
+            cmd.Parameters.AddWithValue("@pictureUrl", student.PictureUrl);
+            cmd.Parameters.AddWithValue("@groupId", student.GroupId);
+
+
+            return cmd;
+        }
+
+
+        // update student
+        //-----------------------------------------------------------------------------------
+        public int UpdateStudent(Student student)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -319,9 +315,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        //delete a student
-        public int DeleteFromGroupe(int groupId)
+        //delete what???????????
+        //-----------------------------------------------------------------------------------
+        public int DeleteFromGroup(int groupId)
         {
             SqlConnection con;
             SqlCommand cmd;

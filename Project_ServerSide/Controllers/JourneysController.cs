@@ -13,21 +13,9 @@ namespace Project_ServerSide.Controllers
         public IActionResult GetJourneyList()
         {
             Journey journey = new Journey();
-            List<Journey> JourneyList = journey.Read();
+            List<Journey> JourneyList = journey.GetJourneyList();
 
             return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system ");
-        }
-
-
-        [HttpGet("GetSpecificJourney/groupId/{groupId}/schoolName/{schoolName}")]
-        public IActionResult GetSpecificJourney(int groupId, string schoolName)
-        {
-            Journey journey = new Journey();
-            journey.GroupId = groupId;
-            journey.SchoolName = schoolName;
-            Journey result = journey.pullSpecificJourney();
-
-            return Ok(result);
         }
 
 
@@ -38,16 +26,15 @@ namespace Project_ServerSide.Controllers
             return dbs.GetJourneyDatesAndSchoolName(groupId);
         }
 
-
-        //insert new Journey
+    
         [HttpPost("schoolName/{schoolName}")]
-        public int PostSchoolName(string schoolName)
+        public int Post(string schoolName)
         {
-            return Journey.Insert(schoolName);
+            return Journey.InsertSchoolName(schoolName);
         }
 
 
-        [HttpPut("groupId/{groupId}")]
+        [HttpPut("groupId/{groupId}")] //////////////////אותו דבר????
         public IActionResult Put(int groupId, [FromBody] Journey journey)
         {
             journey.GroupId = groupId;
@@ -55,7 +42,7 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")]
+        [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")] //////////////////אותו דבר????
         public IActionResult UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
             Journey_DBservices dbs = new Journey_DBservices();

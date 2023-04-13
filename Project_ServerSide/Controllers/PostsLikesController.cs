@@ -12,14 +12,14 @@ namespace Project_ServerSide.Controllers
         [HttpGet("studentId/{studentId}")]
         public List<PostsLikes> Get(int studentId)
         {
-            return PostsLikes.ReadByStudentId(studentId);
+            return PostsLikes.ReadPostsLikes(studentId);
         }
 
 
         [HttpPost("studentId/{studentId}/postId/{postId}")]
         public bool Post(int studentId, int postId)
         {
-            return PostsLikes.Insert(studentId, postId);
+            return PostsLikes.InsertPostsLikes(studentId, postId);
         }
 
 
@@ -27,7 +27,7 @@ namespace Project_ServerSide.Controllers
         public IActionResult Delete(int studentId, int postId)
         {
             PostsLikes s = new PostsLikes();
-            int num = PostsLikes.Delete(studentId, postId);
+            int num = PostsLikes.DeletePostsLikes(studentId, postId);
             if (num == 1)
                 return Ok(new { message = "Resource deleted successfully" });
             else

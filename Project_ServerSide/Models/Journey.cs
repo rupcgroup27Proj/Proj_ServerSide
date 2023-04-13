@@ -39,24 +39,17 @@ namespace Project_ServerSide.Models
         public DateTime StartDate { get => startDate; set => startDate = value; }
         public DateTime EndDate { get => endDate; set => endDate = value; }
 
-
-        public Journey pullSpecificJourney()
+         public List<Journey> GetJourneyList()
         {
             Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.pullSpecificJourney(this);
+            return dbs.GetJourneyList();
         }
 
-        public static int Insert(string schoolName)
+        public static int InsertSchoolName(string schoolName)
         {
             Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.Insert(schoolName);
+            return dbs.InsertSchoolName(schoolName);
 
-        }
-
-        public List<Journey> Read()
-        {
-            Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.Read();
         }
 
         public int Update()

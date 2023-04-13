@@ -11,7 +11,7 @@ namespace Project_ServerSide.Controllers
         [HttpPost]
         public bool Post([FromBody] Guide guide)
         {
-            return guide.Insert();
+            return guide.InsertGuide();
         }
     }
 }

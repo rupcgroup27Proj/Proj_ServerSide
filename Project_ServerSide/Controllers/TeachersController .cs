@@ -11,7 +11,7 @@ namespace Project_ServerSide.Controllers
         [HttpPost]
         public bool Post([FromBody] Teacher teacher)
         {
-            return teacher.Insert();
+            return teacher.InsertTeacher();
         }
     }
 }
