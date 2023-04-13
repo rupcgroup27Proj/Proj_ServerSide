@@ -11,21 +11,21 @@ namespace Project_ServerSide.Controllers
         [HttpGet("groupId/{groupId}")]
         public string Get(int groupId)
         {
-            return SocialCloud.ReadByGroupIdAndType(groupId);
+            return SocialCloud.ReadSocialCloudByGroupId(groupId);
         }
 
 
         [HttpPost("tagsJson/{tagsJson}")]
         public IActionResult Post([FromBody] SocialCloud socialCloud, string tagsJson)
         {
-            return socialCloud.Insert(tagsJson) != 0 ? Ok() : NotFound();
+            return socialCloud.InsertSocialCloud(tagsJson) != 0 ? Ok() : NotFound();
         }
 
 
         [HttpDelete("postId/{postId}")]
         public IActionResult Delete(int postId)
         {
-            return SocialCloud.Delete(postId) != 0 ? Ok() : NotFound();
+            return SocialCloud.DeleteFromSocialCloud(postId) != 0 ? Ok() : NotFound();
         }
     }
 }

@@ -36,19 +36,19 @@ namespace Project_ServerSide.Models
         public List<Tag> Tags { get => tags; set => tags = value; }
        
 
-        public static string ReadByGroupIdAndType(int groupId)
+        public static string ReadSocialCloudByGroupId(int groupId)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
-            return dbs.ReadByGroupIdAndType(groupId);
+            return dbs.ReadSocialCloudByGroupId(groupId);
         }
 
-        public int Insert(string tagsJson)
+        public int InsertSocialCloud(string tagsJson)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
             return dbs.InsertSocialCloud(this, tagsJson);
         }
 
-        public static int Delete(int postId)
+        public static int DeleteFromSocialCloud(int postId)
         {
             SocialCloud_DBservice dbs = new SocialCloud_DBservice();
             return dbs.DeleteFromSocialCloud(postId);

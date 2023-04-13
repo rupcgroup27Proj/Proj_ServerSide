@@ -15,7 +15,6 @@ namespace Project_ServerSide.Models.DAL
     {
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -25,8 +24,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // GetStudentPostsLikes  
-        public List<PostsLikes> PostsLikesByStudentId(int studentId)
+        // get student posts likes  
+        //-----------------------------------------------------------------------------------
+        public List<PostsLikes> ReadPostsLikes(int studentId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -67,7 +67,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
         private SqlCommand CreateCommandPostsLikesByStudentId(string spName, SqlConnection con, int studentId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -80,8 +79,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        // InsertPostToStudentPostsLikes  
+        // insert like to post   
+        //-----------------------------------------------------------------------------------
         public bool InsertPostsLikes(int studentId, int postId)
         {
 
@@ -109,7 +108,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
         private SqlCommand CreateCommandInsertPostsLikes(String spName, SqlConnection con, int studentId, int postId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -123,9 +121,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        // DeleteFromPostsLikes  
-        public int DeleteFromPostsLikes(int studentId, int postId)
+        // delete like from post 
+        //-----------------------------------------------------------------------------------
+        public int DeletePostsLikes(int studentId, int postId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -150,7 +148,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
         private SqlCommand CreateCommandDeleteFromPostsLikes(string spName, SqlConnection con, int studentId, int postId)
         {
             SqlCommand cmd = new SqlCommand();

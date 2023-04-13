@@ -14,7 +14,6 @@ namespace Project_ServerSide.Models.DAL
     {
         public SqlConnection connect(String conString)
         {
-            // read the connection string from the configuration file
             IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json").Build();
             string cStr = configuration.GetConnectionString("myProjDB");
@@ -24,115 +23,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // InsertToSocialCloud  
-        public int InsertSocialCloud(SocialCloud socialCloud, string tags)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-
-            dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(tags);
-
-            // Access the array of tag objects using the "Tags" property
-            dynamic tagsJson = parsedJson.Tags;
-
-            // Convert the tag objects to a list of Tag objects
-            List<Tag> tagsList = tagsJson.ToObject<List<Tag>>();
-
-            // Serialize the list of Tag objects back into JSON format
-            string tagsJsonString = JsonConvert.SerializeObject(tagsList);
-
-            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud, tagsJsonString);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            { throw (ex); }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-
-        private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud, string tagsJson)
-        {
-
-            SqlCommand cmd = new SqlCommand(); 
-            cmd.Connection = con;           
-            cmd.CommandText = spName;      
-            cmd.CommandTimeout = 10;      
-            cmd.CommandType = System.Data.CommandType.StoredProcedure; 
-            cmd.Parameters.AddWithValue("@groupId", socialCloud.GroupId);
-            cmd.Parameters.AddWithValue("@studentId", socialCloud.StudentId);
-            cmd.Parameters.AddWithValue("@teacherId", socialCloud.TeacherId);
-            cmd.Parameters.AddWithValue("@guideId", socialCloud.GuideId);
-            cmd.Parameters.AddWithValue("@fileUrl", socialCloud.FileUrl);
-            cmd.Parameters.AddWithValue("@type", socialCloud.Type);
-            cmd.Parameters.AddWithValue("@description", socialCloud.Description);
-            cmd.Parameters.AddWithValue("@tagsJson", tagsJson);
-
-            return cmd;
-        }
-
-
-
-        // DeleteFromSocialCloud 
-        public int DeleteFromSocialCloud(int postId)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            {  throw ex; }
-
-            cmd = CreateCommandDeleteFromSocialCloud("spDeleteFromSocialCloud", con, postId);    
-
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            { throw ex; }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-        }
-
-        private SqlCommand CreateCommandDeleteFromSocialCloud(string spName, SqlConnection con, int postId)
-        {
-
-            SqlCommand cmd = new SqlCommand(); 
-            cmd.Connection = con;            
-            cmd.CommandText = spName;   
-            cmd.CommandTimeout = 10;     
-            cmd.CommandType = CommandType.StoredProcedure; 
-            cmd.Parameters.AddWithValue("@postId", postId);
-            return cmd;
-        }
-
-
-
-        // GetSocialCloud(postId+Tags)
-        public string ReadByGroupIdAndType(int groupId)
+        // get social cloud
+        //-----------------------------------------------------------------------------------
+        public string ReadSocialCloudByGroupId(int groupId)
         {
             SqlConnection con;
             try
@@ -286,6 +179,115 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw; }
         }
+
+
+        // insert to social cloud  
+        //-----------------------------------------------------------------------------------
+        public int InsertSocialCloud(SocialCloud socialCloud, string tags)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+
+            dynamic parsedJson = JsonConvert.DeserializeObject<dynamic>(tags);
+
+            // Access the array of tag objects using the "Tags" property
+            dynamic tagsJson = parsedJson.Tags;
+
+            // Convert the tag objects to a list of Tag objects
+            List<Tag> tagsList = tagsJson.ToObject<List<Tag>>();
+
+            // Serialize the list of Tag objects back into JSON format
+            string tagsJsonString = JsonConvert.SerializeObject(tagsList);
+
+            cmd = CreateCommandInsertSocialCloud("spInsertSocialCloud", con, socialCloud, tagsJsonString);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand CreateCommandInsertSocialCloud(String spName, SqlConnection con, SocialCloud socialCloud, string tagsJson)
+        {
+
+            SqlCommand cmd = new SqlCommand(); 
+            cmd.Connection = con;           
+            cmd.CommandText = spName;      
+            cmd.CommandTimeout = 10;      
+            cmd.CommandType = System.Data.CommandType.StoredProcedure; 
+            cmd.Parameters.AddWithValue("@groupId", socialCloud.GroupId);
+            cmd.Parameters.AddWithValue("@studentId", socialCloud.StudentId);
+            cmd.Parameters.AddWithValue("@teacherId", socialCloud.TeacherId);
+            cmd.Parameters.AddWithValue("@guideId", socialCloud.GuideId);
+            cmd.Parameters.AddWithValue("@fileUrl", socialCloud.FileUrl);
+            cmd.Parameters.AddWithValue("@type", socialCloud.Type);
+            cmd.Parameters.AddWithValue("@description", socialCloud.Description);
+            cmd.Parameters.AddWithValue("@tagsJson", tagsJson);
+
+            return cmd;
+        }
+
+
+        // delete from social cloud 
+        //-----------------------------------------------------------------------------------
+        public int DeleteFromSocialCloud(int postId)
+        {
+
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            {  throw ex; }
+
+            cmd = CreateCommandDeleteFromSocialCloud("spDeleteFromSocialCloud", con, postId);    
+
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            { throw ex; }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+
+        }
+
+        private SqlCommand CreateCommandDeleteFromSocialCloud(string spName, SqlConnection con, int postId)
+        {
+
+            SqlCommand cmd = new SqlCommand(); 
+            cmd.Connection = con;            
+            cmd.CommandText = spName;   
+            cmd.CommandTimeout = 10;     
+            cmd.CommandType = CommandType.StoredProcedure; 
+            cmd.Parameters.AddWithValue("@postId", postId);
+            return cmd;
+        }
+
+
     }
 }
 

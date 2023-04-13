@@ -12,7 +12,7 @@ namespace Project_ServerSide.Controllers
         [HttpGet("studentId/{studentId}")]
         public string Get(int studentId)
         {
-            return FavList.ReadByStudentId(studentId);
+            return FavList.ReadFavListByStudentId(studentId);
         }
 
 
@@ -20,7 +20,7 @@ namespace Project_ServerSide.Controllers
         public bool Post(int studentId, int postId, [FromBody] List<Tag> tags)
         {
             Questionnaire.updateStudentTags(studentId, tags);
-            return FavList.Insert(studentId, postId);
+            return FavList.InsertFav(studentId, postId);
         }
 
 
@@ -28,7 +28,7 @@ namespace Project_ServerSide.Controllers
         public IActionResult Delete(int studentId, int postId, [FromBody] List<Tag> tags)
         {
             FavList.LowerStudentTags(studentId, tags);
-            if (FavList.Delete(studentId, postId) == 1)
+            if (FavList.DeleteFav(studentId, postId) == 1)
                 return Ok(new { message = "Resource deleted successfully" });
             else
                 return NotFound(new { message = "Resource not found" });

@@ -23,25 +23,24 @@ namespace Project_ServerSide.Models
         public List<Tag> Tags { get => tags; set => tags = value; }
         public string Description { get => description; set => description = value; }
 
-        public static string ReadByStudentId(int studentId)
+        public static string ReadFavListByStudentId(int studentId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
-            return dbs.FavListByStudentId(studentId);
+            return dbs.ReadFavListByStudentId(studentId);
         }
 
-        public static bool Insert(int studentId, int postId)
+        public static bool InsertFav(int studentId, int postId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
-            return dbs.InsertFavPost(studentId, postId);
+            return dbs.InsertFav(studentId, postId);
         }
 
-        public static int Delete(int studentId, int postId)
+        public static int DeleteFav(int studentId, int postId)
         {
             FavList_DBservices dbs = new FavList_DBservices();
-            return dbs.DeletePostFromListFav(studentId, postId);
+            return dbs.DeleteFav(studentId, postId);
 
         }
-
         public static void LowerStudentTags(int studentId, List<Tag> tags)
         {
             FavList_DBservices dbs = new FavList_DBservices();

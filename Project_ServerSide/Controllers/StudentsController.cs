@@ -12,26 +12,24 @@ namespace Project_ServerSide.Controllers
         public List<Student> GetGroupStudents(int groupId)
         {
             Student student = new Student();
-            return student.Read(groupId);
+            return student.GetGroupStudents(groupId);
         }
 
 
         [HttpGet("studentId/{studentId}")]
-        public IActionResult Get(int studentId)
+        public IActionResult GetSpecificStudent(int studentId)
         {
             Student student = new Student();
             student.StudentId = studentId;
-            Student res = student.pullSpecificStudent();
+            Student res = student.GetSpecificStudent();
 
             return (res.StudentId == 0) ? NotFound() : Ok(res);
-
         }
-
 
         [HttpPost]
         public bool Post([FromBody] Student student)
         {
-            return student.Insert();
+            return student.InsertStudent();
         }
 
 
@@ -39,15 +37,15 @@ namespace Project_ServerSide.Controllers
         public IActionResult Put(int studentId, [FromBody] Student student)
         {
             student.StudentId = studentId;
-            return (student.Update() == 1) ? Ok(student) : NotFound();
+            return (student.UpdateStudent() == 1) ? Ok(student) : NotFound();
         }
 
 
         [HttpDelete("groupId/{groupId}")]
-        public IActionResult DeleteFromGroupe(int groupId)
+        public IActionResult Delete(int groupId)
         {
             Student s = new Student();
-            int num = s.DeleteFromGroupe(groupId);
+            int num = s.DeleteFromGroup(groupId);
 
             return (num == 1) ? Ok() : NotFound();
         }

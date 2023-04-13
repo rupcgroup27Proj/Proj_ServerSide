@@ -35,8 +35,6 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-
-
         public void InsertNewQuestionnaire(int groupId, JsonObject sq)
         {
             SqlConnection con;

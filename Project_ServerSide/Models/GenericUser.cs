@@ -38,7 +38,6 @@ namespace Project_ServerSide.Models
         public DateTime StartDate { get => startDate; set => startDate = value; }
         public DateTime EndDate { get => endDate; set => endDate = value; }
 
-
         static public GenericUser Login(int id, string password, string type)
         {
             Generic_DBservices dbs = new Generic_DBservices();

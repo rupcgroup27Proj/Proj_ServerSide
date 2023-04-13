@@ -40,10 +40,10 @@ namespace Project_ServerSide.Models
             return dbs.Login(this);
         }
         
-        public bool Insert()
+        public bool InsertTeacher()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
-            return (dbs.Insert(this) == 2) ? true : false;
+            return (dbs.InsertTeacher(this) == 2) ? true : false;
         }
     }
 }
