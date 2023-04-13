@@ -36,12 +36,6 @@ namespace Project_ServerSide.Models
         public string Type { get => type; set => type = value; }
 
 
-        public Student Login()
-        {
-            Students_DBservices dbs = new Students_DBservices();
-            return dbs.Login(this);
-        }
-
         public List<Student> GetGroupStudents(int groupId)
         {
             Students_DBservices dbs = new Students_DBservices();
