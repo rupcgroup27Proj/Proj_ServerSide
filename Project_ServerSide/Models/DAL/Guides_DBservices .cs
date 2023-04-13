@@ -16,67 +16,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //login guide - יש את הgeneric
-        //-----------------------------------------------------------------------------------
-        public Guide Login(Guide guide)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateLoginCommand("spLoginGuides", con, guide);
-
-            Guide u = new Guide();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    u.GuideId = Convert.ToInt32(dataReader["Id"]);
-                    u.Password = dataReader["Password"].ToString();
-                    u.Email = dataReader["Email"].ToString();
-                    u.FirstName = dataReader["Firstname"].ToString();
-                    u.LastName = dataReader["Lastname"].ToString();
-                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
-                    u.PictureUrl = dataReader["PictureUrl"].ToString();
-                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.IsAdmin = Convert.ToBoolean(dataReader["isAdmin"]);
-                    u.Type = "Guide".ToString();
-
-                }
-
-                return u;
-            }
-            catch (Exception ex)
-            { throw; }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-
-        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Guide guide)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", guide.GuideId);
-            cmd.Parameters.AddWithValue("@Password", guide.Password);
-            return cmd;
-        }
-
-
         //insert guide
         //-----------------------------------------------------------------------------------
         public int InsertGuide(Guide guide)

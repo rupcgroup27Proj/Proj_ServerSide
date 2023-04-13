@@ -33,12 +33,6 @@ namespace Project_ServerSide.Models
         public DateTime EndDate { get => endDate; set => endDate = value; }
         public string Type { get => type; set => type = value; }
 
-
-        public Teacher Login()
-        {
-            Teachers_DBservices dbs = new Teachers_DBservices();
-            return dbs.Login(this);
-        }
         
         public bool InsertTeacher()
         {

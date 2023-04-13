@@ -25,63 +25,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //login teacher -  /??????????????להוריד
-        //-----------------------------------------------------------------------------------
-        public Teacher Login(Teacher teacher)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateLoginCommand("spLoginTeachers", con, teacher);
-            Teacher u = new Teacher();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    u.TeacherId = Convert.ToInt32(dataReader["Id"]);
-                    u.Password = dataReader["Password"].ToString();
-                    u.Email = dataReader["Email"].ToString();
-                    u.FirstName = dataReader["Firstname"].ToString();
-                    u.LastName = dataReader["Lastname"].ToString();
-                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
-                    u.PictureUrl = dataReader["PictureUrl"].ToString();
-                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.Type = "Teacher".ToString();
-
-                }
-                return u;
-
-            }
-            catch (Exception ex)
-            { throw; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-
-        private SqlCommand CreateLoginCommand(String spName, SqlConnection con, Teacher teacher)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", teacher.TeacherId);
-            cmd.Parameters.AddWithValue("@Password", teacher.Password);
-            return cmd;
-        }
-
-
         //insert teacher
         //-----------------------------------------------------------------------------------
         public int InsertTeacher(Teacher teacher)
@@ -129,7 +72,5 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@groupId", teacher.GroupId);
             return cmd;
         }
-
-
     }
 }

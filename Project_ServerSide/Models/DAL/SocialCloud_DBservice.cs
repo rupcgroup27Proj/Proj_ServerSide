@@ -287,7 +287,6 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-
     }
 }
 

@@ -36,12 +36,6 @@ namespace Project_ServerSide.Models
         public bool IsAdmin { get => isAdmin; set => isAdmin = value; }
 
 
-        public Guide Login()
-        {
-            Guides_DBservices dbs = new Guides_DBservices();
-            return dbs.Login(this);
-        }
-
         public bool InsertGuide()
         {
             Guides_DBservices dbs = new Guides_DBservices();

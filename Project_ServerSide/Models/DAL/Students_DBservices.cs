@@ -24,64 +24,6 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        //login student -?????????????/להוריד 
-        //-----------------------------------------------------------------------------------
-        public Student Login(Student student)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateLoginCommandSP("spLoginStudent", con, student);
-
-            Student u = new Student();
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    u.StudentId = Convert.ToInt32(dataReader["Id"]);
-                    u.Password = dataReader["Password"].ToString();
-                    u.Email = dataReader["Email"].ToString();
-                    u.FirstName = dataReader["Firstname"].ToString();
-                    u.LastName = dataReader["Lastname"].ToString();
-                    u.Phone = Convert.ToDouble(dataReader["Phone"]);
-                    u.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
-                    u.PictureUrl = dataReader["PictureUrl"].ToString();
-                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    u.Type = "Student".ToString();
-                }
-                return u;
-
-            }
-
-            catch (Exception ex)
-            { throw; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-        }
-
-        private SqlCommand CreateLoginCommandSP(String spName, SqlConnection con, Student student)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", student.StudentId);
-            cmd.Parameters.AddWithValue("@Password", student.Password);
-            return cmd;
-        }
-
 
         //read all students group 
         //-----------------------------------------------------------------------------------
