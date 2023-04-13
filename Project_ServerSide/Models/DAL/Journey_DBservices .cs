@@ -87,7 +87,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //get specific journey's Dates and schoolName  ///////////חסר cs
+        //get specific journey's Dates and schoolName  ///////////חסר קונטרולר
         //-----------------------------------------------------------------------------------
         public object GetJourneyDatesAndSchoolName(int groupId)
         {
@@ -184,6 +184,50 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@schoolName", schoolName);
+            return cmd;
+        }
+
+
+        // update dates to the groups table
+        //-----------------------------------------------------------------------------------
+        public int Update(Journey journey)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+
+            cmd = CreateCommandInsertNewDates("spInsertNewDates", con, journey);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery();
+                return numEffected;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+
+        }
+        private SqlCommand CreateCommandInsertNewDates(String spName, SqlConnection con, Journey journey)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", journey.GroupId);
+            cmd.Parameters.AddWithValue("@startDate", journey.StartDate);
+            cmd.Parameters.AddWithValue("@endDate", journey.EndDate);
             return cmd;
         }
 
