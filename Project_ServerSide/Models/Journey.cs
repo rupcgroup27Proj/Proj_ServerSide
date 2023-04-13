@@ -52,10 +52,10 @@ namespace Project_ServerSide.Models
 
         }
 
-        public int Update()
+        public static int UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
             Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.Update(this);
+            return dbs.UpdateJourneyDates(groupId, startDate, endDate);
         }
 
     }

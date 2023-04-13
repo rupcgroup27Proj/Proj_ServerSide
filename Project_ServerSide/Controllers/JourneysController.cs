@@ -34,19 +34,10 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpPut("groupId/{groupId}")] //////////////////אותו דבר????
-        public IActionResult Put(int groupId, [FromBody] Journey journey)
-        {
-            journey.GroupId = groupId;
-            return (journey.Update() == 1) ? Ok() : NotFound();
-        }
-
-
-        [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")] //////////////////אותו דבר????
+        [HttpPut("groupId/{groupId}/startDate/{startDate}/endDate/{endDate}")] 
         public IActionResult UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {
-            Journey_DBservices dbs = new Journey_DBservices();
-            return (dbs.UpdateJourneyDates(groupId, startDate, endDate) == 1) ? Ok() : NotFound();
+            return (Journey.UpdateJourneyDates(groupId, startDate, endDate) == 1) ? Ok() : NotFound();
         }
     }
 }
