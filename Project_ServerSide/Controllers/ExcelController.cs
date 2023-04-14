@@ -7,7 +7,7 @@ using System.IO;
 using System.Runtime.Versioning;
 
 
-namespace ExcelUpload.Controllers
+namespace Project_ServerSide.Controllers
 {
     [ApiController]
     public class ExcelController : ControllerBase

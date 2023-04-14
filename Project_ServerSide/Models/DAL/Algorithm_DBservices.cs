@@ -14,7 +14,7 @@ using System.Data.Common;
 
 namespace Project_ServerSide.Models.DAL
 {
-    public class Algorithm_DBS
+    public class Algorithm_DBservices
     {
         //________________________________________________________________________
         const int normScalar = 5;  //used for normalizing tagCount between 0 to 5.
