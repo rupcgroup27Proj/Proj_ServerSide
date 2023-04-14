@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Numerics;
-using System.Text.Json;
-using System.Text.RegularExpressions;
+
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -152,8 +143,7 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-        //get specific journey's Dates and schoolName  ///////////חסר cs
+        //get specific journey's Dates and schoolName  
         //-----------------------------------------------------------------------------------
         public object GetJourneyDatesAndSchoolName(int groupId)
         {

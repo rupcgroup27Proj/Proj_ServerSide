@@ -26,7 +26,6 @@ namespace Project_ServerSide.Controllers
         [HttpDelete("studentId/{studentId}/postId/{postId}")]
         public IActionResult Delete(int studentId, int postId)
         {
-            PostsLikes s = new PostsLikes();
             int num = PostsLikes.DeletePostsLikes(studentId, postId);
             if (num == 1)
                 return Ok(new { message = "Resource deleted successfully" });

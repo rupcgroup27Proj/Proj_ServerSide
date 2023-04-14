@@ -18,30 +18,10 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpGet("title/{title}")] ///////למחוק
-        public IActionResult Get(string title)// title is 'embassy'
-        {
-            Phones phones = new Phones();
-            phones.Title = title;
-            Phones res = phones.pullEmbassy();
-
-            return (res.Title == null) ? NotFound() : Ok(res);
-        }
-
-
         [HttpPost]
         public bool Post([FromBody] Phones phones)
         {
             return phones.InsertPhone();
-        }
-
-
-        [HttpPut("id/{id}")] ////////למחוק
-        public IActionResult Put(int id, [FromBody] Phones phones)
-        {
-            phones.Id = id;
-
-            return (phones.UpdatePhone() == 1) ? Ok(phones) : NotFound();
         }
 
 

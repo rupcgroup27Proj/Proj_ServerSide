@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Numerics;
-using System.Collections;
 using Project_ServerSide.Models.Algorithm;
-using System.Data.Common;
+
 
 namespace Project_ServerSide.Models.DAL
 {

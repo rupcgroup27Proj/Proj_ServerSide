@@ -46,20 +46,23 @@ namespace Project_ServerSide.Models
             return dbs.GetJourneyList();
         }
 
-
         public List<Journey> GetUserJourneyList(int userId, string userType)
         {
             Journey_DBservices dbs = new Journey_DBservices();
             return dbs.GetUserJourneyList(userId, userType);
         }
 
+        public static object GetJourneyDatesAndSchoolName(int groupId)
+        {
+            Journey_DBservices dbs = new Journey_DBservices();
+            return dbs.GetJourneyDatesAndSchoolName(groupId);
+        }
 
         public static int InsertSchoolName(string schoolName)
         {
             Journey_DBservices dbs = new Journey_DBservices();
             return dbs.InsertSchoolName(schoolName);
         }
-
 
         public static int UpdateJourneyDates(int groupId, DateTime startDate, DateTime endDate)
         {

@@ -23,6 +23,7 @@ namespace Project_ServerSide.Models
         public List<Tag> Tags { get => tags; set => tags = value; }
         public string Description { get => description; set => description = value; }
 
+
         public static string ReadFavListByStudentId(int studentId)
         {
             FavList_DBservices dbs = new FavList_DBservices();

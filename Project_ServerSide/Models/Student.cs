@@ -42,12 +42,6 @@ namespace Project_ServerSide.Models
             return dbs.GetGroupStudents(groupId);
         }
 
-        public Student GetSpecificStudent()
-        {
-            Students_DBservices dbs = new Students_DBservices();
-            return dbs.GetSpecificStudent(this);
-        }
-
         public bool InsertStudent()
         {
             Students_DBservices dbs = new Students_DBservices();

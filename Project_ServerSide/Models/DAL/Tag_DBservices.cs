@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Text.RegularExpressions;
+
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -62,7 +55,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
         private SqlCommand spGetBuiltInTags(SqlConnection con)
         {
             SqlCommand cmd = new SqlCommand();
@@ -72,6 +64,7 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             return cmd;
         }
+
 
         //read tag list
         //-----------------------------------------------------------------------------------
@@ -114,7 +107,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
         private SqlCommand CreateCommandGetTags(string spName, SqlConnection con, int groupId)
         {
             SqlCommand cmd = new SqlCommand();
