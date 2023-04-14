@@ -1,4 +1,5 @@
 using Microsoft.Extensions.FileProviders;
+using Project_ServerSide.Models.Algorithm;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-//AlgorithmAutoRun.Main(); //for updating the algorithm once a day
+//Algorithm.Main(); //for updating the algorithm once a day
 
 app.Run();
 
