@@ -1,12 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
-using Project_ServerSide.Models.SmartQuestionnaires;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+
 
 namespace Project_ServerSide.Models.DAL
 {

@@ -6,7 +6,7 @@ namespace Project_ServerSide.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SmartRecommandationsController : ControllerBase
+    public class AlgorithmsController : ControllerBase
     {
         //Get a list of TOP 5 recommanded subject to fetch from Wikipedia
         [HttpGet("studentId/{studentId}")]
@@ -17,7 +17,7 @@ namespace Project_ServerSide.Controllers
 
 
         [HttpPut]
-        public void RenAlgorithm()
+        public void RunAlgorithm()
         {
             Algorithm.RunAlgorithm();
         }

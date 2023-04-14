@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
-using Project_ServerSide.Models.SmartQuestionnaires;
+using Project_ServerSide.Models.Questionnaires;
 
 
 namespace Project_ServerSide.Controllers

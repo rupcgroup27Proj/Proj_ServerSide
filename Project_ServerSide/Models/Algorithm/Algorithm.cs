@@ -49,7 +49,7 @@ namespace Project_ServerSide.Models.Algorithm
             int studentCount = preferences.GetLength(0);
             int tagCount = (preferences.GetLength(1));
 
-            Algorithm_DBS a_dbs = new Algorithm_DBS();
+            Algorithm_DBservices a_dbs = new Algorithm_DBservices();
             List<int> studentsIds = a_dbs.GetStudentsIds();
             List<int> tagsIds = a_dbs.GetTagsIds();
 
@@ -79,7 +79,7 @@ namespace Project_ServerSide.Models.Algorithm
 
         static public double[,] GetPreferences()
         {
-            Algorithm_DBS a_dbs = new Algorithm_DBS();
+            Algorithm_DBservices a_dbs = new Algorithm_DBservices();
             return a_dbs.GetPreferences();
         }
 
@@ -133,7 +133,7 @@ namespace Project_ServerSide.Models.Algorithm
 
         static double[] Predict(double[,] preferences, double[,] similarity, int student)
         {
-            Algorithm_DBS dbs = new Algorithm_DBS();
+            Algorithm_DBservices dbs = new Algorithm_DBservices();
             List<int> studentsIds = dbs.GetStudentsIds();
 
             int studentCount = preferences.GetLength(0);
@@ -200,7 +200,7 @@ namespace Project_ServerSide.Models.Algorithm
 
         static public List<string> GetStudentRecommandations(int studentId)
         {
-            Algorithm_DBS a_dbs = new Algorithm_DBS();
+            Algorithm_DBservices a_dbs = new Algorithm_DBservices();
             return a_dbs.GetStudentRecommandations(studentId);
         }
     }

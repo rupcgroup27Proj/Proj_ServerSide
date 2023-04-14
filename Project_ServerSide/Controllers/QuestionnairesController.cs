@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 using Project_ServerSide.Models.DAL;
-using Project_ServerSide.Models.SmartQuestionnaires;
+using Project_ServerSide.Models.Questionnaires;
 using System.Text.Json.Nodes;
 
 namespace Project_ServerSide.Controllers
@@ -10,20 +10,20 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class QuestionnairesController : ControllerBase
     {
+       
         [HttpGet("groupId/{groupId}")]
         public IActionResult GetAllQuestionnaires(int groupId)
         {
-            Questionnaire_DBservices dbs = new Questionnaire_DBservices();
-            return Ok(dbs.GetAllQuestionnaires(groupId));
+           return Ok( Questionnaire.GetAllQuestionnaires(groupId));
         }
 
 
         [HttpPost("groupId/{groupId}")]
-        public void Post(int groupId, [FromBody] JsonObject questionnaire) 
+        public void Post(int groupId, [FromBody] JsonObject questionnaire)
         {
-            Questionnaire_DBservices dbs = new Questionnaire_DBservices();
-            dbs.InsertNewQuestionnaire(groupId, questionnaire);
+            Questionnaire.InsertNewQuestionnaire(groupId, questionnaire);
         }
+
 
 
         [HttpPut("studentId/{studentId}")]
@@ -36,8 +36,7 @@ namespace Project_ServerSide.Controllers
         [HttpDelete("questionnaireId/{questionnaireId}")]
         public void DeleteQuestionnaire(int questionnaireId)
         {
-            Questionnaire_DBservices dbs = new Questionnaire_DBservices();
-            dbs.DeleteQuestionnaire(questionnaireId);
+            Questionnaire.DeleteQuestionnaire(questionnaireId);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Project_ServerSide.Models.SmartQuestionnaires
+﻿namespace Project_ServerSide.Models.Questionnaires
 {
     public class Question
     {

@@ -3,28 +3,13 @@ using System.Data.SqlClient;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Newtonsoft.Json;
-using Project_ServerSide.Models.SmartQuestionnaires;
+using Project_ServerSide.Models.Questionnaires;
 
 
 namespace Project_ServerSide.Models.DAL
 {
     public class Questionnaire_DBservices
     {
-        private class JSONQuestionnaire
-        {
-            string id;
-            string title;
-            string description;
-            List<Tag> tags;
-            List<Question> questions;
-
-            public string Id { get => id; set => id = value; }
-            public string Title { get => title; set => title = value; }
-            public string Description { get => description; set => description = value; }
-            public List<Tag> Tags { get => tags; set => tags = value; }
-            public List<Question> Questions { get => questions; set => questions = value; }
-        }
-
         public SqlConnection connect(String conString)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -35,47 +20,9 @@ namespace Project_ServerSide.Models.DAL
             return con;
         }
 
-        public void InsertNewQuestionnaire(int groupId, JsonObject sq)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
 
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = spPostQuestionnare(con, groupId, sq);
-
-            try
-            {cmd.ExecuteNonQuery();}
-
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-
-        private SqlCommand spPostQuestionnare(SqlConnection con, int groupId, JsonObject json) 
-        {
-            string jsonString = System.Text.Json.JsonSerializer.Serialize(json);
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = "InsertQuestionnaire";
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@groupId", groupId);
-            cmd.Parameters.AddWithValue("@jsonData", jsonString);
-
-            return cmd;
-        }
-
-
-
+        // GetAllQuestionnaires
+        //-----------------------------------------------------------------------------------
         public string GetAllQuestionnaires(int groupId)
         {
             SqlConnection con;
@@ -296,7 +243,50 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+        // InsertNewQuestionnaire
+        //-----------------------------------------------------------------------------------
+        public void InsertNewQuestionnaire(int groupId, JsonObject sq)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
 
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spPostQuestionnare(con, groupId, sq);
+
+            try
+            {cmd.ExecuteNonQuery();}
+
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spPostQuestionnare(SqlConnection con, int groupId, JsonObject json) 
+        {
+            string jsonString = System.Text.Json.JsonSerializer.Serialize(json);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = "InsertQuestionnaire";
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+            cmd.Parameters.AddWithValue("@jsonData", jsonString);
+
+            return cmd;
+        }
+
+
+        // updateStudentTags
+        //-----------------------------------------------------------------------------------
         public void updateStudentTags(int studentId, List<Tag> tags)
         {
             SqlConnection con;
@@ -334,7 +324,8 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
+        // DeleteQuestionnaire
+        //-----------------------------------------------------------------------------------
         public void DeleteQuestionnaire(int questionnaireId)
         {
             SqlConnection con;
