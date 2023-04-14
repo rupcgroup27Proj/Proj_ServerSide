@@ -16,7 +16,7 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpGet("studentId/{studentId}")]
+        [HttpGet("studentId/{studentId}")] ///////למחוק 
         public IActionResult GetSpecificStudent(int studentId)
         {
             Student student = new Student();
@@ -41,11 +41,11 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpDelete("groupId/{groupId}")]
-        public IActionResult Delete(int groupId)
+        [HttpDelete("studentId/{studentId}")]
+        public IActionResult Delete(int studentId)
         {
             Student s = new Student();
-            int num = s.DeleteFromGroup(groupId);
+            int num = s.DeleteFromGroup(studentId);
 
             return (num == 1) ? Ok() : NotFound();
         }

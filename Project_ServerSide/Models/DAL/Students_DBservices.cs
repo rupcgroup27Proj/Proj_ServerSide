@@ -257,9 +257,9 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        //delete what???????????
+        //delete student from group
         //-----------------------------------------------------------------------------------
-        public int DeleteFromGroup(int groupId)
+        public int DeleteFromGroup(int studentId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -270,11 +270,11 @@ namespace Project_ServerSide.Models.DAL
             { throw (ex); }
 
 
-            cmd = CreateCommandWithStoredProcedureDelete1("spDeleteStudentFromGroups", con, groupId);
+            cmd = CreateCommandWithStoredProcedureDelete1("spDeleteStudentFromGroups", con, studentId);
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                int numEffected = cmd.ExecuteNonQuery(); 
                 return numEffected;
             }
             catch (Exception ex)
@@ -286,14 +286,14 @@ namespace Project_ServerSide.Models.DAL
             }
         }
 
-        private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int groupId)
+        private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int studentId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@groupId", groupId);
+            cmd.Parameters.AddWithValue("@studentId", studentId);
             return cmd;
         }
     }

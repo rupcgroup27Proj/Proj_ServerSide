@@ -18,7 +18,7 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpGet("title/{title}")]
+        [HttpGet("title/{title}")] ///////למחוק
         public IActionResult Get(string title)// title is 'embassy'
         {
             Phones phones = new Phones();
@@ -36,7 +36,7 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpPut("id/{id}")]
+        [HttpPut("id/{id}")] ////////למחוק
         public IActionResult Put(int id, [FromBody] Phones phones)
         {
             phones.Id = id;

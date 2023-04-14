@@ -88,9 +88,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-
-
-
         //get the journeys of the current user (teacher or guide)
         //-----------------------------------------------------------------------------------
         public List<Journey> GetUserJourneyList(int userId, string userType)
