@@ -34,10 +34,10 @@ namespace Project_ServerSide.Models
         public string Type { get => type; set => type = value; }
 
         
-        public bool InsertTeacher()
+        public int InsertTeacher()
         {
             Teachers_DBservices dbs = new Teachers_DBservices();
-            return (dbs.InsertTeacher(this) == 2) ? true : false;
+            return dbs.InsertTeacher(this);
         }
     }
 }

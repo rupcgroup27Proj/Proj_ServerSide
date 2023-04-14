@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Project_ServerSide.Models;
 using System.Numerics;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -85,6 +86,74 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             return cmd;
         }
+
+
+
+
+
+        //get the journeys of the current user (teacher or guide)
+        //-----------------------------------------------------------------------------------
+        public List<Journey> GetUserJourneyList(int userId, string userType)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = CreateReadUserJourneysCommand("spReadUserJourney", con, userId, userType);
+
+            List<Journey> JourneyList = new List<Journey>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    Journey u = new Journey();
+                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    u.SchoolName = dataReader["schoolName"].ToString();
+                    u.TeacherFirstName = dataReader["teacherFirstName"].ToString();
+                    u.TeacherLastName = dataReader["teacherLastName"].ToString();
+                    u.TeacherId = Convert.ToInt32(dataReader["teacherId"]);
+                    u.TeacherEmail = dataReader["teacherEmail"].ToString();
+                    u.PhoneTeacher = Convert.ToDouble(dataReader["teacherPhone"]);
+                    u.GuideFirstName = dataReader["guideFirstName"].ToString();
+                    u.GuideLastName = dataReader["guideLastName"].ToString();
+                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
+                    u.GuideEmail = dataReader["guideEmail"].ToString();
+                    u.PhoneGuide = Convert.ToDouble(dataReader["guidePhone"]);
+                    u.StartDate = Convert.ToDateTime(dataReader["StartDate"]);
+                    u.EndDate = Convert.ToDateTime(dataReader["EndDate"]);
+                    JourneyList.Add(u);
+                }
+
+                return JourneyList;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+        private SqlCommand CreateReadUserJourneysCommand(String spName, SqlConnection con, int userId, string userType)
+        {
+
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@userId", userId);
+            cmd.Parameters.AddWithValue("@userType", userType);
+            return cmd;
+        }
+
 
 
         //get specific journey's Dates and schoolName  ///////////חסר cs

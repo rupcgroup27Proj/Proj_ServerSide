@@ -14,10 +14,16 @@ namespace Project_ServerSide.Controllers
         {
             Journey journey = new Journey();
             List<Journey> JourneyList = journey.GetJourneyList();
-
             return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system ");
         }
 
+        [HttpGet("GetUserJourneys/userId/{userId}/userType/{userType}")]
+        public IActionResult GetUserJourneyList(int userId, string userType)
+        {
+            Journey journey = new Journey();
+            List<Journey> JourneyList = journey.GetUserJourneyList(userId, userType);
+            return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system");
+        }
 
         [HttpGet("GetJourneyDatesAndSchoolName/groupId/{groupId}")]
         public object GetJourneyDatesAndSchoolName(int groupId)

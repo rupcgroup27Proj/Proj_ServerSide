@@ -9,9 +9,15 @@ namespace Project_ServerSide.Controllers
     public class GuidesController : ControllerBase
     {
         [HttpPost]
-        public bool Post([FromBody] Guide guide)
+        public IActionResult Post([FromBody] Guide guide)
         {
-            return guide.InsertGuide();
+            int res = guide.InsertGuide();
+            if (res == 2)
+                return Ok(2);
+            if (res == 1)
+                return Ok(1);
+            else 
+                return StatusCode(500, "Could not associate a guide to the delegation");
         }
     }
 }

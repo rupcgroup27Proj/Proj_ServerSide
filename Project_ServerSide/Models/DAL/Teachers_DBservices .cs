@@ -50,9 +50,7 @@ namespace Project_ServerSide.Models.DAL
             {
                 if (con != null)
                     con.Close();
-
             }
-
         }
 
         private SqlCommand CreateInsertTeacherstCommand(String spName, SqlConnection con, Teacher teacher)

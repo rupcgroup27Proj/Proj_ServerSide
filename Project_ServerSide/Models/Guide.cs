@@ -36,10 +36,10 @@ namespace Project_ServerSide.Models
         public bool IsAdmin { get => isAdmin; set => isAdmin = value; }
 
 
-        public bool InsertGuide()
+        public int InsertGuide()
         {
             Guides_DBservices dbs = new Guides_DBservices();
-            return (dbs.InsertGuide(this) == 2) ? true : false;
+            return dbs.InsertGuide(this);
         }
     }
 }
