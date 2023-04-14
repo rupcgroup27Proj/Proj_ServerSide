@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
-using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Numerics;
+﻿using System.Data.SqlClient;
+
 
 namespace Project_ServerSide.Models.DAL
 {
     public class Teachers_DBservices
     {
-
         public SqlConnection connect(String conString)
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()

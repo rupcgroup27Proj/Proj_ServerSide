@@ -25,7 +25,6 @@ namespace Project_ServerSide.Controllers
         [HttpDelete("commentId/{commentId}")]
         public IActionResult Delete(int commentId)
         {
-            PostsComments s = new PostsComments();
             int num = PostsComments.DeletePostsComments(commentId);
             if (num == 1)
                 return Ok(new { message = "Resource deleted successfully" });

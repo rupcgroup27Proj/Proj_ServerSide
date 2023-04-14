@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Text;
-using System.Xml.Linq;
-using Project_ServerSide.Models;
-using System.Numerics;
-using System.Text.RegularExpressions;
+
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -73,7 +65,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
         private SqlCommand CreateReadStudentsCommandSP(String spName, SqlConnection con, int groupId)
         {
             SqlCommand cmd = new SqlCommand();
@@ -82,66 +73,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@groupId", groupId);
-            return cmd;
-        }
-
-
-        // get Specific Student 
-        //-----------------------------------------------------------------------------------
-        public Student GetSpecificStudent(Student student)
-        {
-
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreatePullCommandSP("spPullStudentById", con, student);
-
-            Student Y = new Student();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    Y.StudentId = Convert.ToInt32(dataReader["Id"]);
-                    Y.Password = dataReader["Password"].ToString();
-                    Y.Email = dataReader["Email"].ToString();
-                    Y.FirstName = dataReader["Firstname"].ToString();
-                    Y.LastName = dataReader["Lastname"].ToString();
-                    Y.Phone = Convert.ToDouble(dataReader["Phone"]);
-                    Y.ParentPhone = Convert.ToDouble(dataReader["ParentPhone"]);
-                    Y.PictureUrl = dataReader["PictureUrl"].ToString();
-                    Y.GroupId = Convert.ToInt32(dataReader["groupId"]);
-                    Y.Type = "Student".ToString();
-                }
-                return Y;
-
-            }
-            catch (Exception ex)
-            { throw; }
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-
-        }
-
-        private SqlCommand CreatePullCommandSP(String spName, SqlConnection con, Student student)
-        {
-
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Id", student.StudentId);
             return cmd;
         }
 
@@ -183,7 +114,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
         private SqlCommand CreateInsertStudentCommandSP(String spName, SqlConnection con, Student student)
         {
 
@@ -241,7 +171,6 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-
         private SqlCommand CreateCommandWithStoredProcedure(String spName, SqlConnection con, Student student)
         {
             SqlCommand cmd = new SqlCommand();
@@ -285,7 +214,6 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-
         private SqlCommand CreateCommandWithStoredProcedureDelete1(String spName, SqlConnection con, int studentId)
         {
             SqlCommand cmd = new SqlCommand();

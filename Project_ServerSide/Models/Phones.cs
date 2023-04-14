@@ -26,22 +26,10 @@ namespace Project_ServerSide.Models
             return dbs.ReadPhoneList(groupId);
         }
 
-        public Phones pullEmbassy()
-        {
-            Phones_DBservices dbs = new Phones_DBservices();
-            return dbs.pullEmbassy(this);
-        }
-
         public bool InsertPhone()
         {
             Phones_DBservices dbs = new Phones_DBservices();
             return (dbs.InsertPhone(this) == 1) ? true : false;
-        }
-
-        public int UpdatePhone()
-        {
-            Phones_DBservices dbs = new Phones_DBservices();
-            return dbs.UpdatePhone(this);
         }
 
         public int DeletePhone(int id)

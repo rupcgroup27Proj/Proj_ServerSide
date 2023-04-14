@@ -16,16 +16,6 @@ namespace Project_ServerSide.Controllers
         }
 
 
-        [HttpGet("studentId/{studentId}")] ///////למחוק 
-        public IActionResult GetSpecificStudent(int studentId)
-        {
-            Student student = new Student();
-            student.StudentId = studentId;
-            Student res = student.GetSpecificStudent();
-
-            return (res.StudentId == 0) ? NotFound() : Ok(res);
-        }
-
         [HttpPost]
         public bool Post([FromBody] Student student)
         {

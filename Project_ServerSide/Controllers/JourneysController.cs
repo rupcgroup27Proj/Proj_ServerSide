@@ -17,6 +17,7 @@ namespace Project_ServerSide.Controllers
             return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system ");
         }
 
+
         [HttpGet("GetUserJourneys/userId/{userId}/userType/{userType}")]
         public IActionResult GetUserJourneyList(int userId, string userType)
         {
@@ -25,11 +26,11 @@ namespace Project_ServerSide.Controllers
             return (JourneyList.Count > 0) ? Ok(JourneyList) : NotFound("No Journey on the system");
         }
 
+
         [HttpGet("GetJourneyDatesAndSchoolName/groupId/{groupId}")]
         public object GetJourneyDatesAndSchoolName(int groupId)
         {
-            Journey_DBservices dbs = new Journey_DBservices();
-            return dbs.GetJourneyDatesAndSchoolName(groupId);
+            return Journey.GetJourneyDatesAndSchoolName(groupId);
         }
 
     

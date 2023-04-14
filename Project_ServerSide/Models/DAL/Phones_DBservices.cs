@@ -77,56 +77,6 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
-        // get embassy of Israel
-        //-----------------------------------------------------------------------------------
-        public Phones pullEmbassy(Phones phones)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateCommandPullEmbassy("sppullEmbassy", con, phones);
-
-            Phones X = new Phones();
-
-            try
-            {
-                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-                while (dataReader.Read())
-                {
-                    X.Title = dataReader["title"].ToString();
-                    X.Phone = dataReader["phone"].ToString();
-                    X.Notes = dataReader["notes"].ToString();
-                }
-                return X;
-
-            }
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-        private SqlCommand CreateCommandPullEmbassy(String spName, SqlConnection con, Phones phones)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@title", phones.Title);
-            return cmd;
-        }
-
-
         //insert phone
         //-----------------------------------------------------------------------------------
         public int InsertPhone(Phones phones)
@@ -166,50 +116,6 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@phone", phones.Phone);
             cmd.Parameters.AddWithValue("@title", phones.Title);
             cmd.Parameters.AddWithValue("@notes", phones.Notes);
-            cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
-            return cmd;
-        }
-
-
-        //update phone
-        //-----------------------------------------------------------------------------------
-        public int UpdatePhone(Phones phones)
-        {
-            SqlConnection con;
-            SqlCommand cmd;
-
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw (ex); }
-
-            cmd = CreateCommandUpdatePhone("spUpdatePhone", con, phones);
-
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            { throw (ex); }
-
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-        private SqlCommand CreateCommandUpdatePhone(String spName, SqlConnection con, Phones phones)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@phone", phones.Phone);
-            cmd.Parameters.AddWithValue("@title", phones.Title);
-            cmd.Parameters.AddWithValue("@notes", phones.Notes);
-            cmd.Parameters.AddWithValue("@id", phones.Id);
             cmd.Parameters.AddWithValue("@groupId", phones.GroupId);
             return cmd;
         }
