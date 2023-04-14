@@ -60,10 +60,10 @@ namespace Project_ServerSide.Models
             return dbs.UpdateStudent(this);
         }
 
-        public int DeleteFromGroup(int groupId)
+        public int DeleteFromGroup(int studentId)
         {
             Students_DBservices dbs = new Students_DBservices();
-            return dbs.DeleteFromGroup(groupId);
+            return dbs.DeleteFromGroup(studentId);
         }
     }
 }
