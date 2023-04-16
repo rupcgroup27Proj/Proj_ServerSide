@@ -12,10 +12,10 @@ namespace Project_ServerSide.Models
         public int PostId { get => postId; set => postId = value; }
 
 
-        public static List<PostsLikes> ReadPostsLikes(int studentId)
+        public static List<PostsLikes> ReadPostsLikes(int groupId)
         {
             PostsLikes_DBservices dbs = new PostsLikes_DBservices();
-            return dbs.ReadPostsLikes(studentId);
+            return dbs.ReadPostsLikes(groupId);
         }
 
         public static bool InsertPostsLikes(int studentId, int postId)

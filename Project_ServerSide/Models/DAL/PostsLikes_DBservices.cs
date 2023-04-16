@@ -20,7 +20,7 @@ namespace Project_ServerSide.Models.DAL
 
         // get student posts likes  
         //-----------------------------------------------------------------------------------
-        public List<PostsLikes> ReadPostsLikes(int studentId)
+        public List<PostsLikes> ReadPostsLikes(int groupId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -30,7 +30,7 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw ex; }
 
-            cmd = CreateCommandPostsLikesByStudentId("spReadPostsLikesByStudentId", con, studentId);// create the command
+            cmd = CreateCommandPostsLikesByStudentId("spReadPostsLikesByGroupId", con, groupId);// create the command
 
             List<PostsLikes> tempList = new List<PostsLikes>();
 
@@ -61,14 +61,14 @@ namespace Project_ServerSide.Models.DAL
             }
 
         }
-        private SqlCommand CreateCommandPostsLikesByStudentId(string spName, SqlConnection con, int studentId)
+        private SqlCommand CreateCommandPostsLikesByStudentId(string spName, SqlConnection con, int groupId)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@groupId", groupId);
             return cmd;
         }
 

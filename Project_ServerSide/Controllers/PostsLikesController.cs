@@ -9,10 +9,10 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class PostsLikesController : ControllerBase
     {
-        [HttpGet("studentId/{studentId}")]
-        public List<PostsLikes> Get(int studentId)
+        [HttpGet("groupId/{groupId}")]
+        public List<PostsLikes> Get(int groupId)
         {
-            return PostsLikes.ReadPostsLikes(studentId);
+            return PostsLikes.ReadPostsLikes(groupId);
         }
 
 
