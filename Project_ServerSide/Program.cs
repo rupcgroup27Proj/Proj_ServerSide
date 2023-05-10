@@ -20,10 +20,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), @"uploadedFiles")),
+    RequestPath = new PathString("/Images")
+});
+
+
+app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
 //Algorithm.Main(); //for updating the algorithm once a day
 
 app.Run();
-
-
 
 

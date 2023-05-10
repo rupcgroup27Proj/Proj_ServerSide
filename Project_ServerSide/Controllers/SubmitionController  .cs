@@ -8,14 +8,14 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class SubmitionController : ControllerBase
     {
-        //[HttpGet("groupId/{groupId}")]
-        //public IActionResult Get(int groupId)
-        //{
-        //    Phones phones = new Phones();
-        //    List<Phones> PhonesList = phones.ReadPhoneList(groupId);
+        [HttpGet("taskId/{taskId}")]
+        public IActionResult Get(int taskId)
+        {
+            Submittion submittion = new Submittion();
+            List<Submittion> SubList = submittion.ReadSubList(taskId);
 
-        //    return (PhonesList.Count > 0) ? Ok(PhonesList) : NotFound("No Phones on the system");
-        //}
+            return Ok(SubList);
+        }
 
 
 

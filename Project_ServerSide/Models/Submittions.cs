@@ -10,6 +10,8 @@ namespace Project_ServerSide.Models
     {
 
         int id;
+        string firstName;
+        string lastName;
         string fileURL;
         string descriptionStu;
         DateTime submittedAt;
@@ -18,6 +20,8 @@ namespace Project_ServerSide.Models
         int submissionId;
 
         public int Id { get => id; set => id = value; }
+        public string FirstName { get => firstName; set => firstName = value; }
+        public string LastName { get => lastName; set => lastName = value; }
         public string FileURL { get => fileURL; set => fileURL = value; }
         public string DescriptionStu { get => descriptionStu; set => descriptionStu = value; }
         public DateTime SubmittedAt { get => submittedAt; set => submittedAt = value; }
@@ -28,11 +32,11 @@ namespace Project_ServerSide.Models
 
 
 
-        //public List<Phones> ReadPhoneList(int groupId)
-        //{
-        //    Phones_DBservices dbs = new Phones_DBservices();
-        //    return dbs.ReadPhoneList(groupId);
-        //}
+        public List<Submittion> ReadSubList(int taskId)
+        {
+            Tasks_DBservices dbs = new Tasks_DBservices();
+            return dbs.ReadSubList(taskId);
+        }
 
 
         public bool SubmitTaskByStudent()
