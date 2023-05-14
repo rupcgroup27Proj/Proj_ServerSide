@@ -45,7 +45,7 @@ namespace Project_ServerSide.Models
         public bool InsertStudent()
         {
             Students_DBservices dbs = new Students_DBservices();
-            return (dbs.InsertStudent(this) == 2) ? true : false;
+            return (dbs.InsertStudent(this) == 2 || dbs.InsertStudent(this) == 1) ? true : false;
         }
   
         public int UpdateStudent()
