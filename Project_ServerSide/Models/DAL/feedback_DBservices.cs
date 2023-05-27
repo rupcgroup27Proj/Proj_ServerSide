@@ -20,7 +20,7 @@ namespace Project_ServerSide.Models.DAL
 
         //get all feedback
         //-----------------------------------------------------------------------------------
-        public List<Feedback> GetFeedbackList()
+        public List<Feedback> GetFeedbackList(int groupId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -30,7 +30,7 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw (ex); }
 
-            cmd = CreateReadCommand("spReadFeedback", con);
+            cmd = CreateReadCommand("spReadFeedback", con, groupId);
 
             List<Feedback> feedback = new List<Feedback>();
 
@@ -41,11 +41,8 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     Feedback u = new Feedback();
-                    u.FeedbackId = Convert.ToInt32(dataReader["feedbackId"]);
-                    u.ReplierId = Convert.ToInt32(dataReader["replierId"]);
-                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+
                     u.FeedbackText = dataReader["feedbackText"].ToString();
-                    u.GuideId = Convert.ToInt32(dataReader["guideId"]);
 
                     feedback.Add(u);
                 }
@@ -60,7 +57,7 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-        private SqlCommand CreateReadCommand(String spName, SqlConnection con)
+        private SqlCommand CreateReadCommand(String spName, SqlConnection con, int groupId)
         {
 
             SqlCommand cmd = new SqlCommand();
@@ -68,6 +65,8 @@ namespace Project_ServerSide.Models.DAL
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+
             return cmd;
         }
 

@@ -11,8 +11,6 @@ namespace Project_ServerSide.Models
         string feedbackText;
         int replierId;
         int groupId;
-
-        List<Feedback> feedback = new List<Feedback>();
   
 
         public int GuideId { get => guideId; set => guideId = value; }
@@ -22,16 +20,13 @@ namespace Project_ServerSide.Models
 
 
 
-
-
-
-        public List<Feedback> GetFeedbackList()
+        public List<Feedback> GetFeedbackList(int groupId)
         {
             feedback_DBservices dbs = new feedback_DBservices();
-            return dbs.GetFeedbackList();
+            return dbs.GetFeedbackList(groupId);
         }
 
-        public static bool Insert()
+        public bool Insert()
         {
             feedback_DBservices dbs = new feedback_DBservices();
             return (dbs.Insert(this) == 1) ? true : false;
