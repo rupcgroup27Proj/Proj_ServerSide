@@ -8,6 +8,7 @@ namespace Project_ServerSide.Controllers
     [ApiController]
     public class TasksController : ControllerBase
     {
+
         [HttpGet("groupId/{groupId}")]
         public IActionResult Get(int groupId)
         {
@@ -24,14 +25,5 @@ namespace Project_ServerSide.Controllers
             return tasks.InsertTasksbyTeacher();
         }
 
-
-
-        //[HttpDelete("id/{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    Phones phones = new Phones();
-
-        //    return (phones.DeletePhone(id) > 0) ? Ok("Success") : NotFound("Delete failed");
-        //}
     }
 }

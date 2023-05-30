@@ -15,9 +15,7 @@ namespace Project_ServerSide.Controllers
             List<Submittion> SubList = submittion.ReadSubList(taskId);
 
             return Ok(SubList);
-            //
         }
-
 
 
         [HttpPost]
