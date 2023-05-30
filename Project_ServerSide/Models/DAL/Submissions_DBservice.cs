@@ -41,11 +41,12 @@ namespace Project_ServerSide.Models.DAL
                     Submission u = new Submission();
                     u.FirstName = dataReader["firstName"].ToString();
                     u.LastName = dataReader["lastName"].ToString();
-                    u.Id = Convert.ToInt32(dataReader["id"]);
+                    u.Id = Convert.ToInt32(dataReader["studentId"]);
                     u.Description = dataReader["description"].ToString();
                     u.FileURL = dataReader["fileUrl"].ToString();
                     u.TaskId = Convert.ToInt32(dataReader["taskId"]);
                     u.SubmittedAt = Convert.ToDateTime(dataReader["submittedAt"]);
+                    u.SubmissionId = Convert.ToInt32(dataReader["submissionId"]);
 
                     SubList.Add(u);
 
