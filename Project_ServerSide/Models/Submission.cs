@@ -1,9 +1,8 @@
 ﻿using Project_ServerSide.Models.DAL;
 
-
 namespace Project_ServerSide.Models
 {
-    public class Submittion
+    public class Submission
     {
 
         int id;
@@ -27,27 +26,27 @@ namespace Project_ServerSide.Models
         public int SubmissionId { get => submissionId; set => submissionId = value; }
 
 
-        public List<Submittion> ReadSubList(int taskId)
+        public static List<Submission> ReadSubList(int taskId)
         {
-            Submittions_DBservices dbs = new Submittions_DBservices();
+            Submissions_DBservice dbs = new Submissions_DBservice();
             return dbs.ReadSubList(taskId);
         }
 
         public bool SubmitTaskByStudent()
         {
-            Submittions_DBservices dbs = new Submittions_DBservices();
+            Submissions_DBservice dbs = new Submissions_DBservice();
             return (dbs.SubmitTaskByStudent(this) == 2) ? true : false;
         }
 
         public int UpdateSubmittion()
         {
-            Submittions_DBservices dbs = new Submittions_DBservices();
+            Submissions_DBservice dbs = new Submissions_DBservice();
             return dbs.UpdateSubmittion(this);
         }
 
         public int DeleteSubmittion(int submissionId)
         {
-            Submittions_DBservices dbs = new Submittions_DBservices();
+            Submissions_DBservice dbs = new Submissions_DBservice();
             return dbs.DeleteSubmittion(submissionId);
         }
     }

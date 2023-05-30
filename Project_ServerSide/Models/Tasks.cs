@@ -5,6 +5,7 @@ namespace Project_ServerSide.Models
 {
     public class Tasks
     {
+        int taskId;
         int groupId;
         string name;
         string description;
@@ -12,6 +13,7 @@ namespace Project_ServerSide.Models
         DateTime due;
         string fileURL;
 
+        public int TaskId { get => taskId; set => taskId = value; }
         public int GroupId { get => groupId; set => groupId = value; }
         public string Name { get => name; set => name = value; }
         public string Description { get => description; set => description = value; }

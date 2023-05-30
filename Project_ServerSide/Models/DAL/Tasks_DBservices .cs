@@ -38,6 +38,7 @@ namespace Project_ServerSide.Models.DAL
                 while (dataReader.Read())
                 {
                     Tasks u = new Tasks();
+                    u.TaskId = Convert.ToInt32(dataReader["taskID"]);
                     u.Name = dataReader["name"].ToString();
                     u.Description = dataReader["description"].ToString();
                     u.FileURL = dataReader["fileUrl"].ToString();

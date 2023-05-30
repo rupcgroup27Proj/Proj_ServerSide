@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Project_ServerSide.Models.DAL
 {
-    public class Submittions_DBservices
+    public class Submissions_DBservice
     {
         public SqlConnection connect(String conString)
         {
@@ -18,7 +18,7 @@ namespace Project_ServerSide.Models.DAL
 
         //get which student submit task 
         //-----------------------------------------------------------------------------------
-        public List<Submittion> ReadSubList(int taskId)
+        public List<Submission> ReadSubList(int taskId)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -30,7 +30,7 @@ namespace Project_ServerSide.Models.DAL
 
             cmd = CreateReadsubCommand("spReadWhoDidTask", con, taskId);
 
-            List<Submittion> SubList = new List<Submittion>();
+            List<Submission> SubList = new List<Submission>();
 
             try
             {
@@ -38,7 +38,7 @@ namespace Project_ServerSide.Models.DAL
 
                 while (dataReader.Read())
                 {
-                    Submittion u = new Submittion();
+                    Submission u = new Submission();
                     u.FirstName = dataReader["firstName"].ToString();
                     u.LastName = dataReader["lastName"].ToString();
                     u.Id = Convert.ToInt32(dataReader["id"]);
@@ -46,7 +46,6 @@ namespace Project_ServerSide.Models.DAL
                     u.FileURL = dataReader["fileUrl"].ToString();
                     u.TaskId = Convert.ToInt32(dataReader["taskId"]);
                     u.SubmittedAt = Convert.ToDateTime(dataReader["submittedAt"]);
-
 
                     SubList.Add(u);
 
@@ -76,7 +75,7 @@ namespace Project_ServerSide.Models.DAL
 
         //submit Tasks by Student
         //-----------------------------------------------------------------------------------
-        public int SubmitTaskByStudent(Submittion submittion)
+        public int SubmitTaskByStudent(Submission Submission)
         {
 
             SqlConnection con;
@@ -87,7 +86,7 @@ namespace Project_ServerSide.Models.DAL
             catch (Exception ex)
             { throw ex; }
 
-            cmd = CreateSubmitTasksCommand("spSubmitByStudent", con, submittion);
+            cmd = CreateSubmitTasksCommand("spSubmitByStudent", con, Submission);
 
             try
             {
@@ -103,18 +102,18 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-        private SqlCommand CreateSubmitTasksCommand(String spName, SqlConnection con, Submittion submittion)
+        private SqlCommand CreateSubmitTasksCommand(String spName, SqlConnection con, Submission Submission)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@id", submittion.Id);
-            cmd.Parameters.AddWithValue("@taskId", submittion.TaskId);
-            cmd.Parameters.AddWithValue("@description", submittion.Description);
-            cmd.Parameters.AddWithValue("@submittedAt", submittion.SubmittedAt);
-            cmd.Parameters.AddWithValue("@fileUrl", submittion.FileURL);
+            cmd.Parameters.AddWithValue("@id", Submission.Id);
+            cmd.Parameters.AddWithValue("@taskId", Submission.TaskId);
+            cmd.Parameters.AddWithValue("@description", Submission.Description);
+            cmd.Parameters.AddWithValue("@submittedAt", Submission.SubmittedAt);
+            cmd.Parameters.AddWithValue("@fileUrl", Submission.FileURL);
 
             return cmd;
         }
@@ -164,7 +163,7 @@ namespace Project_ServerSide.Models.DAL
 
         // update Submissiom
         //-----------------------------------------------------------------------------------
-        public int UpdateSubmittion(Submittion submittion)
+        public int UpdateSubmittion(Submission Submission)
         {
             SqlConnection con;
             SqlCommand cmd;
@@ -178,7 +177,7 @@ namespace Project_ServerSide.Models.DAL
                 throw ex;
             }
 
-            cmd = CreateCommandWithStoredProcedure("spUpdateSubmission", con, submittion);
+            cmd = CreateCommandWithStoredProcedure("spUpdateSubmission", con, Submission);
 
             try
             {
@@ -195,15 +194,15 @@ namespace Project_ServerSide.Models.DAL
                     con.Close();
             }
         }
-        private SqlCommand CreateCommandWithStoredProcedure(string spName, SqlConnection con, Submittion submittion)
+        private SqlCommand CreateCommandWithStoredProcedure(string spName, SqlConnection con, Submission Submission)
         {
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@submissionId", submittion.SubmissionId);
-            cmd.Parameters.AddWithValue("@grade", submittion.Grade);
+            cmd.Parameters.AddWithValue("@submissionId", Submission.SubmissionId);
+            cmd.Parameters.AddWithValue("@grade", Submission.Grade);
 
             return cmd;
         }
