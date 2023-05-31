@@ -21,6 +21,11 @@ namespace Project_ServerSide.Models
         public string FileURL { get => fileURL; set => fileURL = value; }
         public DateTime Due { get => due; set => due = value; }
 
+        public List<Tasks> GetTaskByID(int taskId)
+        {
+            Tasks_DBservices dbs = new Tasks_DBservices();
+            return dbs.GetTaskByID(taskId);
+        }
 
         public List<Tasks> ReadTaskList(int groupId)
         {
