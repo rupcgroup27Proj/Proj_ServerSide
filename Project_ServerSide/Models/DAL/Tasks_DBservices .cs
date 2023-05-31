@@ -119,7 +119,8 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
-        //get Tasks list by TASK id
+
+        //get Task details by taskId
         //-----------------------------------------------------------------------------------
         public List<Tasks> GetTaskByID(int taskId)
         {

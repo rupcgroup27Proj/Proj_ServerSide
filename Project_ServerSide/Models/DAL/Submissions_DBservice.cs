@@ -47,6 +47,7 @@ namespace Project_ServerSide.Models.DAL
                     u.TaskId = Convert.ToInt32(dataReader["taskId"]);
                     u.SubmittedAt = Convert.ToDateTime(dataReader["submittedAt"]);
                     u.SubmissionId = Convert.ToInt32(dataReader["submissionId"]);
+                    u.Grade = Convert.ToInt32(dataReader["grade"]);
 
                     SubList.Add(u);
 

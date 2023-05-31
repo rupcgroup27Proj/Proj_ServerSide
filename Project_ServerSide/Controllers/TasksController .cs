@@ -18,6 +18,7 @@ namespace Project_ServerSide.Controllers
             return (TasksList.Count > 0) ? Ok(TasksList) : NotFound("No Tasks on the system");
         }
 
+
         [HttpGet("groupId/{groupId}")]
         public List<Tasks> ReadTaskList(int groupId)
         {
@@ -25,7 +26,6 @@ namespace Project_ServerSide.Controllers
             return tasks.ReadTaskList(groupId);
 
         }
-
 
         [HttpPost]
         public bool Post([FromBody] Tasks tasks)
