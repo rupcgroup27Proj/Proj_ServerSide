@@ -9,13 +9,21 @@ namespace Project_ServerSide.Controllers
     public class TasksController : ControllerBase
     {
 
-        [HttpGet("groupId/{groupId}")]
-        public IActionResult Get(int groupId)
+        [HttpGet("taskId/{taskId}")]
+        public IActionResult Get(int taskId)
         {
             Tasks tasks = new Tasks();
-            List<Tasks> TasksList = tasks.ReadTaskList(groupId);
+            List<Tasks> TasksList = tasks.GetTaskByID(taskId);
 
             return (TasksList.Count > 0) ? Ok(TasksList) : NotFound("No Tasks on the system");
+        }
+
+        [HttpGet("groupId/{groupId}")]
+        public List<Tasks> ReadTaskList(int groupId)
+        {
+            Tasks tasks = new Tasks();
+            return tasks.ReadTaskList(groupId);
+
         }
 
 

@@ -119,5 +119,63 @@ namespace Project_ServerSide.Models.DAL
             return cmd;
         }
 
+        //get Tasks list by TASK id
+        //-----------------------------------------------------------------------------------
+        public List<Tasks> GetTaskByID(int taskId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = CreateReadCommand("spGetTaskByID", con, taskId);
+
+            List<Tasks> TaskList = new List<Tasks>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    Tasks u = new Tasks();
+                    u.TaskId = Convert.ToInt32(dataReader["taskID"]);
+                    u.Name = dataReader["name"].ToString();
+                    u.Description = dataReader["description"].ToString();
+                    u.FileURL = dataReader["fileUrl"].ToString();
+                    u.GroupId = Convert.ToInt32(dataReader["groupId"]);
+                    u.CreatedAt = Convert.ToDateTime(dataReader["createdAt"]);
+                    u.Due = Convert.ToDateTime(dataReader["due"]);
+
+                    TaskList.Add(u);
+
+
+                }
+                return TaskList;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+        private SqlCommand CreateReadCommand(String spName, SqlConnection con, int taskId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@taskId", taskId);
+            return cmd;
+        }
+
+
     }
 }
