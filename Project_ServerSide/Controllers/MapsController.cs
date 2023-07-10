@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
 
-
 namespace Project_ServerSide.Controllers
 {
     [Route("api/[controller]")]
@@ -31,7 +30,7 @@ namespace Project_ServerSide.Controllers
             {
                 if (formFile.Length > 0)
                 {
-                    string uniqueFileName = GetUniqueFileName(formFile.FileName); 
+                    string uniqueFileName = GetUniqueFileName(formFile.FileName);
                     var filePath = Path.Combine(path, "uploadedFiles/" + uniqueFileName);
 
                     using (var stream = System.IO.File.Create(filePath))
@@ -43,7 +42,7 @@ namespace Project_ServerSide.Controllers
                 }
             }
 
-            return  check == 1 ? Ok() : NotFound();
+            return check == 1 ? Ok() : NotFound();
         }
 
 
@@ -61,16 +60,38 @@ namespace Project_ServerSide.Controllers
         }
 
         // DELETE api/<MapsController>/5
-        [HttpDelete("locationId/{locationId}")]
-        public IActionResult Delete(int locationId)
+        [HttpDelete("locationId/{locationId}/filesUrl/{filesUrl}")]
+        public IActionResult Delete(int locationId, string filesUrl)
         {
-            return Map.deleteLocation(locationId) != 0 ? Ok() : NotFound();
+            int a = Map.deleteLocation(locationId) != 0 ? 1 : 0;
+
+            if (a == 1)
+            {
+                string[] files = filesUrl.Split(',');
+                foreach (string f in files)
+                {
+                    string file = "./uploadedFiles/" + f;
+                    System.IO.File.Delete(file);
+                }
+                return Ok();
+            }
+            else
+                return NotFound();
         }
 
-        [HttpDelete("fileId/{fileId}")]
-        public IActionResult DeleteImage(int fileId)
+        [HttpDelete("fileId/{fileId}/fileUrl/{fileUrl}")]
+        public IActionResult DeleteImage(int fileId, string fileUrl)
         {
-            return Map.deleteImage(fileId) != 0 ? Ok() : NotFound();
+
+            int a = Map.deleteImage(fileId) != 0 ? 1 : 0;
+            if (a == 1)
+            {
+                string file = "./uploadedFiles/" + fileUrl;
+                System.IO.File.Delete(file);
+                return Ok();
+            }
+            else
+                return NotFound();
         }
 
         private string GetUniqueFileName(string fileName)
