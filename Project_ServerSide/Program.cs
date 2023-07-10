@@ -12,7 +12,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//app.UseHttpsRedirection();
+//app.UseHttpsRedirection(); //Problems wih ruppin's server - uncomment before publishing
 
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
@@ -20,13 +20,14 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+/*
 app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), @"uploadedFiles")),
     RequestPath = new PathString("/Images")
 });
-
+*/
 
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
