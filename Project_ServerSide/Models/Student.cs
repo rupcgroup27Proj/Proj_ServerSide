@@ -42,16 +42,29 @@ namespace Project_ServerSide.Models
             return dbs.GetGroupStudents(groupId);
         }
 
+        public static List<object> GetTokens(int groupId)
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            return dbs.GetTokens(groupId);
+        }
+
         public bool InsertStudent()
         {
             Students_DBservices dbs = new Students_DBservices();
-            return (dbs.InsertStudent(this) == 2 || dbs.InsertStudent(this) == 1) ? true : false;
+            int a = dbs.InsertStudent(this);
+            return (a == 2 || a == 1) ? true : false;
         }
   
         public int UpdateStudent()
         {
             Students_DBservices dbs = new Students_DBservices();
             return dbs.UpdateStudent(this);
+        }
+
+        public static int UpdateToken(int studentId, string token)
+        {
+            Students_DBservices dbs = new Students_DBservices();
+            return dbs.UpdateToken(studentId, token);
         }
 
         public int DeleteFromGroup(int studentId)

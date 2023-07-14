@@ -46,6 +46,7 @@ namespace Project_ServerSide.Models.DAL
                     user.PictureUrl = dataReader["PictureUrl"].ToString();
                     user.GroupId = Convert.ToInt32(dataReader["groupId"]);
                     user.ParentPhone = (type == "Student") ? dataReader["ParentPhone"].ToString() : null;
+                    user.Token = (type == "Student") ? dataReader["token"].ToString() : null;
                     user.IsAdmin = (type == "Guide") ? Convert.ToBoolean(dataReader["isAdmin"]) : false;
                     user.Type = type;
                     user.StartDate = Convert.ToDateTime(dataReader["StartDate"]);

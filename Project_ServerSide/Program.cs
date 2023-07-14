@@ -20,14 +20,15 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-/*
+
 app.UseStaticFiles(new StaticFileOptions()
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), @"uploadedFiles")),
+    FileProvider = new CompositeFileProvider(
+        new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "uploadedFiles")),
+        new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "pdfs"))),
     RequestPath = new PathString("/Images")
 });
-*/
+
 
 app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 

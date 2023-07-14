@@ -15,6 +15,11 @@ namespace Project_ServerSide.Controllers
             return student.GetGroupStudents(groupId);
         }
 
+        [HttpGet("gId/{gId}")]
+        public List<object> GetTokens(int gId)
+        {
+            return Student.GetTokens(gId);
+        }
 
         [HttpPost]
         public bool Post([FromBody] Student student)
@@ -30,6 +35,11 @@ namespace Project_ServerSide.Controllers
             return (student.UpdateStudent() == 1) ? Ok(student) : NotFound();
         }
 
+        [HttpPut("studentId/{studentId}/token/{token}")]
+        public IActionResult Put(int studentId, string token)
+        {
+            return (Student.UpdateToken(studentId, token) == 1) ? Ok() : NotFound();
+        }
 
         [HttpDelete("studentId/{studentId}")]
         public IActionResult Delete(int studentId)

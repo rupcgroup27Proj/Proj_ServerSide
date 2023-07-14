@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Project_ServerSide.Models;
+using System.IO;
 
 
 namespace Project_ServerSide.Controllers
@@ -28,10 +29,38 @@ namespace Project_ServerSide.Controllers
         }
 
         [HttpPost]
-        public bool Post([FromBody] Tasks tasks)
+        public async Task<IActionResult> Post([FromForm] PdfModel pdf)
         {
-            return tasks.InsertTasksbyTeacher();
+            string path = System.IO.Directory.GetCurrentDirectory();
+            string uniqueFileName = GetUniqueFileName(pdf.Name);
+            var filePath = Path.Combine(path, "pdfs/" + uniqueFileName);
+            List<string> imageLinks = new List<string>();
+            int check = 0;
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await pdf.Document.CopyToAsync(stream);
+            }
+            imageLinks.Add(uniqueFileName);
+            check = PdfModel.addPdf(uniqueFileName, pdf.Description, pdf.Date, pdf.Name, pdf.GroupId);
+            return check == 2 ? Ok() : NotFound();
         }
 
+
+        private string GetUniqueFileName(string fileName)
+        {
+            string uniqueFileName = fileName + ".pdf";
+            int count = 1;
+            string path = System.IO.Directory.GetCurrentDirectory();
+            string fileExtension = Path.GetExtension(fileName);
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+
+            while (System.IO.File.Exists(Path.Combine(path, "pdfs/" + uniqueFileName)))
+            {
+                uniqueFileName = $"{fileNameOnly}({count++}){fileExtension}";
+            }
+
+            return uniqueFileName;
+        }
     }
 }

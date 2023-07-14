@@ -1,5 +1,8 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using System;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -75,49 +78,34 @@ namespace Project_ServerSide.Models.DAL
 
         //insert Tasks by Teacher
         //-----------------------------------------------------------------------------------
-        public int InsertTasksbyTeacher(Tasks tasks)
-        {
+        //public int InsertTasksbyTeacher(PdfModel pdf)
+        //{
 
-            SqlConnection con;
-            SqlCommand cmd;
+        //    SqlConnection con;
+        //    SqlCommand cmd;
 
-            try
-            { con = connect("myProjDB"); }
-            catch (Exception ex)
-            { throw ex; }
+        //    try
+        //    { con = connect("myProjDB"); }
+        //    catch (Exception ex)
+        //    { throw ex; }
 
-            cmd = CreateInsertTasksCommand("spInsertTasksByTeacher", con, tasks);
+        //    cmd = CreateInsertTasksCommand("spInsertTasksByTeacher", con, pdf);
 
-            try
-            {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
-            }
-            catch (Exception ex)
-            { throw ex; }
+        //    try
+        //    {
+        //        int numEffected = cmd.ExecuteNonQuery();
+        //        return numEffected;
+        //    }
+        //    catch (Exception ex)
+        //    { throw ex; }
 
-            finally
-            {
-                if (con != null)
-                    con.Close();
-            }
-        }
-        private SqlCommand CreateInsertTasksCommand(String spName, SqlConnection con, Tasks tasks)
-        {
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = con;
-            cmd.CommandText = spName;
-            cmd.CommandTimeout = 10;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@groupId", tasks.GroupId);
-            cmd.Parameters.AddWithValue("@name", tasks.Name);
-            cmd.Parameters.AddWithValue("@description", tasks.Description);
-            cmd.Parameters.AddWithValue("@createdAt", tasks.CreatedAt);
-            cmd.Parameters.AddWithValue("@due", tasks.Due);
-            cmd.Parameters.AddWithValue("@fileUrl", tasks.FileURL);
+        //    finally
+        //    {
+        //        if (con != null)
+        //            con.Close();
+        //    }
+        //}
 
-            return cmd;
-        }
 
 
         //get Task details by taskId
@@ -178,5 +166,48 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
+
+
+        public int addPdf(string uniqueFileName, string description, string date, string name, int groupId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            try
+            {
+                cmd = CreateInsertTasksCommand("spInsertTasksByTeacher", con, uniqueFileName, description, date, name, groupId);
+                return cmd.ExecuteNonQuery();
+            }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand CreateInsertTasksCommand(String spName, SqlConnection con, string uniqueFileName, string description, string date, string name, int groupId)
+        {
+            DateTime dateTime;
+            DateTime.TryParseExact(date, "MM/dd/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime);
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.Parameters.AddWithValue("@createdAt", DateTime.Now);
+            cmd.Parameters.AddWithValue("@due", dateTime);
+            cmd.Parameters.AddWithValue("@fileUrl", uniqueFileName);
+
+            return cmd;
+        }
     }
 }

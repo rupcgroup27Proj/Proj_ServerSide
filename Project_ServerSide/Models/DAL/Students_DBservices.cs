@@ -77,6 +77,59 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+        //Get all tokens
+        //-----------------------------------------------------------------------------------
+        public List<object> GetTokens(int groupId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetTokens("spGetTokens", con, groupId);
+
+            List<object> tokens = new List<object>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    object tmpJ = new
+                    {
+                        firstName = dataReader["firstName"].ToString(),
+                        lastName = dataReader["lastName"].ToString(),
+                        token = dataReader["token"].ToString()
+                    };
+                    tokens.Add(tmpJ);
+                }
+                return tokens;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+
+        }
+        private SqlCommand spGetTokens(String spName, SqlConnection con, int groupId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@groupId", groupId);
+            return cmd;
+        }
+
+
         //insert student 
         //-----------------------------------------------------------------------------------
         public int InsertStudent(Student student)
@@ -184,6 +237,52 @@ namespace Project_ServerSide.Models.DAL
             cmd.Parameters.AddWithValue("@parentPhone", student.ParentPhone);
             return cmd;
         }
+
+
+
+        // update token
+        //-----------------------------------------------------------------------------------
+        public int UpdateToken(int studentId, string token)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            { con = connect("myProjDB"); }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spUpdateToken("spUpdateToken", con, studentId, token);
+
+            try
+            {
+                int numEffected = cmd.ExecuteNonQuery(); // execute the command
+                return numEffected;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+
+        }
+
+        private SqlCommand spUpdateToken(String spName, SqlConnection con, int studentId, string token)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id", studentId);
+            cmd.Parameters.AddWithValue("@token", token);
+        
+            return cmd;
+        }
+
+
 
 
         //delete student from group

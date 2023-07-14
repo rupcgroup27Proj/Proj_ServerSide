@@ -21,6 +21,7 @@ namespace Project_ServerSide.Models
         bool isAdmin;
         DateTime startDate;
         DateTime endDate;
+        string token;
 
 
         public string Type { get => type; set => type = value; }
@@ -37,6 +38,7 @@ namespace Project_ServerSide.Models
         public bool IsAdmin { get => isAdmin; set => isAdmin = value; }
         public DateTime StartDate { get => startDate; set => startDate = value; }
         public DateTime EndDate { get => endDate; set => endDate = value; }
+        public string Token { get => token; set => token = value; }
 
         static public GenericUser Login(int id, string password, string type)
         {

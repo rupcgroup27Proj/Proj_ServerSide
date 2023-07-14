@@ -33,11 +33,11 @@ namespace Project_ServerSide.Models
             return dbs.ReadTaskList(groupId);
         }
 
-        public bool InsertTasksbyTeacher()
-        {
-            Tasks_DBservices dbs = new Tasks_DBservices();
-            return (dbs.InsertTasksbyTeacher(this) == 2) ? true : false;
-        }
+        //public static bool InsertTasksbyTeacher(PdfModel pdf)
+        //{
+        //    Tasks_DBservices dbs = new Tasks_DBservices();
+        //    return (dbs.InsertTasksbyTeacher(pdf) == 2) ? true : false;
+        //}
       
     }
 }
