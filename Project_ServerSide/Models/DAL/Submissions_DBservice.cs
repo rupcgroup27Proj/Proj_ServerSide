@@ -77,9 +77,10 @@ namespace Project_ServerSide.Models.DAL
         }
 
 
+
         //submit Tasks by Student
         //-----------------------------------------------------------------------------------
-      
+
         public int addSubmission(string uniqueFileName, string description, int id, int taskId, string submittedAt)
         {
             SqlConnection con;
@@ -182,7 +183,7 @@ namespace Project_ServerSide.Models.DAL
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery(); 
+                int numEffected = cmd.ExecuteNonQuery();
                 return numEffected;
             }
             catch (Exception ex)
@@ -207,5 +208,152 @@ namespace Project_ServerSide.Models.DAL
 
             return cmd;
         }
+
+        //Get all submission of a student
+        public List<int> GetAllStudentSubmissions(int studentId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB");
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetAllStudentSubmissions("spGetAllStudentSubmissions", con, studentId);
+
+            List<int> taskIds = new List<int>();
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+                while (dataReader.Read())
+                {
+                    int a = Convert.ToInt32(dataReader["taskId"]);
+                    taskIds.Add(a);
+                }
+                return taskIds;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spGetAllStudentSubmissions(String spName, SqlConnection con, int studentId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            return cmd;
+        }
+
+        //Get student's specific submission
+        public string GetSubmission(int studentId, int taskId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB");
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetSpecificSubmission("spGetSpecificSubmission", con, studentId, taskId);
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                string s = "";
+                while (dataReader.Read())
+                {
+                    s = (dataReader["fileUrl"]).ToString();
+                }
+                return s;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spGetSpecificSubmission(String spName, SqlConnection con, int studentId, int taskId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@taskId", taskId);
+            return cmd;
+        }
+
+
+        
+        //Get student's specific submission grade
+        public int GetSubmissionData(int studentId, int taskId)
+        {
+            SqlConnection con;
+            SqlCommand cmd;
+
+            try
+            {
+                con = connect("myProjDB");
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            cmd = spGetSpecificSubmissionData("spGetSpecificSubmissionData", con, studentId, taskId);
+
+            try
+            {
+                SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                int a = 0;
+                while (dataReader.Read())
+                {
+                    a = Convert.ToInt32(dataReader["grade"]);
+                }
+                return a;
+            }
+            catch (Exception ex)
+            { throw (ex); }
+
+            finally
+            {
+                if (con != null)
+                    con.Close();
+            }
+        }
+
+        private SqlCommand spGetSpecificSubmissionData(String spName, SqlConnection con, int studentId, int taskId)
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = con;
+            cmd.CommandText = spName;
+            cmd.CommandTimeout = 10;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@studentId", studentId);
+            cmd.Parameters.AddWithValue("@taskId", taskId);
+            return cmd;
+        }
+
+
     }
 }

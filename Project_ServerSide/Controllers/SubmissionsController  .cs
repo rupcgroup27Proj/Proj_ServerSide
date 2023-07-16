@@ -14,6 +14,23 @@ namespace Project_ServerSide.Controllers
             return Submission.ReadSubList(taskId);
         }
 
+        [HttpGet("studentId/{studentId}")]
+        public List<int> GetAllStudentSubmissions(int studentId)
+        {
+            return Submission.GetAllStudentSubmissions(studentId);
+        }
+
+        [HttpGet("studentId/{studentId}/taskId/{taskId}")]
+        public string GetSubmission(int studentId, int taskId)
+        {
+            return Submission.GetSubmission(studentId, taskId);
+        }
+
+        [HttpGet("spec/studentId/{studentId}/taskId/{taskId}")]
+        public int GetSubmissionData(int studentId, int taskId)
+        {
+            return Submission.GetSubmissionData(studentId, taskId);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromForm] SubmissionModel s)

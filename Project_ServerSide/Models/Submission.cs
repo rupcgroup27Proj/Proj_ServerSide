@@ -32,11 +32,26 @@ namespace Project_ServerSide.Models
             return dbs.ReadSubList(taskId);
         }
 
-        //public bool SubmitTaskByStudent()
-        //{
-        //    Submissions_DBservice dbs = new Submissions_DBservice();
-        //    return (dbs.SubmitTaskByStudent(this) == 2) ? true : false;
-        //}
+        public static List<int> GetAllStudentSubmissions(int studentId)
+        {
+            Submissions_DBservice dbs = new Submissions_DBservice();
+            return dbs.GetAllStudentSubmissions(studentId);
+
+        }
+
+        public static string GetSubmission(int studentId, int taskId)
+        {
+            Submissions_DBservice dbs = new Submissions_DBservice();
+            return dbs.GetSubmission(studentId, taskId);
+        }
+
+
+        public static int GetSubmissionData(int studentId, int taskId)
+        {
+            Submissions_DBservice dbs = new Submissions_DBservice();
+            return dbs.GetSubmissionData(studentId, taskId);
+        }
+
 
         public int UpdateSubmittion()
         {
