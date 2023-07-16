@@ -16,9 +16,22 @@ namespace Project_ServerSide.Controllers
 
 
         [HttpPost]
-        public bool Post([FromBody] Submission Submission)
+        public async Task<IActionResult> Post([FromForm] SubmissionModel s)
         {
-            return Submission.SubmitTaskByStudent();
+            string path = System.IO.Directory.GetCurrentDirectory();
+            string uniqueFileName = GetUniqueFileName("Sub");
+            var filePath = Path.Combine(path, "submissions/" + uniqueFileName);
+            List<string> imageLinks = new List<string>();
+            int check = 0;
+
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await s.Document.CopyToAsync(stream);
+            }
+            imageLinks.Add(uniqueFileName);
+            check = SubmissionModel.addSubmission(uniqueFileName, s.Description, s.Id, s.TaskId, s.SubmittedAt);
+            Console.WriteLine(check);
+            return check == 2 ? Ok() : NotFound();
         }
 
 
@@ -38,6 +51,22 @@ namespace Project_ServerSide.Controllers
             int s = Submission.DeleteSubmittion(submissionId);
 
             return Ok(s);
+        }
+
+        private string GetUniqueFileName(string fileName)
+        {
+            string uniqueFileName = fileName;
+            int count = 1;
+            string path = System.IO.Directory.GetCurrentDirectory();
+            string fileExtension = Path.GetExtension(fileName);
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+
+            while (System.IO.File.Exists(Path.Combine(path, "submissions/" + uniqueFileName)))
+            {
+                uniqueFileName = $"{fileNameOnly}({count++}).pdf";
+            }
+
+            return uniqueFileName;
         }
     }
 }

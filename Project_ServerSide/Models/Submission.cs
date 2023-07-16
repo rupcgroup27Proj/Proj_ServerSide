@@ -32,11 +32,11 @@ namespace Project_ServerSide.Models
             return dbs.ReadSubList(taskId);
         }
 
-        public bool SubmitTaskByStudent()
-        {
-            Submissions_DBservice dbs = new Submissions_DBservice();
-            return (dbs.SubmitTaskByStudent(this) == 2) ? true : false;
-        }
+        //public bool SubmitTaskByStudent()
+        //{
+        //    Submissions_DBservice dbs = new Submissions_DBservice();
+        //    return (dbs.SubmitTaskByStudent(this) == 2) ? true : false;
+        //}
 
         public int UpdateSubmittion()
         {

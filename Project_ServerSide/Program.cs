@@ -25,7 +25,9 @@ app.UseStaticFiles(new StaticFileOptions()
 {
     FileProvider = new CompositeFileProvider(
         new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "uploadedFiles")),
-        new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "pdfs"))),
+        new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "pdfs")),
+        new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "submissions"))
+        ),
     RequestPath = new PathString("/Images")
 });
 

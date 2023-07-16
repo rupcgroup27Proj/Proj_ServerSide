@@ -1,5 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
+using System.Globalization;
+using System.Threading.Tasks;
 
 namespace Project_ServerSide.Models.DAL
 {
@@ -77,50 +79,47 @@ namespace Project_ServerSide.Models.DAL
 
         //submit Tasks by Student
         //-----------------------------------------------------------------------------------
-        public int SubmitTaskByStudent(Submission Submission)
+      
+        public int addSubmission(string uniqueFileName, string description, int id, int taskId, string submittedAt)
         {
-
             SqlConnection con;
             SqlCommand cmd;
 
             try
             { con = connect("myProjDB"); }
             catch (Exception ex)
-            { throw ex; }
-
-            cmd = CreateSubmitTasksCommand("spSubmitByStudent", con, Submission);
+            { throw (ex); }
 
             try
             {
-                int numEffected = cmd.ExecuteNonQuery();
-                return numEffected;
+                cmd = CreateSubmitTasksCommand("spSubmitByStudent", con, uniqueFileName, description, id, taskId, submittedAt);
+                return cmd.ExecuteNonQuery();
             }
-            catch (Exception ex)
-            { throw ex; }
-
             finally
             {
                 if (con != null)
                     con.Close();
             }
         }
-        private SqlCommand CreateSubmitTasksCommand(String spName, SqlConnection con, Submission Submission)
+
+        private SqlCommand CreateSubmitTasksCommand(String spName, SqlConnection con, string uniqueFileName, string description, int id, int taskId, string submittedAt)
         {
+            DateTime dateTime;
+            DateTime.TryParseExact(submittedAt, "MM/dd/yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime);
+            Console.WriteLine(dateTime);
             SqlCommand cmd = new SqlCommand();
             cmd.Connection = con;
             cmd.CommandText = spName;
             cmd.CommandTimeout = 10;
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@id", Submission.Id);
-            cmd.Parameters.AddWithValue("@taskId", Submission.TaskId);
-            cmd.Parameters.AddWithValue("@description", Submission.Description);
-            cmd.Parameters.AddWithValue("@submittedAt", Submission.SubmittedAt);
-            cmd.Parameters.AddWithValue("@fileUrl", Submission.FileURL);
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Parameters.AddWithValue("@taskId", taskId);
+            cmd.Parameters.AddWithValue("@description", description);
+            cmd.Parameters.AddWithValue("@submittedAt", dateTime);
+            cmd.Parameters.AddWithValue("@fileUrl", uniqueFileName);
 
             return cmd;
         }
-
-
 
         //delete Submittion 
         //-----------------------------------------------------------------------------------
